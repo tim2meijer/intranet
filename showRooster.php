@@ -23,7 +23,7 @@ foreach($diensten as $dienst) {
 			
 		foreach($vulling as $lid) {
 			$data = getMemberDetails($lid);
-			$namen[] = "<a href='profiel.php?id=$lid'>". makeName($lid, 5) ."</a> (". $data['mail'] .")";
+			$namen[] = "<a href='profiel.php?id=$lid'>". makeName($lid, 5) ."</a>";
 		}
 		
 		echo '<tr><td valign=\'top\'>'.date("d-m", $details['start']).'</td><td valign=\'top\'>'. implode('<br>', $namen).'</td></tr>'.NL;
