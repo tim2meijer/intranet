@@ -18,9 +18,10 @@ $familie = getFamilieleden($id);
 # Pagina tonen
 echo $HTMLHeader;
 echo "<h1>". makeName($id, 6) ."</h1>".NL;
-echo "<table width=100%>".NL;
+echo "<table width=100% border=0>".NL;
 echo "<tr>".NL;
-echo "	<td width=50% valign='top'>";
+echo "	<td width=4%>&nbsp;</td>".NL;
+echo "	<td width=44% valign='top'>";
 
 # Eigen gegevens
 echo "	<table>".NL;
@@ -83,9 +84,10 @@ if($personData['twitter'] != '' OR $personData['fb'] != '' OR $personData['linke
 }
 echo "	</table>".NL;
 echo "	</td>".NL;
+echo "	<td width=4%>&nbsp;</td>".NL;
 
 # Familieleden
-echo "	<td width=50% valign='top'>";
+echo "	<td width=44% valign='top'>";
 
 if(count($familie) > 1) {
 	echo "	<b>Familieleden</b><br>";
@@ -99,11 +101,14 @@ if(count($familie) > 1) {
 }
 
 echo "	</td>".NL;
+echo "	<td width=4%>&nbsp;</td>".NL;
 echo "</tr>".NL;
 
 if(in_array($_SESSION['ID'], $familie) OR in_array(1, getMyGroups($_SESSION['ID']))) {
 	echo "<tr>".NL;
-	echo "	<td colspan='2'><a href='gegevens.php?id=$id'>Wijzig gegevens</a></td>".NL;
+	echo "	<td>&nbsp;</td>".NL;
+	echo "	<td colspan='3'><a href='gegevens.php?id=$id'>Wijzig gegevens</a></td>".NL;
+	echo "	<td>&nbsp;</td>".NL;
 	echo "</tr>".NL;
 }
 

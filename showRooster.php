@@ -22,7 +22,8 @@ foreach($diensten as $dienst) {
 		$namen = array();
 			
 		foreach($vulling as $lid) {
-			$namen[] = "<a href='profiel.php?id=$lid'>". makeName($lid, 5) ."</a>";
+			$data = getMemberDetails($lid);
+			$namen[] = "<a href='profiel.php?id=$lid'>". makeName($lid, 5) ."</a> (". $data['mail'] .")";
 		}
 		
 		echo '<tr><td valign=\'top\'>'.date("d-m", $details['start']).'</td><td valign=\'top\'>'. implode('<br>', $namen).'</td></tr>'.NL;
