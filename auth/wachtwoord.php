@@ -35,8 +35,6 @@ if(isset($_POST['opvragen'])) {
 		$Mail[] = "<p>";
 		//$Mail[] = "Met deze gegevens kan je via <a href='". $ScriptURL ."account.php'>". $ScriptURL ."account.php</a> je eigen wachtwoord instellen";	
 		$HTMLMail = implode("\n", $Mail);
-		
-		echo $HTMLMail;
 
 		if(!sendMail($id, "Nieuw wachtwoord voor $ScriptTitle", $HTMLMail, $var)) {			
 			$text[] = "Inloggegevens konden helaas niet verstuurd worden";

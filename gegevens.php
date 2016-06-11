@@ -30,8 +30,8 @@ if(isset($_POST['data_opslaan'])) {
 	
 	if(!mysqli_query($db, $sql_persoon) OR !mysqli_query($db, $sql_adres)) {
 		$text[] = "Er is een fout opgetreden.";
-		//$text[] = $sql_persoon;
-		//$text[] = $sql_adres;
+		$text[] = $sql_persoon;
+		$text[] = $sql_adres;
 	} else {
 		$text[] = "Gegevens succesvol gewijzigd.";
 	}
@@ -54,33 +54,48 @@ if(isset($_POST['data_opslaan'])) {
 	$text[] = "<td width=4%>&nbsp;</td>";
 	$text[] = "<td width=44% valign='top'>";
 	$text[] = "<table width='100%'>";
-	//$text[] = "<tr>";
-	//$text[] = "	<td></td>";
-	//$text[] = "	<td><input type='text' name='' value=''></td>";
-	//$text[] = "</tr>";
+	if(in_array(1, getMyGroups($_SESSION['ID']))) {
+		$text[] = "<tr>";
+		$text[] = "	<td>Geslacht</td>";
+		$text[] = "	<td><select name='geslacht'>";
+		$text[] = "	<option value='M'". ($personData['geslacht'] == 'M' ? ' selected' : '') .">Man</option>";
+		$text[] = "	<option value='V'". ($personData['geslacht'] == 'V' ? ' selected' : '') .">Vrouw</option>";
+		$text[] = "	</select>";
+		$text[] = "	</td>";
+		$text[] = "</tr>";
+		$text[] = "<tr>";
+		$text[] = "	<td>Status</td>";
+		$text[] = "	<td><select name='belijdenis'>";
+		$text[] = "	<option value='-'". ($personData['belijdenis'] == '-' ? ' selected' : '') ."></option>";
+		$text[] = "	<option value='D'". ($personData['belijdenis'] == 'D' ? ' selected' : '') .">Gedoopt</option>";
+		$text[] = "	<option value='B'". ($personData['belijdenis'] == 'B' ? ' selected' : '') .">Belijdenis</option>";
+		$text[] = "	</select>";
+		$text[] = "	</td>";
+		$text[] = "</tr>";
+	}
 	$text[] = "<tr>";
 	$text[] = "	<td valign='top'>Voorletters</td>";
-	$text[] = "	<td valign='top'><input type='text' name='voorletters' value='".$personData['voorletters']."'></td>";
+	$text[] = "	<td valign='top' colspan='2'><input type='text' name='voorletters' value='".$personData['voorletters']."'></td>";
 	$text[] = "</tr>";
 	$text[] = "<tr>";
 	$text[] = "	<td valign='top'>Voornaam</td>";
-	$text[] = "	<td valign='top'><input type='text' name='voornaam' value='".$personData['voornaam']."'></td>";
+	$text[] = "	<td valign='top' colspan='2'><input type='text' name='voornaam' value='".$personData['voornaam']."'></td>";
 	$text[] = "</tr>";
 	$text[] = "<tr>";
 	$text[] = "	<td valign='top'>Tussenvoegsel</td>";
-	$text[] = "	<td valign='top'><input type='text' name='tussenvoegsel' value='".$personData['tussenvoegsel']."'></td>";
+	$text[] = "	<td valign='top' colspan='2'><input type='text' name='tussenvoegsel' value='".$personData['tussenvoegsel']."'></td>";
 	$text[] = "</tr>";
 	$text[] = "<tr>";
 	$text[] = "	<td valign='top'>Achternaam</td>";
-	$text[] = "	<td valign='top'><input type='text' name='achternaam' value='".$personData['achternaam']."'></td>";
+	$text[] = "	<td valign='top' colspan='2'><input type='text' name='achternaam' value='".$personData['achternaam']."'></td>";
 	$text[] = "</tr>";
 	$text[] = "<tr>";
 	$text[] = "	<td valign='top'>Meisjesnaam</td>";
-	$text[] = "	<td valign='top'><input type='text' name='meisjesnaam' value='".$personData['meisjesnaam']."'></td>";
+	$text[] = "	<td valign='top' colspan='2'><input type='text' name='meisjesnaam' value='".$personData['meisjesnaam']."'></td>";
 	$text[] = "</tr>";
 	$text[] = "<tr>";
 	$text[] = "	<td valign='top'>Geboortedag</td>";
-	$text[] = "	<td valign='top'><select name='dag'>";
+	$text[] = "	<td valign='top' colspan='2'><select name='dag'>";
 	for($d=1 ; $d<32 ; $d++) {
 		$text[] = "	<option value='$d'". ($d == $personData['dag'] ? ' selected' : '') .">$d</option>";
 	}
@@ -99,23 +114,26 @@ if(isset($_POST['data_opslaan'])) {
 	$text[] = "</tr>";
 	$text[] = "<tr>";
 	$text[] = "	<td valign='top'>Telefoonnummer</td>";
-	$text[] = "	<td valign='top'><input type='text' name='prive_tel' value='". $personData['prive_tel'] ."'><br><font class='small'>Vul dit nummer alleen in als het verschilt van de rest van de familie</font></td>";
+	$text[] = "	<td valign='top' colspan='2'><input type='text' name='prive_tel' value='". $personData['prive_tel'] ."'><br><font class='small'>Vul dit nummer alleen in als het verschilt van de rest van de familie</font></td>";
 	$text[] = "</tr>";
 	$text[] = "<tr>";
 	$text[] = "	<td valign='top'>Mailadres</td>";
-	$text[] = "	<td valign='top'><input type='text' name='prive_mail' value='". $personData['prive_mail'] ."'><br><font class='small'>Vul dit nummer alleen in als het verschilt van de rest van de familie</font></td>";
+	$text[] = "	<td valign='top' colspan='2'><input type='text' name='prive_mail' value='". $personData['prive_mail'] ."'><br><font class='small'>Vul dit mailadres alleen in als het verschilt van de rest van de familie</font></td>";
 	$text[] = "</tr>";
 	$text[] = "<tr>";
 	$text[] = "	<td valign='top'>Twitter</td>";
-	$text[] = "	<td valign='top'><font class='small'>https://twitter.com/</font><input type='text' name='twitter' value='". $personData['twitter'] ."'></td>";
+	$text[] = "	<td valign='top' class='small' align='right'>https://twitter.com/</td>";
+	$text[] = "	<td valign='top'><input type='text' name='twitter' value='". $personData['twitter'] ."'></td>";
 	$text[] = "</tr>";
 	$text[] = "<tr>";
 	$text[] = "	<td valign='top'>Facebook</td>";
-	$text[] = "	<td valign='top'><font class='small'>https://www.facebook.com/</font><input type='text' name='fb' value='". $personData['fb'] ."'></td>";
+	$text[] = "	<td valign='top' class='small' align='right'>https://www.facebook.com/</td>";
+	$text[] = "	<td valign='top'><input type='text' name='fb' value='". $personData['fb'] ."'></td>";
 	$text[] = "</tr>";
 	$text[] = "<tr>";
 	$text[] = "	<td valign='top'>LinkedIn</td>";
-	$text[] = "	<td valign='top'><font class='small'>https://nl.linkedin.com/in/</font><input type='text' name='linkedin' value='". $personData['linkedin'] ."'></td>";
+	$text[] = "	<td valign='top' class='small' align='right'>https://nl.linkedin.com/in/</td>";
+	$text[] = "	<td valign='top'><input type='text' name='linkedin' value='". $personData['linkedin'] ."'></td>";
 	$text[] = "</tr>";
 	$text[] = "</table>";
 	$text[] = "</td>";

@@ -75,9 +75,9 @@ if($personData['twitter'] != '' OR $personData['fb'] != '' OR $personData['linke
 	echo "	<tr>".NL;
 	echo "		<td>&nbsp;</td>".NL;
 	echo "		<td>";
-	echo "		<a href='https://www.facebook.com/".$personData['fb']."'><img src='images/facebook.jpg'></a>&nbsp;";
-	echo "		<a href='https://nl.linkedin.com/in/".$personData['linkedin']."'><img src='images/linkedin.jpg'></a>&nbsp;";
-	echo "		<a href='https://twitter.com/".$personData['twitter']."'><img src='images/twitter.png'></a>";
+	if($personData['fb'] != "")				{	echo "		<a href='https://www.facebook.com/".$personData['fb']."' target='_blank'><img src='images/facebook.jpg'></a>&nbsp;"; }
+	if($personData['linkedin'] != "")	{	echo "		<a href='https://nl.linkedin.com/in/".$personData['linkedin']."' target='_blank'><img src='images/linkedin.jpg'></a>&nbsp;"; }
+	if($personData['twitter'] != "")	{	echo "		<a href='https://twitter.com/".$personData['twitter']."' target='_blank'><img src='images/twitter.png'></a>"; }
 	echo "		</td>".NL;
 	echo "	</tr>".NL;
 }
@@ -100,6 +100,13 @@ if(count($familie) > 1) {
 
 echo "	</td>".NL;
 echo "</tr>".NL;
+
+if(in_array($_SESSION['ID'], $familie) OR in_array(1, getMyGroups($_SESSION['ID']))) {
+	echo "<tr>".NL;
+	echo "	<td colspan='2'><a href='gegevens.php?id=$id'>Wijzig gegevens</a></td>".NL;
+	echo "</tr>".NL;
+}
+
 echo "</table>".NL;
 
 echo $HTMLFooter;

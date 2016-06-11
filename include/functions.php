@@ -215,7 +215,7 @@ function getGroupMembers($commID) {
 }
 
 function getMemberDetails($id) {
-	global $TableUsers, $UserID, $UserAdres, $UserGeslacht, $UserUsername, $UserVoorletters, $UserVoornaam, $UserTussenvoegsel, $UserAchternaam, $UserMeisjesnaam, $UserGebDag, $UserGebMaand, $UserGebJaar, $UserTelefoon, $UserMail, $UserTwitter, $UserFacebook, $UserLinkedin;
+	global $TableUsers, $UserID, $UserAdres, $UserGeslacht, $UserUsername, $UserVoorletters, $UserVoornaam, $UserTussenvoegsel, $UserAchternaam, $UserMeisjesnaam, $UserGebDag, $UserGebMaand, $UserGebJaar, $UserTelefoon, $UserMail, $UserTwitter, $UserFacebook, $UserLinkedin, $UserBelijdenis;
 	global $TableAdres, $AdresID, $AdresStraat, $AdresHuisnummer, $AdresPC, $AdresPlaats, $AdresTelefoon, $AdresMail, $AdresWijk;
 	
 	$db = connect_db();
@@ -227,8 +227,9 @@ function getMemberDetails($id) {
 	$row = mysqli_fetch_array($result);
 	
 	$data['id']							= $row[$UserID];
-	//$data['adres']					= $row[$UserAdres];
+	$data['adres']					= $row[$UserAdres];
 	$data['geslacht']				= $row[$UserGeslacht];
+	$data['belijdenis']			= $row[$UserBelijdenis];
 	$data['voorletters']		= $row[$UserVoorletters];
 	$data['voornaam']				= $row[$UserVoornaam];
 	$data['tussenvoegsel']	= $row[$UserTussenvoegsel];
