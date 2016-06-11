@@ -1,0 +1,27 @@
+body {
+	background-color:#F2F2F2;
+	font-family:Arial;
+	color:#34383D;
+}
+
+p {
+	margin-top: 30px;
+}
+
+.small {
+	font-size:10px;
+}
+
+.seperator {
+	border-bottom:1px solid #34383D;
+}
+
+.onderwerp {
+	color:#34383D;
+	font-size:24px;
+	font-weight:bold;
+}
+
+.own {
+	font-style: italic;
+}
