@@ -35,7 +35,7 @@ if(isset($_POST['save']) OR isset($_POST['maanden'])) {
 
 # Als op de knop van de mail geklikt is die data wegschrijven
 if(isset($_POST['save_mail'])) {
-	$sql = "UPDATE $TableRoosters SET $RoostersMail = '". urlencode($_POST['text_mail']) ."', $RoostersSubject = '". urlencode($_POST['onderwerp_mail']) ."' WHERE $RoostersID = ". $_POST['rooster'];
+	$sql = "UPDATE $TableRoosters SET $RoostersMail = '". urlencode($_POST['text_mail']) ."', $RoostersSubject = '". urlencode($_POST['onderwerp_mail']) ."', $RoostersFrom = '". urlencode($_POST['naam_afzender']) ."',	$RoostersFromAddr = '". urlencode($_POST['mail_afzender']) ."' WHERE $RoostersID = ". $_POST['rooster'];
 	mysqli_query($db, $sql);
 }
 
@@ -84,10 +84,10 @@ foreach($diensten as $dienst) {
 	
 	for($n=0 ; $n < $nrFields ; $n++) {
 		$block_1[] = "	<td><select name='persoon[$dienst][]'>";
-		$block_1[] = "<option value=''>&nbsp;</option>";
+		$block_1[] = "	<option value=''>&nbsp;</option>";
 						
 		foreach($namen as $key => $naam) {
-			$block_1[] = "<option value='$key'". ($selected == $key ? " selected" : '') .">$naam</option>";
+			$block_1[] = "	<option value='$key'". ($selected == $key ? " selected" : '') .">$naam</option>";
 		}		
 		
 		$block_1[] = "</select></td>";
@@ -107,13 +107,23 @@ $block_2[] = "<form method='post' action='$_SERVER[PHP_SELF]'>";
 $block_2[] = "<input type='hidden' name='rooster' value='". $_REQUEST['rooster'] ."'>";
 $block_2[] = "<table>";
 $block_2[] = "<tr>";
+$block_2[] = "	<td valign='top'>Afzendernaam</td>";
+$block_2[] = "	<td valign='top' colspan='2'><input type='text' name='naam_afzender' size=80 value='".$RoosterData['naam_afzender'] ."'></td>";
+$block_2[] = "</tr>";
+$block_2[] = "<tr>";
+$block_2[] = "	<td valign='top'>Mailadres</td>";
+$block_2[] = "	<td valign='top' colspan='2'><input type='text' name='mail_afzender' size=80 value='".$RoosterData['mail_afzender'] ."'></td>";
+$block_2[] = "</tr>";
+$block_2[] = "<tr>";
 $block_2[] = "	<td valign='top'>Onderwerp</td>";
-$block_2[] = "	<td valign='top' colspan='2'><input type='text' name='onderwerp_mail' size=70 value='".$RoosterData['onderwerp_mail'] ."'></td>";
+$block_2[] = "	<td valign='top' colspan='2'><input type='text' name='onderwerp_mail' size=80 value='".$RoosterData['onderwerp_mail'] ."'></td>";
 $block_2[] = "</tr>";
 $block_2[] = "<tr>";
 $block_2[] = "	<td valign='top'>Mailtekst</td>";
-$block_2[] = "	<td valign='top'><textarea name='text_mail' rows=30 cols=60>". $RoosterData['text_mail'] ."</textarea></td>";
-$block_2[] = "	<td valign='top'>[[voornaam]] = voornaam van de ontvanger<br>[[team]] = namen van iedereen die voor die zondag op het rooster staat</td>";
+$block_2[] = "	<td valign='top'><textarea name='text_mail' rows=20 cols=60>". $RoosterData['text_mail'] ."</textarea></td>";
+$block_2[] = "	<td valign='top'>[[voornaam]] = voornaam van de ontvanger<br>";
+$block_2[] = "	[[team]] = namen van iedereen die voor die dag op het rooster staat<br>";
+$block_2[] = "	[[dag]] = naam van de dag. Meestal zondag, bij feestdagen meestal andere dag.</td>";
 $block_2[] = "</tr>";
 $block_2[] = "<tr>";
 $block_2[] = "	<td valign='top'>&nbsp;</td><td valign='top' colspan='2'><input type='submit' name='save_mail' value='Mail-gegevens opslaan'></td>";
