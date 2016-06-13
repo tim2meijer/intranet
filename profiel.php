@@ -27,7 +27,7 @@ echo "	<td width=44% valign='top'>";
 echo "	<table>".NL;
 echo "	<tr>".NL;
 echo "		<td><b>Adres</b></td>".NL;
-echo "		<td>". $personData['straat'] .' '. $personData['huisnummer'] ." (<a href='https://www.google.nl/maps/place/". urlencode($personData['straat'] .' '. $personData['huisnummer'] .', '. $personData['PC'] .' '. $personData['plaats']) ."' target='_blank'>google maps</a>)</td>".NL;
+echo "		<td><a href='https://www.google.nl/maps/place/". urlencode($personData['straat'] .' '. $personData['huisnummer'] .', '. $personData['PC'] .' '. $personData['plaats']) ."' target='_blank'>". $personData['straat'] .' '. $personData['huisnummer'] ."</a></td>".NL;
 echo "	</tr>".NL;
 echo "	<tr>".NL;
 echo "		<td><b>Postcode</b></td>".NL;
@@ -94,7 +94,7 @@ if(count($familie) > 1) {
 	foreach($familie as $leden) {
 		if($leden != $id) {
 			$famData = getMemberDetails($leden);
-			echo "	<a href='?id=$leden'>". makeName($leden, 5) ."</a> (". $famData['jaar'] .")<br>";
+			echo "	<a href='?id=$leden'>". makeName($leden, 5) ."</a> ('". substr($famData['jaar'], -2) .")<br>";
 		}
 	}
 } else {
