@@ -93,7 +93,8 @@ if(count($familie) > 1) {
 	echo "	<b>Familieleden</b><br>";
 	foreach($familie as $leden) {
 		if($leden != $id) {
-			echo "	<a href='?id=$leden'>". makeName($leden, 5) ."</a><br>";
+			$famData = getMemberDetails($leden);
+			echo "	<a href='?id=$leden'>". makeName($leden, 5) ."</a> (". $famData['jaar'] .")<br>";
 		}
 	}
 } else {
