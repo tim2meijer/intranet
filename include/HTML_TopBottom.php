@@ -21,7 +21,7 @@ $HTMLBody	.= '	<td>'.NL;
 $HTMLBody	.= '	<table width="95%" cellpadding="0" cellspacing="0" align="center" bgcolor="#ffffff" border=0>'.NL;
 $HTMLBody	.= '	<tr>'.NL;
 $HTMLBody	.= '		<td width="50">&nbsp;</td>'.NL;
-$HTMLBody	.= '		<td width="150"><img src="http://www.draijer.org/extern/trinitas/images/trinitaslogo.png" height=150 alt=""></td>'.NL;
+$HTMLBody	.= '		<td width="150"><a href="'. $ScriptURL .'"><img src="'. $ScriptURL .'/images/trinitaslogo.png" height=150 alt=""></a></td>'.NL;
 $HTMLBody	.= '    <td width="75">&nbsp;</td>'.NL;
 $HTMLBody	.= '		<td class="onderwerp" align="middle" height="80" valign="middle">SAMENWERKINGSGEMEENTE CGK-GKV-NGK DEVENTER</td>'.NL;
 $HTMLBody	.= '		<td width="50">&nbsp;</td>'.NL;
