@@ -27,7 +27,7 @@ echo "	<td width=44% valign='top'>";
 echo "	<table>".NL;
 echo "	<tr>".NL;
 echo "		<td><b>Adres</b></td>".NL;
-echo "		<td>". $personData['straat'] .' '. $personData['huisnummer'] ." (<a href='https://www.google.nl/maps/place/". urldecode($personData['straat'] .' '. $personData['huisnummer'] .', '. $personData['PC'] .' '. $personData['plaats']) ."'>google maps</a>)</td>".NL;
+echo "		<td>". $personData['straat'] .' '. $personData['huisnummer'] ." (<a href='https://www.google.nl/maps/place/". urlencode($personData['straat'] .' '. $personData['huisnummer'] .', '. $personData['PC'] .' '. $personData['plaats']) ."' target='_blank'>google maps</a>)</td>".NL;
 echo "	</tr>".NL;
 echo "	<tr>".NL;
 echo "		<td><b>Postcode</b></td>".NL;
