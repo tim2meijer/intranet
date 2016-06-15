@@ -57,7 +57,7 @@ $IDs = getGroupMembers($RoosterData['groep']);
 
 # Als er geen groep is, gewoon de hele gemeente nemen
 if(count($IDs) == 0) {
-	$IDs = getMembers('adressen');
+	$IDs = getMembers('volwasen');
 }
 
 # Doorloop de hele groep en haal hun namen op
