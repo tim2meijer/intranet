@@ -463,11 +463,11 @@ function removeFromRooster($rooster, $dienst) {
 	}
 }
 
-function add2Rooster($rooster, $dienst, $persoon) {
-	global $TablePlanning, $PlanningDienst, $PlanningGroup, $PlanningUser;
+function add2Rooster($rooster, $dienst, $persoon, $positie) {
+	global $TablePlanning, $PlanningDienst, $PlanningGroup, $PlanningUser, $PlanningPositie;
 	$db = connect_db();
 	
-	$sql = "INSERT INTO $TablePlanning ($PlanningDienst, $PlanningGroup, $PlanningUser) VALUES ($dienst, $rooster, $persoon)";
+	$sql = "INSERT INTO $TablePlanning ($PlanningDienst, $PlanningGroup, $PlanningPositie, $PlanningUser) VALUES ($dienst, $rooster, $positie, $persoon)";
 	if(mysqli_query($db, $sql)) {
 		return true;
 	} else {
@@ -476,15 +476,17 @@ function add2Rooster($rooster, $dienst, $persoon) {
 }
 
 function getRoosterVulling($rooster, $dienst) {
-	global $TablePlanning, $PlanningDienst, $PlanningGroup, $PlanningUser;
+	global $TablePlanning, $PlanningDienst, $PlanningGroup, $PlanningUser, $PlanningPositie;
 	$db = connect_db();
 	
 	$data = array();
 		
-	$sql = "SELECT $PlanningUser FROM $TablePlanning WHERE $PlanningDienst = $dienst AND $PlanningGroup = $rooster";
+	$sql = "SELECT $PlanningUser FROM $TablePlanning WHERE $PlanningDienst = $dienst AND $PlanningGroup = $rooster ORDER BY $PlanningPositie ASC";
 	$result = mysqli_query($db, $sql);
 	if($row = mysqli_fetch_array($result)) {
 		do {
+			//$pos = $row[$PlanningPositie];
+			//$data[$pos] = $row[$PlanningUser];
 			$data[] = $row[$PlanningUser];
 		} while($row = mysqli_fetch_array($result));		
 	}
@@ -701,8 +703,7 @@ function sendMail($ontvanger, $subject, $bericht, $var) {
 		$mail->FromName = $ScriptTitle;
 	}
 			
-	$mail->AddAddress($UserData['mail'], makeName($ontvanger, 5));
-	//$mail->AddAddress('internet@draijer.org', makeName($ontvanger, 5));
+	$mail->AddAddress($UserData['mail'], makeName($ontvanger, 5));	
 	$mail->AddBCC('internet@draijer.org');
 	$mail->Subject	= $SubjectPrefix . $subject;
 	$mail->IsHTML(true);
@@ -717,9 +718,6 @@ function sendMail($ontvanger, $subject, $bericht, $var) {
 		}
 	}
 	
-	echo $HTMLMail;
-
-	/*
 	if(!$mail->Send()) {
 		//echo date("H:i") . " : Problemen met mail verstuurd aan ". makeName(array($UserData['voornaam'], $UserData['tussen'], $UserData['achternaam']), 5) ."<br>";
 		//toLog('error', $user, $nummer, 'problemen met mail versturen');
@@ -729,8 +727,8 @@ function sendMail($ontvanger, $subject, $bericht, $var) {
 		//toLog('debug', $user, $nummer, 'trinitas-mail verstuurd');
 		return true;
 	}
-	*/
 }
+
 
 function showBlock($block, $width) {
 	$HTML[] = "<table width='$width%' cellpadding='8' cellspacing='1' bgcolor='#d2d2d2'>";

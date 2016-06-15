@@ -25,9 +25,9 @@ if(isset($_POST['save']) OR isset($_POST['maanden'])) {
 		removeFromRooster($_POST['rooster'], $dienst);
 		
 		# En de nieuwe wegschrijven
-		foreach($personen as $persoon) {
-			if($persoon != '' OR $persoon != 0) {
-				add2Rooster($_POST['rooster'], $dienst, $persoon);
+		foreach($personen as $pos => $persoon) {
+			if($persoon != '' AND $persoon != 0) {
+				add2Rooster($_POST['rooster'], $dienst, $persoon, $pos);
 			}
 		}
 	}
