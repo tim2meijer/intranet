@@ -12,8 +12,8 @@ $db = connect_db();
 $startTijd = mktime(0, 0, 0, date("n"), (date("j")+3), date("Y"));
 $eindTijd = mktime(23, 59, 59, date("n"), (date("j")+3), date("Y"));
 
-//$diensten = getKerkdiensten($startTijd, $eindTijd);
-$diensten = array(5);
+$diensten = getKerkdiensten($startTijd, $eindTijd);
+//$diensten = array(23);
 $roosters = getRoosters(0);
 
 foreach($diensten as $dienst) {
@@ -54,7 +54,7 @@ foreach($diensten as $dienst) {
 						$FinalSubject = $ReplacedBericht;
 					}					
 				}
-								
+				
 				sendMail($lid, $FinalSubject, $FinalHTMLMail, $var);
 			}
 		}
