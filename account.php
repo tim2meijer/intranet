@@ -32,8 +32,10 @@ if(isset($_POST['data_opslaan']) AND $unique) {
 	if(!mysqli_query($db, $sql) ) {
 		$text[] = "Er is een fout opgetreden.";
 		$text[] = $sql;
+		toLog('error', $_SESSION['ID'], $_POST['id'], 'Fout met wijzigen accountgegevens');
 	} else {
 		$text[] = "Account succesvol gewijzigd.";
+		toLog('info', $_SESSION['ID'], $_POST['id'], 'Accountgegevens gewijzigd');
 	}			
 } else {		
 	$text[] = "<form action='". $_SERVER['PHP_SELF'] ."' method='post'>";

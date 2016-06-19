@@ -32,10 +32,16 @@ if(isset($_POST['data_opslaan'])) {
 		$text[] = "Er is een fout opgetreden.";
 		$text[] = $sql_persoon;
 		$text[] = $sql_adres;
+		toLog('error', $_SESSION['ID'], $_POST['id'], 'Fout bij wijzigen gegevens');
 	} else {
 		$text[] = "Gegevens succesvol gewijzigd.";
+		toLog('info', $_SESSION['ID'], $_POST['id'], 'Gegevens gewijzigd');
 	}
-			
+	
+	$redirect = $ScriptURL."/profiel.php?id=".$_POST['id'];
+	$url="Location: ". $redirect;
+	//header($url);			
+	header("Refresh: 1; url=".$redirect);
 } else {
 	$personData = getMemberDetails($id);	
 	
@@ -173,13 +179,6 @@ if(isset($_POST['data_opslaan'])) {
 	$text[] = "</tr>";
 	$text[] = "</table>";
 }
-/*
-$personData['geslacht']
-$personData['username']
-
-*/
-
-
 
 echo $HTMLHeader;
 echo implode("\n", $text);

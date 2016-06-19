@@ -30,4 +30,6 @@ if(in_array($_REQUEST['groep'], $myGroups) AND $groupData['html-int'] != "") {
 	
 echo $HTMLFooter;
 
+toLog('debug', $_SESSION['ID'], '', 'Groep-pagina '. $groupData['naam'] .' bekeken');
+
 ?>

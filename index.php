@@ -152,6 +152,18 @@ if(count($jarigen) > 0) {
 }
 $blockArray[] = implode("<br>".NL, $jarig);
 
+
+# Jarigen
+$jarigen = getJarigen(date("d", (time()+(24*60*60))), date("m", (time()+(24*60*60))));
+if(count($jarigen) > 0) {
+	$morgen[] = "<b>Jarigen morgen</b>";
+	foreach($jarigen as $jarige) {
+		$data = getMemberDetails($jarige);
+		$morgen[] = "<a href='profiel.php?id=$jarige' target='_blank'>". makeName($jarige, 5)."</a> (". (date("Y")-$data['jaar']).")";
+	}
+}
+$blockArray[] = implode("<br>".NL, $morgen);
+
 # Pagina tonen
 echo $HTMLHeader;
 echo '<table border=0 width=100%>'.NL;

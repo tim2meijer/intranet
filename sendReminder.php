@@ -49,7 +49,11 @@ foreach($diensten as $dienst) {
 					}					
 				}
 				
-				sendMail($lid, $FinalSubject, $FinalHTMLMail, $var);
+				if(sendMail($lid, $FinalSubject, $FinalHTMLMail, $var)) {
+					toLog('debug', '', $lid, 'reminder-mail '. $roosterData['naam'] .' verstuurd');
+				} else {
+					toLog('error', '', $lid, 'problemen met reminder-mail '. $roosterData['naam'] .' versturen');
+				}
 			}
 		}
 	}

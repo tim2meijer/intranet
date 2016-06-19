@@ -18,6 +18,10 @@ $requiredUserGroups = array(1, $beheerder);
 $cfgProgDir = 'auth/';
 include($cfgProgDir. "secure.php");
 
+# Roosterdata en groepsdata opvragen
+$RoosterData = getRoosterDetails($_REQUEST['rooster']);
+$IDs = getGroupMembers($RoosterData['groep']);
+
 # Als er op een knop gedrukt is, het rooster wegschrijven
 if(isset($_POST['save']) OR isset($_POST['maanden'])) {
 	foreach($_POST['persoon'] as $dienst => $personen) {
@@ -29,14 +33,16 @@ if(isset($_POST['save']) OR isset($_POST['maanden'])) {
 			if($persoon != '' AND $persoon != 0) {
 				add2Rooster($_POST['rooster'], $dienst, $persoon, $pos);
 			}
-		}
+		}		
 	}
+	toLog('info', $_SESSION['ID'], '', 'Rooster '. $RoosterData['naam'] .' aangepast');
 }
 
 # Als op de knop van de mail geklikt is die data wegschrijven
 if(isset($_POST['save_mail'])) {
 	$sql = "UPDATE $TableRoosters SET $RoostersMail = '". urlencode($_POST['text_mail']) ."', $RoostersSubject = '". urlencode($_POST['onderwerp_mail']) ."', $RoostersFrom = '". urlencode($_POST['naam_afzender']) ."',	$RoostersFromAddr = '". urlencode($_POST['mail_afzender']) ."' WHERE $RoostersID = ". $_POST['rooster'];
 	mysqli_query($db, $sql);
+	toLog('info', $_SESSION['ID'], '', 'Mail voor '. $RoosterData['naam'] .' aangepast');
 }
 
 # Als er op de knop van 3 maanden extra geklikt is, 3 maanden bij de eindtijd toevoegen
@@ -50,10 +56,6 @@ if(isset($_POST['blokken'])) {
 if(isset($_POST['maanden'])) {
 	$blokken++;
 }
-
-# Roosterdata en groepsdata opvragen
-$RoosterData = getRoosterDetails($_REQUEST['rooster']);
-$IDs = getGroupMembers($RoosterData['groep']);
 
 # Als er geen groep is, gewoon de hele gemeente nemen
 if(count($IDs) == 0) {

@@ -15,11 +15,12 @@ $beheerder = getBeheerder($_REQUEST['groep']);
 $requiredUserGroups = array_merge(array(1), $beheerder);
 $cfgProgDir = 'auth/';
 include($cfgProgDir. "secure.php");
+
+$groupData = getGroupDetails($_REQUEST['groep']);
+$GroupMembers = getGroupMembers($_REQUEST['groep']);
 	
 $leden = getMembers('all');
 foreach($leden as $lid) {
-	//$data = getMemberDetails($lid);
-	//$namen[$lid] = makeName($lid, 6) .' (wijk '. $data['wijk'] .')';
 	$namen[$lid] = makeName($lid, 6);
 }
 
@@ -36,6 +37,7 @@ if(isset($_POST['change_members'])) {
 		$newLidID = array_search($_POST['nieuw_lid'], $namen);
 		addGroupLid($newLidID, $_POST['groep']);
 	}
+	toLog('info', $_SESSION['ID'], '', 'Leden '. $groupData['naam'] .' gewijzigd');
 }
 
 if(isset($_POST['change_site'])) {	
@@ -44,10 +46,8 @@ if(isset($_POST['change_site'])) {
 	
 	$sql = "UPDATE $TableGroups SET ". implode(", ", $set) ." WHERE $GroupID = ". $_REQUEST['groep'];
 	mysqli_query($db, $sql);
+	toLog('info', $_SESSION['ID'], '', 'Tekst voor groeppagina '. $groupData['naam'] .' gewijzigd');
 }
-
-$groupData = getGroupDetails($_REQUEST['groep']);
-$GroupMembers = getGroupMembers($_REQUEST['groep']);
 
 $block_1[] = "<form method='post' action='$_SERVER[PHP_SELF]'>";                      
 $block_1[] = "<input type='hidden' name='groep' value='". $_REQUEST['groep'] ."'>"; 

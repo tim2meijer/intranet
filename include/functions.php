@@ -719,12 +719,8 @@ function sendMail($ontvanger, $subject, $bericht, $var) {
 	}
 	
 	if(!$mail->Send()) {
-		//echo date("H:i") . " : Problemen met mail verstuurd aan ". makeName(array($UserData['voornaam'], $UserData['tussen'], $UserData['achternaam']), 5) ."<br>";
-		//toLog('error', $user, $nummer, 'problemen met mail versturen');
 		return false;
 	} else {
-		//echo date("H:i") . " : Mail verstuurd aan ". makeName(array($UserData['voornaam'], $UserData['tussen'], $UserData['achternaam']), 5) ."<br>";
-		//toLog('debug', $user, $nummer, 'trinitas-mail verstuurd');
 		return true;
 	}
 }
@@ -770,7 +766,18 @@ function getJarigen($dag, $maand) {
 		} while($row = mysqli_fetch_array($result));		
 	}
 	return $data;	
+}
 
+function toLog($type, $dader, $slachtoffer, $message) {
+	global $db,$TableLog, $LogID, $LogTime, $LogType, $LogUser, $LogSubject, $LogMessage;	
+
+	connect_db();
+ 	
+	$tijd = time();	
+	$sql = "INSERT INTO $TableLog ($LogTime, $LogType, $LogUser, $LogSubject, $LogMessage) VALUES ($tijd, '$type', '$dader', '$slachtoffer', '". addslashes($message) ."')";
+	if(!mysqli_query($db, $sql)) {
+		echo "log-error : ". $sql;
+	}
 }
 
 ?>

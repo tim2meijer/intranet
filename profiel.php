@@ -14,6 +14,7 @@ if(!isset($_REQUEST['id'])) {
 
 $personData = getMemberDetails($id);
 $familie = getFamilieleden($id);
+toLog('debug', $_SESSION['ID'], $id, 'profiel bekeken'); 
 
 # Pagina tonen
 echo $HTMLHeader;
@@ -108,8 +109,22 @@ echo "</tr>".NL;
 if(in_array($_SESSION['ID'], $familie) OR in_array(1, getMyGroups($_SESSION['ID']))) {
 	echo "<tr>".NL;
 	echo "	<td>&nbsp;</td>".NL;
-	echo "	<td colspan='3'><a href='gegevens.php?id=$id'>Wijzig gegevens</a></td>".NL;
-	echo "	<td>&nbsp;</td>".NL;
+	echo "	<td valign='top'><a href='gegevens.php?id=$id'>Wijzig gegevens</a></td>".NL;
+	
+	if(in_array(1, getMyGroups($_SESSION['ID']))) {			
+		echo "	<td>&nbsp;</td>".NL;
+		echo "	<td valign='top'>".NL;
+		echo "	<a href='admin/editGegevens.php?action=splits&id=$id'>Splits familielid af</a><br>".NL;
+		echo "	<a href='admin/editGegevens.php?action=combine&id=$id'>Combineer persoon</a><br>".NL;
+		echo "	<a href='admin/editGegevens.php?action=add&id=$id'>Voeg persoon toe</a><br>".NL;
+		echo "	<a href='admin/editGegevens.php?action=addFam&id=$id'>Voeg familielid toe</a><br>".NL;
+		echo "	<a href='admin/editGegevens.php?action=remove&id=$id'>Verwijder familielid</a><br>".NL;
+		echo "	<a href='admin/editGegevens.php?action=removeFam&id=$id'>Verwijder hele familie</a><br>".NL;
+		echo "	</td>".NL;
+		echo "	<td valign='top'>&nbsp;</td>".NL;
+	} else {
+		echo "	<td colspan='3'>&nbsp;</td>".NL;
+	}
 	echo "</tr>".NL;
 }
 

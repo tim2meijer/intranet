@@ -65,4 +65,12 @@ $PlanningGroup			= "commissie";
 $PlanningUser				= "lid";
 $PlanningPositie		= "positie";
 
+$TableLog						= "log";
+$LogID							= "id";
+$LogTime						= "tijd";
+$LogType						= "type";
+$LogUser						= "dader";
+$LogSubject					= "slachtoffer";
+$LogMessage					= "message";
+
 ?>
