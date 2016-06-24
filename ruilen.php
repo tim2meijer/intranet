@@ -46,7 +46,6 @@ if(isset($_REQUEST['dader']) AND isset($_REQUEST['slachtoffer'])) {
 	
 	if(sendMail($slachtoffer, "Er is met jou geruild voor '". $roosterData['naam'] ."'", implode("<br>\n", $mail), array())) {
 		toLog('debug', $dader, '', 'verplaatst van dienst '. $dienst_d .' naar '. $dienst_s); 
-		echo implode("<br>\n", $mail);
 	}
 		
 	$mail = array();
@@ -56,9 +55,8 @@ if(isset($_REQUEST['dader']) AND isset($_REQUEST['slachtoffer'])) {
 	$mail[] = "Jij staat nu ingepland op ". strftime("%e %B", $details_s['start']) ." en ". makeName($slachtoffer, 1) ." op ". strftime("%e %B", $details_d['start']);
 	$mail[] = "";
 	$mail[] = "Met groet";	
-	if(sendMail($slachtoffer, "Je hebt geruild voor '". $roosterData['naam'] ."'", implode("<br>\n", $mail), array())) {
+	if(sendMail($dader, "Je hebt geruild voor '". $roosterData['naam'] ."'", implode("<br>\n", $mail), array())) {
 		toLog('debug', $slachtoffer, '', 'verplaatst van dienst '. $dienst_s .' naar '. $dienst_d); 
-		echo implode("<br>\n", $mail);
 	}
 	
 	$text[] = 'Er is een bevestigingsmail naar jullie allebei gestuurd.';
