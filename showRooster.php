@@ -9,6 +9,9 @@ $db = connect_db();
 $RoosterData = getRoosterDetails($_REQUEST['rooster']);
 $diensten = getAllKerkdiensten(true);
 //$diensten = getKerkdiensten(time(), mktime(date("H"), date("i"), date("s"), date("n")+3, date("j"), date("Y"));
+$IDs = getGroupMembers($RoosterData['groep']);
+
+toLog('debug', $_SESSION['ID'], '', 'Rooster '. $RoosterData['naam'] .' bekeken');
 
 echo $HTMLHeader;
 echo "<h1>". $RoosterData['naam'] ."</h1>".NL;
@@ -23,7 +26,17 @@ foreach($diensten as $dienst) {
 			
 		foreach($vulling as $lid) {
 			$data = getMemberDetails($lid);
-			$namen[] = "<a href='profiel.php?id=$lid'>". makeName($lid, 5) ."</a>";
+			$string = "<a href='profiel.php?id=$lid'>". makeName($lid, 5) ."</a>";
+			
+			if(in_array($_SESSION['ID'], $IDs)) {
+				if($lid == $_SESSION['ID']) {
+					$string .= " <a href='ruilen.php?rooster=". $_REQUEST['rooster'] ."&dienst_d=$dienst&dader=$lid' title='klik om te ruilen'><img src='images/wisselen.png'></a>";
+				} else {
+					$string .= " <a href='ruilen.php?rooster=". $_REQUEST['rooster'] ."&dienst_s=$dienst&slachtoffer=$lid' title='klik om te ruilen'><img src='images/wisselen.png'></a>";
+				}
+			}
+			
+			$namen[] = $string;
 		}
 		
 		echo '<tr><td valign=\'top\'>'.date("d-m", $details['start']).'</td><td valign=\'top\'>'. implode('<br>', $namen).'</td></tr>'.NL;

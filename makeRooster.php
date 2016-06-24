@@ -41,7 +41,7 @@ if(isset($_POST['save']) OR isset($_POST['maanden'])) {
 # Als op de knop van de mail geklikt is die data wegschrijven
 if(isset($_POST['save_mail'])) {
 	$sql = "UPDATE $TableRoosters SET $RoostersMail = '". urlencode($_POST['text_mail']) ."', $RoostersSubject = '". urlencode($_POST['onderwerp_mail']) ."', $RoostersFrom = '". urlencode($_POST['naam_afzender']) ."',	$RoostersFromAddr = '". urlencode($_POST['mail_afzender']) ."' WHERE $RoostersID = ". $_POST['rooster'];
-	mysqli_query($db, $sql);
+	mysqli_query($db, $sql);		
 	toLog('info', $_SESSION['ID'], '', 'Mail voor '. $RoosterData['naam'] .' aangepast');
 }
 
@@ -60,11 +60,14 @@ if(isset($_POST['maanden'])) {
 # Als er geen groep is, gewoon de hele gemeente nemen
 if(count($IDs) == 0) {
 	$IDs = getMembers('volwassen');
+	$type = 13;
+} else {
+	$type = 5;
 }
 
 # Doorloop de hele groep en haal hun namen op
 foreach($IDs as $member) {
-	$namen[$member] = makeName($member, 5);
+	$namen[$member] = makeName($member, $type);
 }	
 
 # Haal alle kerkdiensten binnen een tijdsvak op

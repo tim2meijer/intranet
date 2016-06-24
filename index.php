@@ -149,8 +149,8 @@ if(count($jarigen) > 0) {
 		$data = getMemberDetails($jarige);
 		$jarig[] = "<a href='profiel.php?id=$jarige' target='_blank'>". makeName($jarige, 5)."</a> (". (date("Y")-$data['jaar']).")";
 	}
+	$blockArray[] = implode("<br>".NL, $jarig);
 }
-$blockArray[] = implode("<br>".NL, $jarig);
 
 
 # Jarigen
@@ -161,8 +161,8 @@ if(count($jarigen) > 0) {
 		$data = getMemberDetails($jarige);
 		$morgen[] = "<a href='profiel.php?id=$jarige' target='_blank'>". makeName($jarige, 5)."</a> (". (date("Y")-$data['jaar']).")";
 	}
+	$blockArray[] = implode("<br>".NL, $morgen);
 }
-$blockArray[] = implode("<br>".NL, $morgen);
 
 # Pagina tonen
 echo $HTMLHeader;
