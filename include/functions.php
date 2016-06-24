@@ -3,6 +3,7 @@ function connect_db() {
 	global $dbHostname, $dbUsername, $dbPassword, $dbName;
 	
 	$link = mysqli_connect($dbHostname, $dbUsername, $dbPassword, $dbName) or die("Error " . mysqli_error($link));
+	mysqli_set_charset($link, 'utf8mb4');
 	
 	return $link;
 }
@@ -181,9 +182,9 @@ function getMembers($type = 'all') {
 	$data = array();
 	
 	if($type == 'all') {
-		$sql = "SELECT $UserID FROM $TableUsers";
+		$sql = "SELECT $UserID FROM $TableUsers ORDER BY $UserAchternaam";
 	} elseif($type == 'volwassen') {
-		$sql = "SELECT $UserID FROM $TableUsers WHERE $UserGebJaar < ". (date("Y")-18);
+		$sql = "SELECT $UserID FROM $TableUsers WHERE $UserGebJaar < ". (date("Y")-18) ." ORDER BY $UserAchternaam";
 	} elseif($type == 'adressen') {
 		$sql = "SELECT $UserID FROM $TableUsers GROUP BY $UserAdres ORDER BY $UserAchternaam";
 	}
@@ -577,18 +578,25 @@ function makeName($id, $type) {
 		$achter_m = '';
 	}
 	
-	# 1 = voornaam											Alberdien
-	# 2 = korte achternaam							Jong
-	# 3 = volledige achternaam (man)		de Jong
-	# 4 = volledige achternaam (vrouw)	de Jong-van Ginkel
-	# 5 = voornaam achternaam (man)			Alberdien de Jong
-	# 6 = voornaam achternaam (vrouw)		Alberdien de Jong-van Ginkel
-	# 7 = voornaam achternaam (vrouw)		Alberdien van Ginkel	
-	# 8 = achternaam, voornaam					Jong; de, Alberdien
+	# 1 = voornaam												Alberdien
+	# 2 = korte achternaam								Jong
+	# 3 = volledige achternaam (man)			de Jong
+	# 4 = volledige achternaam (vrouw)		de Jong-van Ginkel
+	# 5 = voornaam achternaam (man)				Alberdien de Jong
+	# 6 = voornaam achternaam (vrouw)			Alberdien de Jong-van Ginkel
+	# 7 = voornaam achternaam (vrouw)			Alberdien van Ginkel	
+	# 8 = achternaam, voornaam						Jong; de, Alberdien
+	# 9 = voorletters achternaam (man)		A. de Jong
+	# 10 = voorletters achternaam (vrouw)	A. de Jong-van Ginkel
+	# 11 = voorletters achternaam (vrouw)	A. van Ginkel
+	# 12 = voorletters achternaam (man)		A. (Alberdien) de Jong
+	# 13 = voorletters achternaam (vrouw)	A. (Alberdien) de Jong-van Ginkel
+	# 14 = voorletters achternaam (vrouw)	A. (Alberdien) van Ginkel
+
 	
-	if($achter_m != '' AND ($type == 4 OR $type == 6)) {
+	if($achter_m != '' AND ($type == 4 OR $type == 6 OR $type == 10)) {
 		$achter .= '-'.$achter_m;
-	} elseif($achter_m != '' AND $type == 7) {
+	} elseif($achter_m != '' AND ($type == 7 OR $type == 11)) {
 		$achter = $achter_m;
 	}
 			
@@ -617,6 +625,14 @@ function makeName($id, $type) {
 		return urldecode($voornaam.' '.$achternaam);
 	} elseif($type == 8) {
 		return urldecode($achternaam.', '.$voornaam);
+	} elseif($type == 9 OR $type == 10 OR $type == 11) {
+		return urldecode($voorletters .' '. $achternaam);
+	} elseif($type == 12 OR $type == 13 OR $type == 14) {
+		if($voornaam != $voorletters) {
+			return urldecode($voorletters .' ('. $voornaam .') '. $achternaam);
+		} else {
+			return urldecode($voorletters .' '. $achternaam);
+		}
 	}
 }
 
@@ -779,5 +795,10 @@ function toLog($type, $dader, $slachtoffer, $message) {
 		echo "log-error : ". $sql;
 	}
 }
+
+function getParam($name, $default = '') {
+	return isset($_REQUEST[$name]) ? $_REQUEST[$name] : $default;
+}
+
 
 ?>
