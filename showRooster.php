@@ -30,9 +30,9 @@ foreach($diensten as $dienst) {
 			
 			if(in_array($_SESSION['ID'], $IDs)) {
 				if($lid == $_SESSION['ID']) {
-					$string .= " <a href='ruilen.php?rooster=". $_REQUEST['rooster'] ."&dienst_d=$dienst&dader=$lid' title='klik om te ruilen'><img src='images/wisselen.png'></a>";
+					$string .= " <a href='ruilen.php?rooster=". $_REQUEST['rooster'] ."&dienst_d=$dienst&dader=$lid' title='klik om ruiling door te geven'><img src='images/wisselen.png'></a>";
 				} else {
-					$string .= " <a href='ruilen.php?rooster=". $_REQUEST['rooster'] ."&dienst_s=$dienst&slachtoffer=$lid' title='klik om te ruilen'><img src='images/wisselen.png'></a>";
+					$string .= " <a href='ruilen.php?rooster=". $_REQUEST['rooster'] ."&dienst_s=$dienst&slachtoffer=$lid' title='klik ruiling door te geven'><img src='images/wisselen.png'></a>";
 				}
 			}
 			

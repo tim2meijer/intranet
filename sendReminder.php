@@ -21,6 +21,8 @@ foreach($diensten as $dienst) {
 			$onderwerp				= $roosterData['onderwerp_mail'];
 			$var['FromName']	= $roosterData['naam_afzender'];
 			$var['from']			= $roosterData['mail_afzender'];
+			
+			$HTMLMail .= "<p>Ps. : mocht je onderling geruild hebben, wil je deze mail dan doorsturen naar de betreffende persoon?<br>In het vervolg kan je die ruiling ook doorgeven via <a href='$ScriptURL/showRooster.php?rooster=$rooster'>het rooster</a> zelf, dan komt de mail direct goed terecht.";	
 									
 			foreach($vulling as $lid) {
 				$team = array();

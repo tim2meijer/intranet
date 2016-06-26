@@ -720,7 +720,7 @@ function sendMail($ontvanger, $subject, $bericht, $var) {
 	}
 			
 	$mail->AddAddress($UserData['mail'], makeName($ontvanger, 5));	
-	$mail->AddBCC('internet@draijer.org');
+	//$mail->AddBCC('internet@draijer.org');
 	$mail->Subject	= $SubjectPrefix . $subject;
 	$mail->IsHTML(true);
 	$mail->Body			= $HTMLMail;
