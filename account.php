@@ -6,11 +6,14 @@ $cfgProgDir = 'auth/';
 include($cfgProgDir. "secure.php");
 $db = connect_db();
 
+/*
 if(!isset($_REQUEST['id'])) {
 	$id = $_SESSION['ID'];
 } else {
 	$id = $_REQUEST['id'];
 }
+*/
+$id = getParam('id', $_SESSION['ID']);
 
 # Als je niet voorkomt in de Admin-groep dan ga je naar je eigen gegevens
 if(!in_array(1, getMyGroups($_SESSION['ID']))) {	

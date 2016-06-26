@@ -6,11 +6,14 @@ $cfgProgDir = 'auth/';
 include($cfgProgDir. "secure.php");
 $db = connect_db();
 
+/*
 if(!isset($_REQUEST['id'])) {
 	$id = $_SESSION['ID'];
 } else {
 	$id = $_REQUEST['id'];
 }
+*/
+$id = getParam('id', $_SESSION['ID']);
 
 $familie = getFamilieleden($_SESSION['ID']);
 
@@ -19,10 +22,6 @@ $familie = getFamilieleden($_SESSION['ID']);
 if(!in_array(1, getMyGroups($_SESSION['ID'])) AND !in_array($id,$familie)) {	
 	$id = $_SESSION['ID'];
 }
-
-$wijkArray = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J');
-$maandArray = array(1 => 'jan', 2 => 'feb', 3 => 'mrt', 4 => 'apr', 5 => 'mei', 6 => 'jun', 7 => 'jul', 8 => 'aug', 9 => 'sep', 10 => 'okt', 11 => 'nov', 12 => 'dec');
-
 
 if(isset($_POST['data_opslaan'])) {
 	$sql_persoon = "UPDATE $TableUsers SET `$UserVoorletters` = '". addslashes($_POST['voorletters']) ."', `$UserVoornaam` = '". addslashes($_POST['voornaam']) ."', `$UserTussenvoegsel` = '". addslashes($_POST['tussenvoegsel']) ."', `$UserAchternaam` = '". addslashes($_POST['achternaam']) ."', `$UserMeisjesnaam` = '". addslashes($_POST['meisjesnaam']) ."', `$UserGebDag` = ". $_POST['dag'] .", `$UserGebMaand` = ". $_POST['maand'] .", `$UserGebJaar` = ". $_POST['jaar'] .", `$UserTelefoon` = '". $_POST['prive_tel'] ."', `$UserMail` = '". $_POST['prive_mail'] ."', `$UserTwitter` = '". $_POST['twitter'] ."', `$UserFacebook` = '". $_POST['fb'] ."', `$UserLinkedin` = '". $_POST['linkedin'] ."'	WHERE `$UserID` = ". $_POST['id'];

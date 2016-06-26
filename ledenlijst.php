@@ -6,6 +6,7 @@ $cfgProgDir = 'auth/';
 include($cfgProgDir. "secure.php");
 $db = connect_db();
 
+/*
 if(isset($_REQUEST['search_member']) OR !isset($_REQUEST['letter'])) {
 	$leden = getMembers('all');
 	foreach($leden as $lid) {
@@ -42,7 +43,11 @@ if(!isset($_REQUEST['letter'])) {
 	echo $HTMLHeader;
 	$letter = $_REQUEST['letter'];
 }
+*/
 
+$letter = getParam('letter', 'A');
+
+echo $HTMLHeader;
 echo "<h1>Ledenlijst</h1>".NL;
 echo '<p>';
 
@@ -61,6 +66,7 @@ foreach($letterArray as $key => $value) {
 }
 echo '<p>';
 
+/*
 if(!isset($_REQUEST['letter'])) {
 	echo "<form method='post' action='$_SERVER[PHP_SELF]' target='_blank'>";                      
 	echo "Voer de naam in van de persoon die u zoekt.<br>";
@@ -69,6 +75,7 @@ if(!isset($_REQUEST['letter'])) {
 	echo "<input type='submit' name='search_member' value='Lid zoeken'>";
 	echo "</form>";	
 } else {
+*/
 	$sql = "SELECT * FROM $TableUsers WHERE $UserAchternaam like '$letter%' ORDER BY $UserAchternaam";		
 	$result = mysqli_query($db, $sql);
 	if($row	= mysqli_fetch_array($result)) {
@@ -76,7 +83,7 @@ if(!isset($_REQUEST['letter'])) {
 			echo "<a href='profiel.php?id=". $row[$UserID] ."'>". makeName($row[$UserID], 5)."</a><br>";
 		} while($row	= mysqli_fetch_array($result));
 	}
-}
+//}
 	
 echo $HTMLFooter;
 ?>

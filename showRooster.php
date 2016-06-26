@@ -8,7 +8,6 @@ $db = connect_db();
 
 $RoosterData = getRoosterDetails($_REQUEST['rooster']);
 $diensten = getAllKerkdiensten(true);
-//$diensten = getKerkdiensten(time(), mktime(date("H"), date("i"), date("s"), date("n")+3, date("j"), date("Y"));
 $IDs = getGroupMembers($RoosterData['groep']);
 
 toLog('debug', $_SESSION['ID'], '', 'Rooster '. $RoosterData['naam'] .' bekeken');

@@ -6,11 +6,15 @@ $cfgProgDir = 'auth/';
 include($cfgProgDir. "secure.php");
 $db = connect_db();
 
+/*
 if(!isset($_REQUEST['id'])) {
 	$id = $_SESSION['ID'];
 } else {
 	$id = $_REQUEST['id'];
 }
+*/
+
+$id = getParam('id', $_SESSION['ID']);
 
 $personData = getMemberDetails($id);
 $familie = getFamilieleden($id);
