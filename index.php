@@ -137,6 +137,7 @@ $site[] = "<a href='account.php' target='_blank'>Account</a>";
 $site[] = "<a href='profiel.php' target='_blank'>Profiel</a>";
 $site[] = "<a href='gegevens.php' target='_blank'>Gegevens wijzigen</a>";
 $site[] = "<a href='ledenlijst.php' target='_blank'>Ledenlijst</a>";
+$site[] = "<a href='search.php' target='_blank'>Zoeken</a>";
 $site[] = "<a href='auth/objects/logout.php' target='_blank'>Log-out</a>";
 $blockArray[] = implode("<br>".NL, $site);
 

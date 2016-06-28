@@ -75,7 +75,7 @@ echo "		<td>".$personData['wijk'] ."</td>".NL;
 echo "	</tr>".NL;
 echo "	<tr>".NL;
 echo "		<td><b>Geboortedatum</b></td>".NL;
-echo "		<td>". substr('0'.$personData['dag'], -2) .'-'. substr('0'.$personData['maand'], -2) .'-'. $personData['jaar'] ."</td>".NL;
+echo "		<td>". strftime("%d %B %Y", $personData['geb_unix']) ."</td>".NL;
 echo "	</tr>".NL;
 if($personData['twitter'] != '' OR $personData['fb'] != '' OR $personData['linkedin'] != '') {
 	echo "	<tr>".NL;

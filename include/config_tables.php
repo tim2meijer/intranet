@@ -15,6 +15,7 @@ $UserPassword				= "password";
 $UserGebDag					= "geboortedag";
 $UserGebMaand				= "geboortemaand";
 $UserGebJaar				= "geboortejaar";
+$UserGeboorte				= "geboortedatum";
 $UserTelefoon				= "telefoon";
 $UserMail						= "email";
 $UserTwitter				= "twitter";
@@ -75,6 +76,6 @@ $LogMessage					= "message";
 
 $wijkArray = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J');
 $maandArray = array(1 => 'jan', 2 => 'feb', 3 => 'mrt', 4 => 'apr', 5 => 'mei', 6 => 'jun', 7 => 'jul', 8 => 'aug', 9 => 'sep', 10 => 'okt', 11 => 'nov', 12 => 'dec');
-
+$letterArray = array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
 
 ?>

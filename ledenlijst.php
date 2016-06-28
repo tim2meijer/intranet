@@ -45,13 +45,20 @@ if(!isset($_REQUEST['letter'])) {
 }
 */
 
-$letter = getParam('letter', 'A');
+$letter = getParam('letter', '');
+$wijk = getParam('wijk', '');
+
+if($letter == '' AND $wijk == '') {
+	$data = getMemberDetails($_SESSION['ID']);
+	$achternaam = $data['achternaam'];
+	$letter = $achternaam[0];
+}
 
 echo $HTMLHeader;
 echo "<h1>Ledenlijst</h1>".NL;
 echo '<p>';
 
-$letterArray = array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+echo 'Achternaam | ';
 	
 foreach($letterArray as $key => $value) {
 	if($key > 0) {
@@ -64,7 +71,22 @@ foreach($letterArray as $key => $value) {
 		echo "<a href='?letter=$value'>$value</a>";
 	}
 }
+echo '<br>';
+echo 'Wijk | ';
+
+foreach($wijkArray as $key => $value) {
+	if($key > 0) {
+		echo ' | ';
+	}
+	
+	if($value == $wijk) {
+		echo $value;
+	} else {
+		echo "<a href='?wijk=$value'>$value</a>";
+	}
+}
 echo '<p>';
+
 
 /*
 if(!isset($_REQUEST['letter'])) {
@@ -76,13 +98,18 @@ if(!isset($_REQUEST['letter'])) {
 	echo "</form>";	
 } else {
 */
-	$sql = "SELECT * FROM $TableUsers WHERE $UserAchternaam like '$letter%' ORDER BY $UserAchternaam";		
-	$result = mysqli_query($db, $sql);
-	if($row	= mysqli_fetch_array($result)) {
-		do {
-			echo "<a href='profiel.php?id=". $row[$UserID] ."'>". makeName($row[$UserID], 5)."</a><br>";
-		} while($row	= mysqli_fetch_array($result));
-	}
+if($letter != '') {
+	$sql = "SELECT $UserID FROM $TableUsers WHERE $UserAchternaam like '$letter%' ORDER BY $UserAchternaam";
+} elseif($wijk != '') {
+	$sql = "SELECT $TableUsers.$UserID FROM $TableUsers, $TableAdres WHERE $TableAdres.$AdresID = $TableUsers.$UserAdres AND $TableAdres.$AdresWijk like '$wijk' ORDER BY $TableUsers.$UserAchternaam";
+}
+
+$result = mysqli_query($db, $sql);
+if($row	= mysqli_fetch_array($result)) {
+	do {
+		echo "<a href='profiel.php?id=". $row[$UserID] ."'>". makeName($row[$UserID], 5)."</a><br>";
+	} while($row	= mysqli_fetch_array($result));
+}
 //}
 	
 echo $HTMLFooter;

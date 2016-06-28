@@ -216,7 +216,7 @@ function getGroupMembers($commID) {
 }
 
 function getMemberDetails($id) {
-	global $TableUsers, $UserID, $UserAdres, $UserGeslacht, $UserUsername, $UserVoorletters, $UserVoornaam, $UserTussenvoegsel, $UserAchternaam, $UserMeisjesnaam, $UserGebDag, $UserGebMaand, $UserGebJaar, $UserTelefoon, $UserMail, $UserTwitter, $UserFacebook, $UserLinkedin, $UserBelijdenis;
+	global $TableUsers, $UserID, $UserAdres, $UserGeslacht, $UserUsername, $UserVoorletters, $UserVoornaam, $UserTussenvoegsel, $UserAchternaam, $UserMeisjesnaam, $UserGeboorte, $UserTelefoon, $UserMail, $UserTwitter, $UserFacebook, $UserLinkedin, $UserBelijdenis;
 	global $TableAdres, $AdresID, $AdresStraat, $AdresHuisnummer, $AdresPC, $AdresPlaats, $AdresTelefoon, $AdresMail, $AdresWijk;
 	
 	$db = connect_db();
@@ -226,7 +226,7 @@ function getMemberDetails($id) {
 	$sql = "SELECT * FROM $TableUsers WHERE $UserID = $id";
 	$result = mysqli_query($db, $sql);
 	$row = mysqli_fetch_array($result);
-	
+		
 	$data['id']							= $row[$UserID];
 	$data['adres']					= $row[$UserAdres];
 	$data['geslacht']				= $row[$UserGeslacht];
@@ -237,9 +237,11 @@ function getMemberDetails($id) {
 	$data['achternaam']			= $row[$UserAchternaam];
 	$data['meisjesnaam']		= $row[$UserMeisjesnaam];
 	$data['username']				= $row[$UserUsername];
-	$data['dag']						= $row[$UserGebDag];
-	$data['maand']					= $row[$UserGebMaand];
-	$data['jaar']						= $row[$UserGebJaar];
+	$data['geboorte']				= $row[$UserGeboorte];		
+	$data['jaar']						= substr($row[$UserGeboorte], 0, 4);
+	$data['maand']					= substr($row[$UserGeboorte], 5, 2);
+	$data['dag']						= substr($row[$UserGeboorte], 8, 2);	
+	$data['geb_unix']				= mktime(0,0,0,$data['maand'],$data['dag'],$data['jaar']);
 	$data['prive_tel']			= $row[$UserTelefoon];
 	$data['prive_mail']			= $row[$UserMail];
 	$data['twitter']				= $row[$UserTwitter];
@@ -769,12 +771,12 @@ function getFamilieleden($id) {
 }
 
 function getJarigen($dag, $maand) {
-	global $TableUsers, $UserID, $UserGebDag, $UserGebMaand;
+	global $TableUsers, $UserID, $UserGeboorte;
 	$db = connect_db();
 	
 	$data = array();
 	
-	$sql = "SELECT $UserID FROM $TableUsers WHERE $UserGebDag = $dag AND $UserGebMaand = $maand";
+	$sql = "SELECT $UserID FROM $TableUsers WHERE DAYOFMONTH($UserGeboorte) = $dag AND MONTH($UserGeboorte) = $maand";
 	$result = mysqli_query($db, $sql);
 	if($row = mysqli_fetch_array($result)) {
 		do {

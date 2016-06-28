@@ -24,7 +24,7 @@ foreach($diensten as $dienst) {
 		$namen = array();
 			
 		foreach($vulling as $lid) {
-			$data = getMemberDetails($lid);
+			//$data = getMemberDetails($lid);
 			$string = "<a href='profiel.php?id=$lid'>". makeName($lid, 5) ."</a>";
 			
 			if(in_array($_SESSION['ID'], $IDs)) {
