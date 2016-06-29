@@ -79,8 +79,8 @@ foreach($wijkArray as $w) {
 }
 $text[] = "	</select></td>";
 $text[] = "	<td>&nbsp;</td>";
-//$text[] = "	<td><input type='text' name='searchString' value='$searchString'></td>";
-$text[] = "	<td>&nbsp;</td>";
+$text[] = "	<td><input type='text' name='searchString' value='$searchString'></td>";
+//$text[] = "	<td>&nbsp;</td>";
 $text[] = "</tr>";
 $text[] = "<tr>";
 $text[] = "	<td colspan='9'>&nbsp;</td>";
@@ -92,27 +92,36 @@ $text[] = "</table>";
 
 if(isset($_POST['search'])) {
 	$where[] = "$UserGeboorte BETWEEN '$sJaar-$sMaand-$sDag' AND '$eJaar-$eMaand-$eDag'";
+	$table[] = $TableUsers;
 	
 	if($geslacht != '') {
 		$where[] = "$UserGeslacht like '$geslacht'";
 	}
 	
 	if($searchString != '') {
-		$where[] = "$UserVoornaam like '%$searchString%' OR $UserAchternaam like '%$searchString%'";
+		$searchString = strtolower($searchString);
+		$having1 = ", LOWER(CONCAT_WS(' ', $UserVoornaam, $UserAchternaam)) as naamKort, LOWER(CONCAT_WS(' ', $UserVoornaam, $UserTussenvoegsel, $UserAchternaam)) as naamLang";
+		$having2 = " HAVING naamKort like '%$searchString%' OR naamKort like '$searchString%' OR naamKort like '%$searchString'	OR naamLang like '%$searchString%' OR naamLang like '$searchString%' OR naamLang like '%$searchString'";
+	} else {
+		$having1 = '';
+		$having2 = '';
 	}
 		
 	if($wijk != '') {
-		$where[] = "$UserGeslacht like '$geslacht'";
+		$where[] = "$TableUsers.$UserAdres = $TableAdres.$AdresID AND $TableAdres.$AdresWijk like '$wijk'";
+		$table[] = $TableAdres;
 	}
 	
-	$sql = "SELECT * FROM $TableUsers WHERE ". implode(' AND ', $where) ." ORDER BY $UserAchternaam";
+	$sql = "SELECT $TableUsers.$UserID$having1 FROM ". implode(', ', $table)." WHERE ". implode(' AND ', $where) ."$having2 ORDER BY $UserAchternaam";
 	$result = mysqli_query($db, $sql);
 	if($row = mysqli_fetch_array($result)) {
 		$text[] = '<p>';
+		$text[] = '<ol>';
 		do {
 			$lid = $row[$UserID];
-			$text[] = "<a href='profiel.php?id=$lid'>". makeName($lid, 5) ."</a><br>";
+			$text[] = "<li><a href='profiel.php?id=$lid'>". makeName($lid, 5) ."</a></li>";
 		} while($row = mysqli_fetch_array($result));		
+		$text[] = '</ol>';
 	}
 }
 
