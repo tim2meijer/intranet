@@ -38,7 +38,7 @@ foreach($diensten as $dienst) {
 			$namen[] = $string;
 		}
 		
-		echo '<tr><td valign=\'top\'>'.date("d-m", $details['start']).'</td><td valign=\'top\'>'. implode('<br>', $namen).'</td></tr>'.NL;
+		echo '<tr><td valign=\'top\'>'.date("d-m H:i", $details['start']).'</td><td valign=\'top\'>'. implode('<br>', $namen).'</td></tr>'.NL;
 	}
 }
 
