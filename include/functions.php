@@ -176,7 +176,7 @@ function getKerkdienstDetails($id) {
 }
 
 function getMembers($type = 'all') {
-	global $TableUsers, $UserID, $UserGebJaar, $UserAdres, $UserAchternaam, $UserMeisjesnaam;	
+	global $TableUsers, $UserID, $UserAdres, $UserGeboorte, $UserAchternaam, $UserMeisjesnaam;	
 	$db = connect_db();
 	
 	$data = array();
@@ -184,7 +184,7 @@ function getMembers($type = 'all') {
 	if($type == 'all') {
 		$sql = "SELECT $UserID FROM $TableUsers ORDER BY $UserAchternaam";
 	} elseif($type == 'volwassen') {
-		$sql = "SELECT $UserID FROM $TableUsers WHERE $UserGebJaar < ". (date("Y")-18) ." ORDER BY $UserAchternaam";
+		$sql = "SELECT $UserID FROM $TableUsers WHERE $UserGeboorte < '". (date("Y")-18) ."-". date("m-d") ."' ORDER BY $UserAchternaam";
 	} elseif($type == 'adressen') {
 		$sql = "SELECT $UserID FROM $TableUsers GROUP BY $UserAdres ORDER BY $UserAchternaam";
 	}
