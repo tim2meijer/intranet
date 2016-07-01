@@ -126,11 +126,11 @@ if(in_array(1, getMyGroups($_SESSION['ID']))) {
 if(in_array(1, getMyGroups($_SESSION['ID']))) {
 	$adminDeel[] = "<b>Admin</b>";
 	
-	$links['admin/generateUsernames.php'] = 'Gebruikersnamen aanmaken';
-	$links['admin/generateDiensten.php'] = 'Kerkdiensten aanmaken';
-	$links['admin/crossCheck.php'] = 'Check databases';
+	$adminLinks['admin/generateUsernames.php'] = 'Gebruikersnamen aanmaken';
+	$adminLinks['admin/generateDiensten.php'] = 'Kerkdiensten aanmaken';
+	$adminLinks['admin/crossCheck.php'] = 'Check databases';
 	
-	foreach($links as $link => $naam) {
+	foreach($adminLinks as $link => $naam) {
 		$adminDeel[] = "<a href='$link' target='_blank'>$naam</a>";
 	}
 	
