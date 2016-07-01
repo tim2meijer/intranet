@@ -122,7 +122,20 @@ if(in_array(1, getMyGroups($_SESSION['ID']))) {
 	$blockArray[] = implode("<br>".NL, $adminRoosters);
 }
 
-
+# Admin-deel
+if(in_array(1, getMyGroups($_SESSION['ID']))) {
+	$adminDeel[] = "<b>Admin</b>";
+	
+	$links['admin/generateUsernames.php'] = 'Gebruikersnamen aanmaken';
+	$links['admin/generateDiensten.php'] = 'Kerkdiensten aanmaken';
+	$links['admin/crossCheck.php'] = 'Check databases';
+	
+	foreach($links as $link => $naam) {
+		$adminDeel[] = "<a href='$link' target='_blank'>$naam</a>";
+	}
+	
+	$blockArray[] = implode("<br>".NL, $adminDeel);
+}
 
 # Hyperlinks
 $links[] = "<b>Links</b>";
