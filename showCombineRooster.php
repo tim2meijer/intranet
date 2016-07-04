@@ -22,26 +22,30 @@ if(isset($_REQUEST['show'])) {
 	
 	foreach($diensten as $dienst) {
 		$dienstData = getKerkdienstDetails($dienst);		
-		$eersteRij = true;
+		$gevuldeCel = false;
+		$cel = array();
 				
 		foreach($roosters as $rooster) {
 			$vulling = getRoosterVulling($rooster, $dienst);
 		
-			if(count($vulling) > 0) {	
-				if($eersteRij) {
-					$text[] = "<tr>";
-					$text[] = "<td valign='top'>".strftime("%a %d %b %H:%M", $dienstData['start'])."</td>";
-					$eersteRij = false;
-				}				
-				
+			if(count($vulling) > 0) {				
 				$team = array();	
 				foreach($vulling as $lid) {
 					$team[] = makeName($lid, 5);
 				}
-				$text[] = "<td valign='top'>". implode("<br>", $team) ."</td>";
-			}
+				$cel[] = "<td valign='top'>". implode("<br>", $team) ."</td>";
+				$gevuldeCel = true;
+			} else {
+				$cel[] = "<td>&nbsp;</td>";
+			}		
 		}
-		$text[] = "</tr>";
+		
+		if($gevuldeCel) {
+			$text[] = "<tr>";
+			$text[] = "<td valign='top'>".strftime("%a %d %b %H:%M", $dienstData['start'])."</td>";
+			$text[] = implode("\n", $cel);
+			$text[] = "</tr>";
+		}
 	}
 	$text[] = "</table>";
 } else {
