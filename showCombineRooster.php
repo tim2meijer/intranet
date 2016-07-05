@@ -10,7 +10,7 @@ if(isset($_REQUEST['show'])) {
 	$diensten = getAllKerkdiensten(false);
 	$roosters = $_REQUEST['r'];
 	
-	$text[] = "<table border=0>";
+	$text[] = "<table border=1>";
 	$text[] = "<tr>";
 	$text[] = "<td>&nbsp;</td>";
 	
