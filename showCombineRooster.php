@@ -97,7 +97,7 @@ if(isset($_REQUEST['pdf'])) {
 	$pdf->SetWidths($widths);
 	
 	$pdf->makeTable($header, $data);
-  $pdf->Output('I', $title .'.pdf');	
+  $pdf->Output('I', $title.'_'.date('Y_m_d').'.pdf');	
 } else {
 	echo $HTMLHeader;
 	echo implode("\n", $text);

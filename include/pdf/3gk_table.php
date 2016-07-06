@@ -43,7 +43,7 @@ class PDF_3GK_Table extends PDF_3GK {
 			}
 			
 			# Print the text
-			$this->MultiCell($w,5,$data[$i],0,$a);
+			$this->MultiCell($w,5, utf8_decode($data[$i]),0,$a);
 			
 			# Put the position to the right of the cell
 			$this->SetXY($x+$w,$y);
