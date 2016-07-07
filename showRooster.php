@@ -38,10 +38,19 @@ foreach($diensten as $dienst) {
 			$namen[] = $string;
 		}
 		
-		echo '<tr><td valign=\'top\'>'.strftime("%a %d %b %H:%M", $details['start']).'</td><td valign=\'top\'>'. implode('<br>', $namen).'</td></tr>'.NL;
+		echo "<tr>";
+		echo "	<td valign='top'>".strftime("%a %d %b %H:%M", $details['start'])."</td>";
+		echo "	<td valign='top'>". implode('<br>', $namen)."</td>";
+		echo "</tr>".NL;
 	}
 }
 
+echo "<tr>";
+echo "	<td colspan='2'>&nbsp;</td>";
+echo "</tr>".NL;
+echo "<tr>";
+echo "	<td colspan='2'><a href='showCombineRooster.php?rs=". $_REQUEST['rooster'] ."&pdf'>PDF-versie</a></td>";
+echo "</tr>".NL;
 echo '</table>';
 echo $HTMLFooter;
 ?>

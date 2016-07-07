@@ -83,7 +83,7 @@ if(count($roosters) > 0) {
 if(isset($_REQUEST['pdf'])) {
 	if(count($header) == 2) {
 		$RoosterData = getRoosterDetails(end($roosters));
-		$title = $RoosterData['naam'];
+		$title = 'Rooster '. $RoosterData['naam'];
 	} else {
 		$title = 'Gecombineerd rooster';
 	}
