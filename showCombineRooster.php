@@ -8,10 +8,17 @@ $cfgProgDir = 'auth/';
 include($cfgProgDir. "secure.php");
 $db = connect_db();
 
-if(isset($_REQUEST['show'])) {
-	$diensten = getAllKerkdiensten(false);
+$roosters = array();
+
+if(isset($_REQUEST['rs'])) {
+	$roosters = explode('|', $_REQUEST['rs']);
+} elseif(isset($_REQUEST['r'])) {
 	$roosters = $_REQUEST['r'];
-	
+}
+
+if(count($roosters) > 0) {
+	$diensten = getAllKerkdiensten(true);
+		
 	$text[] = "<table border=1>";
 	$text[] = "<tr>";
 	$text[] = "<td>&nbsp;</td>";
@@ -58,7 +65,7 @@ if(isset($_REQUEST['show'])) {
 	
 	$text[] = "</table>";
 	$text[] = "<p>";
-	$text[] = "<a href='?r[]=". implode("&r[]=", $_REQUEST['r'])."&show&pdf'>sla op als PDF</a>";
+	$text[] = "<a href='?rs=". implode('|', $roosters)."&pdf'>sla op als PDF</a>";
 } else {
 	$roosters = getRoosters(0);
 	$text[] = "<form>";
@@ -81,7 +88,7 @@ if(isset($_REQUEST['pdf'])) {
 		$title = 'Gecombineerd rooster';
 	}
 	
-	if(count($header) < 4) {
+	if(count($header) < 6) {
 		$pdf = new PDF_3GK_Table();
 	} else {
 		$pdf = new PDF_3GK_Table('L');

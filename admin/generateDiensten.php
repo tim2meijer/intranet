@@ -1,23 +1,121 @@
 <?php
-include_once('include/functions.php');
-include_once('include/config.php');
-#include_once('include/HTML_TopBottom.php');
+include_once('../include/functions.php');
+include_once('../include/config.php');
+include_once('../include/HTML_TopBottom.php');
 $requiredUserGroups = array(1);
-$cfgProgDir = 'auth/';
+$cfgProgDir = '../auth/';
 include($cfgProgDir. "secure.php");
 $db = connect_db();
 
-for($i=0 ; $i<25 ; $i++) {
-	$offset = (7-date("N")) + (7*$i);
+if(isset($_POST['save'])) {
+	$startTijd = mktime(0, 0, 1, $_POST['sMaand'], $_POST['sDag'], $_POST['sJaar']);
+	$eindTijd = mktime(23, 59, 59, $_POST['eMaand'], $_POST['eDag'], $_POST['eJaar']);
+	$i = 0;
+	$doorgaan = true;
+		
+	while($doorgaan) {
+		$offset = (7-date("N", $startTijd)) + (7*$i);
+		
+		$start_1	= mktime(10,0,0,date("n", $startTijd),(date("j", $startTijd)+$offset), date("Y", $startTijd));
+		$eind_1		= mktime(11,30,0,date("n", $startTijd),(date("j", $startTijd)+$offset), date("Y", $startTijd));
+		
+		$start_2	= mktime(16,30,0,date("n", $startTijd),(date("j", $startTijd)+$offset), date("Y", $startTijd));
+		$eind_2		= mktime(18,00,0,date("n", $startTijd),(date("j", $startTijd)+$offset), date("Y", $startTijd));
+		
+		if($eind_2 < $eindTijd) {
+			$sql[] = "INSERT INTO $TableDiensten ($DienstStart, $DienstEind) VALUES ('$start_1', '$eind_1')";
+			$sql[] = "INSERT INTO $TableDiensten ($DienstStart, $DienstEind) VALUES ('$start_2', '$eind_2')";
+			$i++;
+		} else {
+			$doorgaan = false;
+		}
+	}	
+} elseif(isset($_POST['reeks'])) {
+	$sql = "SELECT * FROM $TableDiensten ORDER BY $DienstEind DESC LIMIT 0,1";
+	$result = mysqli_query($db, $sql);
+	$row = mysqli_fetch_array($result);
+	$offset = 24*60*60;
 	
-	$start_1	= mktime(10,0,0,date("n"),(date("j")+$offset), date("Y"));
-	$eind_1		= mktime(11,30,0,date("n"),(date("j")+$offset), date("Y"));
-	
-	$start_2	= mktime(16,30,0,date("n"),(date("j")+$offset), date("Y"));
-	$eind_2		= mktime(18,00,0,date("n"),(date("j")+$offset), date("Y"));
-	
-	echo "INSERT INTO `kerkdiensten` (`start`, `eind`) VALUES ('$start_1', '$eind_1');<br>";
-	echo "INSERT INTO `kerkdiensten` (`start`, `eind`) VALUES ('$start_2', '$eind_2');<br>";	
+	$sDag		= getParam('sDag', date("d", $row[$DienstEind]+$offset));
+	$sMaand	= getParam('sMaand', date("m", $row[$DienstEind]+$offset));
+	$sJaar	= getParam('sJaar', date("Y", $row[$DienstEind]+$offset));
+	$eDag		= getParam('eDag', date("d"));
+	$eMaand	= getParam('eMaand', date("m"));
+	$eJaar	= getParam('eJaar', date("Y")+1);
+
+	$text[] = "<form action='". $_SERVER['PHP_SELF'] ."' method='post'>";
+	$text[] = "<table>";
+	$text[] = "<tr>";
+	$text[] = "	<td>Startdatum</td>";
+	$text[] = "	<td><select name='sDag'>";
+	for($d=1 ; $d<32 ; $d++) {
+		$text[] = "	<option value='$d'". ($d == $sDag ? ' selected' : '') .">$d</option>";
+	}
+	$text[] = "	</select> - ";
+	$text[] = "	<select name='sMaand'>";
+	for($m=1 ; $m<13 ; $m++) {
+		$text[] = "	<option value='$m'". ($m == $sMaand ? ' selected' : '') .">". $maandArray[$m] ."</option>";
+	}
+	$text[] = "	</select> - ";
+	$text[] = "	<select name='sJaar'>";
+	for($j=date("Y"); $j<=(date("Y")+10) ; $j++) {
+		$text[] = "	<option value='$j'". ($j == $sJaar ? ' selected' : '') .">$j</option>";
+	}
+	$text[] = "	</select></td>";
+	$text[] = "	<td rowspan='2'>&nbsp;</td>";
+	$text[] = "	<td rowspan='2'><input type='submit' name='save' value='Genereer'></td>";
+	$text[] = "</tr>";
+	$text[] = "<tr>";
+	$text[] = "	<td>Einddatum</td>";
+	$text[] = "	<td><select name='eDag'>";
+	for($d=1 ; $d<32 ; $d++) {
+		$text[] = "	<option value='$d'". ($d == $eDag ? ' selected' : '') .">$d</option>";
+	}
+	$text[] = "	</select> - ";
+	$text[] = "	<select name='eMaand'>";
+	for($m=1 ; $m<13 ; $m++) {
+		$text[] = "	<option value='$m'". ($m == $eMaand ? ' selected' : '') .">". $maandArray[$m] ."</option>";
+	}
+	$text[] = "	</select> - ";
+	$text[] = "	<select name='eJaar'>";
+	for($j=date("Y"); $j<=(date("Y")+10) ; $j++) {
+		$text[] = "	<option value='$j'". ($j == $eJaar ? ' selected' : '') .">$j</option>";
+	}
+	$text[] = "	</select></td>";
+	$text[] = "</tr>";	
+	$text[] = "</table>";
+	$text[] = "</form>";
+} elseif(isset($_POST['enkel'])) {
+	$start	= mktime(10,0,0,date("n"),date("j"), date("Y"));
+	$eind		= mktime(11,30,0,date("n"),date("j"), date("Y"));		
+	$sql[] = "INSERT INTO $TableDiensten ($DienstStart, $DienstEind) VALUES ('$start', '$eind')";
+} else {
+	$text[] = "<form action='". $_SERVER['PHP_SELF'] ."' method='post'>";
+	$text[] = "<table>";
+	$text[] = "<tr>";
+	$text[] = "	<td><input type='submit' name='reeks' value='Reeks'></td>";
+	$text[] = "	<td><input type='submit' name='enkel' value='Enkele dienst'></td>";
+	$text[] = "</tr>";
+	$text[] = "</table>";
+	$text[] = "</form>";
 }
+
+if(count($sql) > 0) {
+	foreach($sql as $query) {
+		$result = mysqli_query($db, $query);
+	}
+	
+	$text[] = "Diensten toegevoegd<br>";
+	
+	if(isset($_POST['enkel'])) {
+		$redirectID		= mysqli_insert_id($db);
+		$text[] = "<a href='editDiensten.php?id=$redirectID'>wijzig dienst</a>";
+	}
+}
+
+echo $HTMLHeader;
+echo implode("\n", $text);
+echo $HTMLFooter;
+
 
 ?>

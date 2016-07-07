@@ -28,21 +28,6 @@ if(count($allRoosters) > 0) {
 
 
 
-# Mijn roosters
-/*
-if(count($myRooster) > 0) {
-	$mijnRoosters[] = "<b>Mijn roosters</b>";
-
-	foreach($myRooster as $rooster) {
-		$data = getRoosterDetails($rooster);
-		$mijnRoosters[] = "<a href='makeRooster.php?rooster=$rooster' target='_blank'>".$data['naam']."</a>";
-	}	
-
-	$blockArray[] = implode("<br>".NL, $mijnRoosters);
-}*/
-
-
-
 # Groepen
 $allGroups = getAllGroups();	
 $myGroups = getMyGroups($_SESSION['ID']);
@@ -128,7 +113,10 @@ if(in_array(1, getMyGroups($_SESSION['ID']))) {
 	
 	$adminLinks['admin/generateUsernames.php'] = 'Gebruikersnamen aanmaken';
 	$adminLinks['admin/generateDiensten.php'] = 'Kerkdiensten aanmaken';
+	$adminLinks['admin/editDiensten.php'] = 'Kerkdiensten wijzigen';
+	$adminLinks['showCombineRooster.php'] = 'Toon combi-rooster';
 	$adminLinks['admin/crossCheck.php'] = 'Check databases';
+	$adminLinks['../dumper/'] = 'Dumper';
 	
 	foreach($adminLinks as $link => $naam) {
 		$adminDeel[] = "<a href='$link' target='_blank'>$naam</a>";

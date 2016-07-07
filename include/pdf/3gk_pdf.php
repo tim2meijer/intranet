@@ -35,7 +35,7 @@ class PDF_3GK extends FPDF {
 		
     # 2 cm van de onderkant en lettertype
     $this->SetY(-20);
-    $this->SetFont('Arial','I',6);
+    $this->SetFont('Arial','',6);
     
     # Printdatum, titel en paginanummers    
     $this->Cell(30,10,strftime("%A %d %B %Y"),0,0,'L');
