@@ -23,14 +23,15 @@ if(isset($_POST['save'])) {
 		$eind_2		= mktime(18,00,0,date("n", $startTijd),(date("j", $startTijd)+$offset), date("Y", $startTijd));
 		
 		if($eind_2 < $eindTijd) {
-			$sql[] = "INSERT INTO $TableDiensten ($DienstStart, $DienstEind) VALUES ('$start_1', '$eind_1')";
-			$sql[] = "INSERT INTO $TableDiensten ($DienstStart, $DienstEind) VALUES ('$start_2', '$eind_2')";
+			$querys[] = "INSERT INTO $TableDiensten ($DienstStart, $DienstEind) VALUES ('$start_1', '$eind_1')";
+			$querys[] = "INSERT INTO $TableDiensten ($DienstStart, $DienstEind) VALUES ('$start_2', '$eind_2')";
 			$i++;
 		} else {
 			$doorgaan = false;
 		}
 	}	
-} elseif(isset($_POST['reeks'])) {
+} else {
+	$querys = array();
 	$sql = "SELECT * FROM $TableDiensten ORDER BY $DienstEind DESC LIMIT 0,1";
 	$result = mysqli_query($db, $sql);
 	$row = mysqli_fetch_array($result);
@@ -85,32 +86,14 @@ if(isset($_POST['save'])) {
 	$text[] = "</tr>";	
 	$text[] = "</table>";
 	$text[] = "</form>";
-} elseif(isset($_POST['enkel'])) {
-	$start	= mktime(10,0,0,date("n"),date("j"), date("Y"));
-	$eind		= mktime(11,30,0,date("n"),date("j"), date("Y"));		
-	$sql[] = "INSERT INTO $TableDiensten ($DienstStart, $DienstEind) VALUES ('$start', '$eind')";
-} else {
-	$text[] = "<form action='". $_SERVER['PHP_SELF'] ."' method='post'>";
-	$text[] = "<table>";
-	$text[] = "<tr>";
-	$text[] = "	<td><input type='submit' name='reeks' value='Reeks'></td>";
-	$text[] = "	<td><input type='submit' name='enkel' value='Enkele dienst'></td>";
-	$text[] = "</tr>";
-	$text[] = "</table>";
-	$text[] = "</form>";
 }
 
-if(count($sql) > 0) {
-	foreach($sql as $query) {
+if(count($querys) > 0) {
+	foreach($querys as $query) {
 		$result = mysqli_query($db, $query);
 	}
 	
-	$text[] = "Diensten toegevoegd<br>";
-	
-	if(isset($_POST['enkel'])) {
-		$redirectID		= mysqli_insert_id($db);
-		$text[] = "<a href='editDiensten.php?id=$redirectID'>wijzig dienst</a>";
-	}
+	$text[] = "Diensten toegevoegd<br>";	
 }
 
 echo $HTMLHeader;

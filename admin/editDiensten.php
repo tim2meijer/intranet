@@ -14,9 +14,20 @@ if(isset($_POST['save'])) {
 	$sql = "UPDATE $TableDiensten SET $DienstStart = '$startTijd', $DienstEind = '$eindTijd' WHERE $DienstID = ". $_POST['id'];
 	mysqli_query($db, $sql);
 	
-	$text[] = "Dienst opgeslagen";	
-} elseif(isset($_REQUEST['id'])) {	
-	$data = getKerkdienstDetails($_REQUEST['id']);
+	$text[] = "Dienst opgeslagen";
+} elseif(isset($_REQUEST['id']) OR isset($_REQUEST['new'])) {	
+	if(isset($_REQUEST['new'])) {
+		$start	= mktime(10,0,0,date("n"),date("j"), date("Y"));
+		$eind		= mktime(11,30,0,date("n"),date("j"), date("Y"));		
+		$query	= "INSERT INTO $TableDiensten ($DienstStart, $DienstEind) VALUES ('$start', '$eind')";
+		$result = mysqli_query($db, $query);
+		
+		$id		= mysqli_insert_id($db);
+	} else {
+		$id		= $_REQUEST['id'];	
+	}
+	
+	$data = getKerkdienstDetails($id);
 	
 	$sMin		= getParam('sMin', date("i", $data['start']));
 	$sUur		= getParam('sUur', date("H", $data['start']));
@@ -31,7 +42,7 @@ if(isset($_POST['save'])) {
 	$eJaar	= getParam('eJaar', date("Y", $data['eind']));
 	
 	$text[] = "<form action='". $_SERVER['PHP_SELF'] ."' method='post'>";
-	$text[] = "<input type='hidden' name='id' value='". $_REQUEST['id'] ."'>";
+	$text[] = "<input type='hidden' name='id' value='$id'>";
 	$text[] = "<table>";
 	$text[] = "<tr>";
 	$text[] = "	<td>Starttijd</td>";
@@ -97,10 +108,13 @@ if(isset($_POST['save'])) {
 } else {
 	$diensten = getAllKerkdiensten(true);
 	
+	$text[] = "<a href='?new'>Extra dienst toevoegen</a>";
+	$text[] = "<p>";
+	
 	foreach($diensten as $dienst) {
 		$data = getKerkdienstDetails($dienst);
 		$text[] = "<a href='?id=$dienst'>".date("d-m H:i", $data['start']) ."-".date("H:i", $data['eind']) ."</a><br>";
-	}
+	}	
 }
 
 echo $HTMLHeader;
