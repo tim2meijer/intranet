@@ -18,6 +18,9 @@ $requiredUserGroups = array(1, $beheerder);
 $cfgProgDir = 'auth/';
 include($cfgProgDir. "secure.php");
 
+# Eerste keer data ophalen voor in logfiles enzo
+$RoosterData = getRoosterDetails($_REQUEST['rooster']);
+
 # Als op de knop van de mail geklikt is die data wegschrijven
 if(isset($_POST['save_mail'])) {
 	$sql = "UPDATE $TableRoosters SET $RoostersMail = '". urlencode($_POST['text_mail']) ."', $RoostersSubject = '". urlencode($_POST['onderwerp_mail']) ."', $RoostersFrom = '". urlencode($_POST['naam_afzender']) ."',	$RoostersFromAddr = '". urlencode($_POST['mail_afzender']) ."' WHERE $RoostersID = ". $_POST['rooster'];
@@ -53,7 +56,8 @@ if(isset($_POST['maanden'])) {
 	$blokken++;
 }
 
-# Roosterdata en groepsdata opvragen
+# Roosterdata voor de 2de keer opvragen (hierboven kan de data gewijzigd zijn)
+# Nu gelijk ook maar groepsdata opvragen
 $RoosterData = getRoosterDetails($_REQUEST['rooster']);
 $IDs = getGroupMembers($RoosterData['groep']);
 

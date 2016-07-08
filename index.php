@@ -116,6 +116,7 @@ if(in_array(1, getMyGroups($_SESSION['ID']))) {
 	$adminLinks['admin/editDiensten.php'] = 'Kerkdiensten wijzigen';
 	$adminLinks['showCombineRooster.php'] = 'Toon combi-rooster';
 	$adminLinks['admin/crossCheck.php'] = 'Check databases';
+	$adminLinks['admin/log.php'] = 'Bekijk logfiles';
 	$adminLinks['../dumper/'] = 'Dumper';
 	
 	foreach($adminLinks as $link => $naam) {

@@ -802,5 +802,48 @@ function getParam($name, $default = '') {
 	return isset($_REQUEST[$name]) ? $_REQUEST[$name] : $default;
 }
 
+function getLogData($start, $end, $types, $dader, $subject, $message, $aantal) {
+	global $db, $TableLog, $LogID, $LogTime, $LogType, $LogUser, $LogSubject, $LogMessage;
+		
+	if($dader != '') {
+		$where[] = "$LogUser = $dader";
+	}
+	
+	if($subject!= '') {
+		$where[] = "$LogSubject = $subject";
+	}
+	
+	if(count($types) > 0) {
+		foreach($types as $type) {
+			$temp[] = "$LogType like '$type'";
+		}
+		$where[] = '('. implode(" OR ", $temp) .')';
+	}
+	
+	if($message != '') {
+		$where[] = "$LogMessage like '$message'";
+	}
+	
+	$where[] = "$LogTime BETWEEN $start AND $end";
+	
+	$sql = "SELECT * FROM $TableLog WHERE ". implode(" AND ", $where) ." LIMIT 0, $aantal";
+			
+	$result	= mysqli_query($db, $sql);
+	if($row	= mysqli_fetch_array($result)) {
+		do {
+			$Data['id']						= $row[$LogID];
+			$Data['tijd']					= $row[$LogTime];
+			$Data['type']					= $row[$LogType];
+			$Data['dader']				= $row[$LogUser];
+			$Data['slachtoffer']	= $row[$LogSubject];
+			$Data['melding']			= $row[$LogMessage];
+			
+			$LogData[] = $Data;
+			unset($Data);
+		} while($row = mysqli_fetch_array($result));
+	}
+	
+	return $LogData;	
+}
 
 ?>
