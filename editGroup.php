@@ -17,7 +17,6 @@ $cfgProgDir = 'auth/';
 include($cfgProgDir. "secure.php");
 
 $groupData = getGroupDetails($_REQUEST['groep']);
-$GroupMembers = getGroupMembers($_REQUEST['groep']);
 	
 $leden = getMembers('all');
 foreach($leden as $lid) {
@@ -48,6 +47,8 @@ if(isset($_POST['change_site'])) {
 	mysqli_query($db, $sql);
 	toLog('info', $_SESSION['ID'], '', 'Tekst voor groeppagina '. $groupData['naam'] .' gewijzigd');
 }
+
+$GroupMembers = getGroupMembers($_REQUEST['groep']);
 
 $block_1[] = "<form method='post' action='$_SERVER[PHP_SELF]'>";                      
 $block_1[] = "<input type='hidden' name='groep' value='". $_REQUEST['groep'] ."'>"; 
