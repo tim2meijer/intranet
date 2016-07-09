@@ -66,6 +66,8 @@ if(count($roosters) > 0) {
 	$text[] = "</table>";
 	$text[] = "<p>";
 	$text[] = "<a href='?rs=". implode('|', $roosters)."&pdf'>sla op als PDF</a>";
+	
+	toLog('debug', $_SESSION['ID'], '', 'Combi-rooster '. implode('|', $roosters) .' bekeken');
 } else {
 	$roosters = getRoosters(0);
 	$text[] = "<form>";
@@ -104,10 +106,12 @@ if(isset($_REQUEST['pdf'])) {
 	$pdf->SetWidths($widths);
 	
 	$pdf->makeTable($header, $data);
-  $pdf->Output('I', $title.'_'.date('Y_m_d').'.pdf');	
+  $pdf->Output('I', $title.'_'.date('Y_m_d').'.pdf');
+  toLog('debug', $_SESSION['ID'], '', 'Combi-rooster '. implode('|', $roosters) .' in PDF bekeken');
 } else {
 	echo $HTMLHeader;
-	echo implode("\n", $text);
+	echo showBlock(implode(NL, $text), 50);
+	//echo implode("\n", $text);
 	echo $HTMLFooter;
 }
 

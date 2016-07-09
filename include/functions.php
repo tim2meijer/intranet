@@ -379,7 +379,7 @@ function getMyRoostersBeheer($id) {
 }
 
 function getRoosterDetails($id) {
-	global $TableRoosters, $RoostersID, $RoostersNaam, $RoostersGroep, $RoostersMail, $RoostersSubject, $RoostersFrom, $RoostersFromAddr;
+	global $TableRoosters, $RoostersID, $RoostersNaam, $RoostersGroep, $RoostersFields, $RoostersMail, $RoostersSubject, $RoostersFrom, $RoostersFromAddr;
 	$db = connect_db();
 	
 	$data = array();
@@ -389,6 +389,7 @@ function getRoosterDetails($id) {
 	if($row = mysqli_fetch_array($result)) {
 		$data['naam']	= $row[$RoostersNaam];
 		$data['groep']	= $row[$RoostersGroep];
+		$data['aantal']	= $row[$RoostersFields];
 		$data['text_mail']	= urldecode($row[$RoostersMail]);
 		$data['onderwerp_mail']	= urldecode($row[$RoostersSubject]);		
 		$data['naam_afzender']	= urldecode($row[$RoostersFrom]);

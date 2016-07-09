@@ -15,6 +15,7 @@ if(isset($_POST['save'])) {
 	mysqli_query($db, $sql);
 	
 	$text[] = "Dienst opgeslagen";
+	toLog('info', $_SESSION['ID'], '', 'Dienst van '. date("d-m-Y", $startTijd) .' gewijzigd');
 } elseif(isset($_REQUEST['id']) OR isset($_REQUEST['new'])) {	
 	if(isset($_REQUEST['new'])) {
 		$start	= mktime(10,0,0,date("n"),date("j"), date("Y"));
@@ -23,6 +24,8 @@ if(isset($_POST['save'])) {
 		$result = mysqli_query($db, $query);
 		
 		$id		= mysqli_insert_id($db);
+		
+		toLog('info', $_SESSION['ID'], '', 'Dienst van '. date("d-m-Y", $start) .' toegevoegd');
 	} else {
 		$id		= $_REQUEST['id'];	
 	}

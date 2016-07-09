@@ -78,11 +78,6 @@ if(isset($userArray["$cfgDbUserIDfield"]) && !empty($cfgDbUserIDfield)) {
 }
 
 if(isset($requiredUserGroups)) {
-	/*
-	$authQuery = mysql_query("SELECT * FROM $TableGrpUsr WHERE $GrpUsrUser = ". $userArray["$cfgDbUserIDfield"]);
-	$authorisatieArray = mysql_fetch_array($authQuery);
-	*/
-	
 	$authorisatieArray = getMyGroups($userArray["$cfgDbUserIDfield"]);
 	$overlap = array_intersect ($requiredUserGroups, $authorisatieArray);
 	
@@ -93,30 +88,5 @@ if(isset($requiredUserGroups)) {
 		exit;
 	}		
 }
-
-/*
-if ( isset($userArray["$cfgDbUserLevelfield"]) && !empty($cfgDbUserLevelfield) ) {
-        $userLevel = stripslashes($userArray["$cfgDbUserLevelfield"]);
-        }
-*/
-
-/*
-if ( ( isset($requiredUserLevel) && !empty($requiredUserLevel[0]) ) || isset($minUserLevel) ) {
-        // check for required user level and minimum user level
-        if ( !isset($userArray["$cfgDbUserLevelfield"]) ) {
-                // check if column (as entered in the configuration file) exist in database
-                $phpSP_message = $strNoUserLevelColumn;
-                include($cfgProgDir . "interface.php");
-                exit;
-                }
-        if ( empty($cfgDbUserLevelfield) || ( !is_in_array($userLevel, @$requiredUserLevel) && ( !isset($minUserLevel) || empty($minUserLevel) || $userLevel < $minUserLevel ) ) ) {
-                // this user does not have the required user level
-                $phpSP_message = $strUserNotAllowed;
-                include($cfgProgDir . "interface.php");
-                exit;
-                }
-        }
-*/
-
 
 ?>

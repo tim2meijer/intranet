@@ -88,7 +88,7 @@ $zoekScherm[] = "	<td colspan=10><input type='checkbox' name='type[]' value='deb
 $zoekScherm[] = "</tr>";
 $zoekScherm[] = "</table>";
 
-$text[] = implode("\n", $zoekScherm);
+$text[] = showBlock(implode(NL, $zoekScherm), 100);
 
 if(count($logData) > 0) {
 	foreach($logData as $data_array) {
@@ -99,9 +99,9 @@ if(count($logData) > 0) {
 		$rij = "<tr>\n";
 		$rij .= "	<td>". date("d-m H:i:s", $data_array['tijd']) ."</td>\n";
 		$rij .= "	<td>&nbsp;</td>\n";
-		$rij .= "	<td><a href='account.php?id=". $data_array['dader'] ."'>". makeName($data_array['dader'], 5) ."</a></td>\n";
+		$rij .= "	<td><a href='../profiel?id=". $data_array['dader'] ."'>". makeName($data_array['dader'], 5) ."</a></td>\n";
 		$rij .= "	<td>&nbsp;</td>\n";
-		$rij .= "	<td>". ($data_array['slachtoffer'] != '' ? "<a href='account.php?id=". $data_array['slachtoffer'] ."'>". makeName($data_array['slachtoffer'], 5) ."</a>" : "&nbsp;") ."</td>\n";
+		$rij .= "	<td>". ($data_array['slachtoffer'] != '' ? "<a href='../profiel.php?id=". $data_array['slachtoffer'] ."'>". makeName($data_array['slachtoffer'], 5) ."</a>" : "&nbsp;") ."</td>\n";
 		$rij .= "	<td>&nbsp;</td>\n";
 		$rij .= "	<td>". $pre . $data_array['melding'] . $post ."</td>\n";
 		$rij .= "</tr>\n";
@@ -126,8 +126,8 @@ if(count($blok_1) > 0) {
 	$text[] = "	<td colspan='2'>&nbsp;</td>";
 	$text[] = "</tr>";
 	$text[] = "<tr>";
-	$text[] = "	<td width='50%' align='top'><table>". implode("", $blok_1)."</table></td>";
-	$text[] = "	<td width='50%' align='top'><table>". implode("", $blok_2)."</table></td>";
+	$text[] = "	<td width='50%' align='top'>". showBlock('<table>'.implode(NL, $blok_1).'</table>', 100)."</td>";
+	$text[] = "	<td width='50%' align='top'>". showBlock('<table>'.implode(NL, $blok_2).'</table>', 100)."</td>";
 	$text[] = "</tr>";
 	$text[] = "</table>";
 }

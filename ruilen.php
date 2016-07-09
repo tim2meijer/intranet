@@ -62,7 +62,7 @@ if(isset($_REQUEST['dader']) AND isset($_REQUEST['slachtoffer'])) {
 	
 	$text[] = 'Er is een bevestigingsmail naar jullie allebei gestuurd.';
 	toLog('info', $dader, $slachtoffer, "geruild voor '". $roosterData['naam'] ."'"); 
-} else {
+} elseif($slachtoffer != '' OR $dader != '') {
 	$diensten = getAllKerkdiensten(true);
 	
 	if(isset($_REQUEST['dader'])) {
@@ -97,9 +97,9 @@ if(isset($_REQUEST['dader']) AND isset($_REQUEST['slachtoffer'])) {
 	}
 	
 	$text[] = '</table>';
+} else {
+	$text[] = "Er mist wat";
 }
-
-
 
 echo $HTMLHeader;
 echo implode("\n", $text);

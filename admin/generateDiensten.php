@@ -90,10 +90,11 @@ if(isset($_POST['save'])) {
 
 if(count($querys) > 0) {
 	foreach($querys as $query) {
-		$result = mysqli_query($db, $query);
+		$result = mysqli_query($db, $query);		
 	}
 	
-	$text[] = "Diensten toegevoegd<br>";	
+	$text[] = "Diensten toegevoegd<br>";
+	toLog('info', $_SESSION['ID'], '', 'nieuwe diensten aangemaakt');
 }
 
 echo $HTMLHeader;

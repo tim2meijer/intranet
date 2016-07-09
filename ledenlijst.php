@@ -100,8 +100,10 @@ if(!isset($_REQUEST['letter'])) {
 */
 if($letter != '') {
 	$sql = "SELECT $UserID FROM $TableUsers WHERE $UserAchternaam like '$letter%' ORDER BY $UserAchternaam";
+	toLog('debug', $_SESSION['ID'], '', "Ledenlijst letter $letter");
 } elseif($wijk != '') {
 	$sql = "SELECT $TableUsers.$UserID FROM $TableUsers, $TableAdres WHERE $TableAdres.$AdresID = $TableUsers.$UserAdres AND $TableAdres.$AdresWijk like '$wijk' ORDER BY $TableUsers.$UserAchternaam";
+	toLog('debug', $_SESSION['ID'], '', "Ledenlijst wijk $wijk");
 }
 
 $result = mysqli_query($db, $sql);

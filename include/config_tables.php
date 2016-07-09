@@ -46,6 +46,7 @@ $TableRoosters			= "roosters";
 $RoostersID					= "id";
 $RoostersNaam				= "naam";
 $RoostersGroep			= "groep";
+$RoostersFields			= "aantal";
 $RoostersMail				= "mail";
 $RoostersSubject		= "onderwerp";
 $RoostersFrom				= "naam_afzender";

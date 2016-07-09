@@ -12,9 +12,9 @@ $IDs = getGroupMembers($RoosterData['groep']);
 
 toLog('debug', $_SESSION['ID'], '', 'Rooster '. $RoosterData['naam'] .' bekeken');
 
-echo $HTMLHeader;
-echo "<h1>". $RoosterData['naam'] ."</h1>".NL;
-echo '<table>';
+
+$text[] = "<h1>". $RoosterData['naam'] ."</h1>".NL;
+$block_1[] = '<table>';
 
 foreach($diensten as $dienst) {
 	$details = getKerkdienstDetails($dienst);
@@ -38,19 +38,28 @@ foreach($diensten as $dienst) {
 			$namen[] = $string;
 		}
 		
-		echo "<tr>";
-		echo "	<td valign='top'>".strftime("%a %d %b %H:%M", $details['start'])."</td>";
-		echo "	<td valign='top'>". implode('<br>', $namen)."</td>";
-		echo "</tr>".NL;
+		$block_1[] = "<tr>";
+		$block_1[] = "	<td valign='top'>".strftime("%a %d %b %H:%M", $details['start'])."</td>";
+		$block_1[] = "	<td valign='top'>". implode('<br>', $namen)."</td>";
+		$block_1[] = "</tr>".NL;
 	}
 }
 
+$block_1[] = '</table>';
+
+$block_2[] = '<table>';
+$block_2[] = "<tr>";
+$block_2[] = "	<td><a href='showCombineRooster.php?rs=". $_REQUEST['rooster'] ."&pdf'>PDF-versie</a></td>";
+$block_2[] = "</tr>".NL;
+$block_2[] = '</table>';
+
+echo $HTMLHeader;
+echo implode(NL, $text);
+echo "<table width=100% border=0>";
 echo "<tr>";
-echo "	<td colspan='2'>&nbsp;</td>";
-echo "</tr>".NL;
-echo "<tr>";
-echo "	<td colspan='2'><a href='showCombineRooster.php?rs=". $_REQUEST['rooster'] ."&pdf'>PDF-versie</a></td>";
-echo "</tr>".NL;
-echo '</table>';
+echo "	<td width='50%' valign='top'>". showBlock(implode(NL, $block_1), 100)."</td>";
+echo "	<td width='50%' valign='top'>". showBlock(implode(NL, $block_2), 100)."</td>";
+echo "</tr>";
+echo "</table>";
 echo $HTMLFooter;
 ?>

@@ -76,7 +76,7 @@ foreach($IDs as $member) {
 
 # Haal alle kerkdiensten binnen een tijdsvak op
 $diensten = getKerkdiensten(time(), mktime(date("H"),date("i"),date("s"),(date("n")+(3*$blokken)),date("j"),date("Y")));
-$nrFields = 3;//getMaxFields($_REQUEST['id']);
+$nrFields = $RoosterData['aantal'];
 
 $block_1[] = "<form method='post' action='$_SERVER[PHP_SELF]'>";
 $block_1[] = "<input type='hidden' name='rooster' value='". $_REQUEST['rooster'] ."'>";

@@ -11,16 +11,21 @@ if(!isset($_REQUEST['groep'])) {
 	exit;
 }
 
+$groep	= getParam('groep', '');
+$extern	= getParam('extern', false);
+
 $myGroups = getMyGroups($_SESSION['ID']);
-$groupData = getGroupDetails($_REQUEST['groep']);
+$groupData = getGroupDetails($groep);
 echo $HTMLHead;
 echo $HTMLBody;
 
-if(in_array($_REQUEST['groep'], $myGroups) AND $groupData['html-int'] != "") {
+if(in_array($groep, $myGroups) AND $groupData['html-int'] != "" AND !$extern) {
 	echo "<h1>". $groupData['naam'] ."</h1>";
 	echo '<p>'.NL;
 	echo $groupData['html-int'];
-} elseif($groupData['html-ext'] != "") {
+	echo '<p>'.NL;
+	echo "<a href='?groep=$groep&extern=true'>Bekijk externe pagina</a>".NL;
+} elseif($groupData['html-ext'] != "" OR $extern) {
 	echo "<h1>". $groupData['naam'] ."</h1>";
 	echo '<p>'.NL;
 	echo $groupData['html-ext'];

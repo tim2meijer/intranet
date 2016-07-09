@@ -91,6 +91,8 @@ $text[] = "</tr>";
 $text[] = "</table>"; 
 
 if(isset($_POST['search'])) {
+	toLog('debug', $_SESSION['ID'], '', "Gezocht op S:$searchString G:$geslacht W:$wijk B:$sDag-$sMaand-$sJaar E:$eDag-$eMaand-$eJaar");
+	
 	$where[] = "$UserGeboorte BETWEEN '$sJaar-$sMaand-$sDag' AND '$eJaar-$eMaand-$eDag'";
 	$table[] = $TableUsers;
 	

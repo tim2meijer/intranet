@@ -6,16 +6,8 @@ $cfgProgDir = 'auth/';
 include($cfgProgDir. "secure.php");
 $db = connect_db();
 
-/*
-if(!isset($_REQUEST['id'])) {
-	$id = $_SESSION['ID'];
-} else {
-	$id = $_REQUEST['id'];
-}
-*/
-$id = getParam('id', $_SESSION['ID']);
-
-$familie = getFamilieleden($_SESSION['ID']);
+$id				= getParam('id', $_SESSION['ID']);
+$familie	= getFamilieleden($_SESSION['ID']);
 
 # Als je niet voorkomt in de Admin-groep en je bent geen familie
 # dan ga je naar je eigen gegevens
