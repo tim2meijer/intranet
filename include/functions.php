@@ -740,7 +740,7 @@ function sendMail($ontvanger, $subject, $bericht, $var) {
 		return false;
 	} else {
 		return true;
-	}
+	}	
 }
 
 

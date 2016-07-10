@@ -4,8 +4,10 @@ include_once('include/config.php');
 include_once('../../general_include/class.phpmailer.php');
 $db = connect_db();
 
-$startTijd = mktime(0, 0, 0, date("n"), (date("j")+3), date("Y"));
 #$startTijd = mktime(0, 0, 0, date("n"), date("j"), date("Y"));
+#$eindTijd = mktime(23, 59, 59, date("n"), (date("j")+7), date("Y"));
+
+$startTijd = mktime(0, 0, 0, date("n"), (date("j")+3), date("Y"));
 $eindTijd = mktime(23, 59, 59, date("n"), (date("j")+3), date("Y"));
 
 $diensten = getKerkdiensten($startTijd, $eindTijd);
@@ -62,6 +64,8 @@ foreach($diensten as $dienst) {
 					} elseif(count($team) > 1) {
 						$ReplacedBericht = str_replace ('[[team]]', makeOpsomming($team), $ReplacedBericht);
 						# str_replace ("[[team]]", "<ul>\n<li>".implode("</li>\n<li>", $team)."</li>\n</ul>", $ReplacedBericht);
+					} else {
+						$ReplacedBericht = str_replace ('[[team]]', 'onbekend', $ReplacedBericht);
 					}
 					
 					# Als [[team|X]] voorkomt moeten deze vervangen worden
@@ -69,11 +73,14 @@ foreach($diensten as $dienst) {
 					# Als [[team|$roos]] voorkomt wordt dat vervangen door dat team
 					if(strpos($ReplacedBericht, '[[team|')) {
 						foreach($roosters as $roos) {
-							$anderTeam = $teams[$dienst][$roos];
+							$anderTeam = $teams[$dienst][$roos];												
+							
 							if(count($anderTeam) == 1) {
 								$ReplacedBericht = str_replace ("[[team|$roos]]", current($anderTeam), $ReplacedBericht);
 							} elseif(count($anderTeam) > 1) {
 								$ReplacedBericht = str_replace ("[[team|$roos]]", makeOpsomming($anderTeam), $ReplacedBericht);
+							} else {
+								$ReplacedBericht = str_replace ("[[team|$roos]]", 'onbekend', $ReplacedBericht);
 							}
 						}
 					}
