@@ -722,8 +722,7 @@ function sendMail($ontvanger, $subject, $bericht, $var) {
 		$mail->FromName = $ScriptTitle;
 	}
 			
-	$mail->AddAddress($UserData['mail'], makeName($ontvanger, 5));	
-	//$mail->AddBCC('internet@draijer.org');
+	$mail->AddAddress($UserData['mail'], makeName($ontvanger, 5));
 	$mail->Subject	= $SubjectPrefix . $subject;
 	$mail->IsHTML(true);
 	$mail->Body			= $HTMLMail;
@@ -845,6 +844,23 @@ function getLogData($start, $end, $types, $dader, $subject, $message, $aantal) {
 	}
 	
 	return $LogData;	
+}
+
+function makeOpsomming($array, $first = ',', $last = 'en') {
+	$lastElement = array_pop($array);
+	
+	return implode("$first ", $array)." $last ".$lastElement;
+}
+
+function excludeID($oldArray, $id) {
+	$newArray = array();
+	foreach($oldArray as $key => $value) {
+		if($key != $id) {
+			$newArray[$key] = $value;
+		}
+	}
+	
+	return $newArray;
 }
 
 ?>
