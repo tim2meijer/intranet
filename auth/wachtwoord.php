@@ -33,14 +33,14 @@ if(isset($_POST['opvragen'])) {
 		$Mail[] = "Loginnaam : ". $data['username'] ."<br>";
 		$Mail[] = "Wachtwoord : ". $nieuwPassword;
 		$Mail[] = "<p>";
-		//$Mail[] = "Met deze gegevens kan je via <a href='". $ScriptURL ."account.php'>". $ScriptURL ."account.php</a> je eigen wachtwoord instellen";	
+		$Mail[] = "Met deze gegevens kan je via <a href='". $ScriptURL ."account.php'>". $ScriptURL ."account.php</a> je eigen wachtwoord instellen";	
 		$HTMLMail = implode("\n", $Mail);
 
 		if(!sendMail($id, "Nieuw wachtwoord voor $ScriptTitle", $HTMLMail, $var)) {			
-			$text[] = "Inloggegevens konden helaas niet verstuurd worden";
-			//toLog('error', $userID, '', 'problemen met account-mail versturen');
+			toLog('error', $id, '', 'problemen met wachtwoord-mail versturen');
+			$text[] = "Inloggegevens konden helaas niet verstuurd worden";			
 		} else {
-			//toLog('info', $id, '', "Inloggegevens verstuurd naar ". makeName(array($data['voornaam'], $data['tussen'], $data['achternaam']), 5));
+			toLog('info', $id, '', "Inloggegevens verstuurd naar ". makeName($id, 5));
 			$text[] = "Inloggegevens zijn verstuurd";
 		}
 	}	

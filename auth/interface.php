@@ -16,6 +16,9 @@
 /*      try to access protected pages. Change logo to your    */
 /*                  logo on line 77 below.                    */
 /**************************************************************/
+
+# Als de interface getoond wordt, is deze gebruiker nieuw en is het bezoek nog niet gelogd.
+$_SESSION['logged'] = false;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">

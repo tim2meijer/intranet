@@ -75,6 +75,12 @@ if(stripslashes($userArray["$cfgDbPasswordfield"]) != $password) {
 
 if(isset($userArray["$cfgDbUserIDfield"]) && !empty($cfgDbUserIDfield)) {
 	$_SESSION['ID'] = stripslashes($userArray["$cfgDbUserIDfield"]);
+	
+	if(!$_SESSION['logged']) {
+		toLog('info', $_SESSION['ID'], '', 'Inlogpoging vanaf '. $_SERVER['REMOTE_ADDR']);
+		$_SESSION['logged'] = true;
+	}
+	
 }
 
 if(isset($requiredUserGroups)) {
