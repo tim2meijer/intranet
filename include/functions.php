@@ -788,8 +788,7 @@ function getJarigen($dag, $maand) {
 
 function toLog($type, $dader, $slachtoffer, $message) {
 	global $db,$TableLog, $LogID, $LogTime, $LogType, $LogUser, $LogSubject, $LogMessage;	
-
-	connect_db();
+	$db = connect_db();
  	
 	$tijd = time();	
 	$sql = "INSERT INTO $TableLog ($LogTime, $LogType, $LogUser, $LogSubject, $LogMessage) VALUES ($tijd, '$type', '$dader', '$slachtoffer', '". addslashes($message) ."')";
