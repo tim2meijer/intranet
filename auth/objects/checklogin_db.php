@@ -78,6 +78,9 @@ if(isset($userArray["$cfgDbUserIDfield"]) && !empty($cfgDbUserIDfield)) {
 	
 	if(!$_SESSION['logged']) {
 		toLog('info', $_SESSION['ID'], '', 'Inlogpoging vanaf '. $_SERVER['REMOTE_ADDR']);
+		$sql = "UPDATE $TableUsers SET $UserLastVisit = '". date("Y-m-d H:i:s") ."' WHERE $UserID like ". $_SESSION['ID'];
+		mysql_query($sql);
+		
 		$_SESSION['logged'] = true;
 	}
 	

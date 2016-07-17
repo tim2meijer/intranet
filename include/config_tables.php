@@ -22,6 +22,9 @@ $UserTwitter				= "twitter";
 $UserFacebook				= "facebook";
 $UserLinkedin				= "linkedin";
 $UserBelijdenis			= "belijdenis";
+$UserLastChange			= "last_change";
+$UserLastVisit			= "last_visit";
+
 
 $TableAdres					= "adressen";
 $AdresID						= "id";
@@ -51,6 +54,7 @@ $RoostersMail				= "mail";
 $RoostersSubject		= "onderwerp";
 $RoostersFrom				= "naam_afzender";
 $RoostersFromAddr		= "mail_afzender";
+$RoostersLastChange	= "last_change";
 
 $TableGrpUsr				= "group_member";
 $GrpUsrGroup				= "commissie";

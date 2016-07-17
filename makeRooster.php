@@ -42,6 +42,9 @@ if(isset($_POST['save']) OR isset($_POST['maanden'])) {
 		}		
 	}
 	toLog('info', $_SESSION['ID'], '', 'Rooster '. $RoosterData['naam'] .' aangepast');
+	
+	$sql = "UPDATE $TableRoosters SET $RoostersLastChange = '". date("Y-m-d H:i:s") ."' WHERE $RoostersID like ". $_POST['rooster'];
+	mysql_query($sql);
 }
 
 # Als er op de knop van 3 maanden extra geklikt is, 3 maanden bij de eindtijd toevoegen

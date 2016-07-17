@@ -27,6 +27,9 @@ if(isset($_POST['data_opslaan'])) {
 	} else {
 		$text[] = "Gegevens succesvol gewijzigd.";
 		toLog('info', $_SESSION['ID'], $_POST['id'], 'Gegevens gewijzigd');
+		
+		$sql = "UPDATE $TableUsers SET $UserLastChange = '". date("Y-m-d H:i:s") ."' WHERE $UserID like ". $_POST['id'];
+		mysqli_query($db, $sql);		
 	}
 	
 	$redirect = $ScriptURL."/profiel.php?id=".$_POST['id'];
