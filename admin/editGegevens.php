@@ -15,24 +15,25 @@ $row = mysqli_fetch_array($result);
 $familieID = $row[$UserAdres];
 
 if($_REQUEST['action'] == 'splits') {
-	$sql_adres		= "INSERT INTO $UserAdres ($AdresStraat) VALUES ('nieuwe straat')";
+	$sql_adres		= "INSERT INTO $TableAdres ($AdresStraat) VALUES ('nieuwe straat')";
 	$result_adres	= mysqli_query($db, $sql_adres);
 	$familieID		= mysqli_insert_id($db);
-	
+		
 	$sql_persoon	= "UPDATE $TableUsers SET $UserAdres = $familieID WHERE $UserID like $lidID";
 	mysqli_query($db, $sql_persoon);
+	
 	$redirectID		= $lidID;
 	toLog('info', $_SESSION['ID'], $redirectID, 'persoon verhuisd');
 } elseif($_REQUEST['action'] == 'combine') {
 } elseif($_REQUEST['action'] == 'add') {
-	$sql_adres		= "INSERT INTO $UserAdres ($AdresStraat) VALUES ('nieuwe straat')";
+	$sql_adres		= "INSERT INTO $TableAdres ($AdresStraat) VALUES ('nieuwe straat')";
 	$result_adres	= mysqli_query($db, $sql_adres);
 	$familieID		= mysqli_insert_id($db);
 	
 	$sql_persoon	= "INSERT INTO $TableUsers ($UserAdres, $UserVoornaam) VALUES ($familieID, 'nieuw persoon')";
 	$result				= mysqli_query($db, $sql_persoon);
 	$redirectID		= mysqli_insert_id($db);	
-	toLog('info', $_SESSION['ID'], $redirectID, 'persoon toegevoegd');
+	toLog('info', $_SESSION['ID'], $redirectID, 'persoon toegevoegd');			
 } elseif($_REQUEST['action'] == 'addFam') {
 	$sql_persoon	= "INSERT INTO $TableUsers ($UserAdres, $UserVoornaam) VALUES ($familieID, 'nieuw persoon')";
 	$result				= mysqli_query($db, $sql_persoon);
@@ -47,7 +48,7 @@ if($_REQUEST['action'] == 'splits') {
 	toLog('info', $_SESSION['ID'], $lidID, 'persoon verwijderd');
 } elseif($_REQUEST['action'] == 'removeFam') {
 	$sql_persoon	= "DELETE FROM $TableUsers WHERE $UserAdres = $familieID";
-	$sql_adres		= "DELETE FROM $UserAdres WHERE $AdresID = $familieID";
+	$sql_adres		= "DELETE FROM $TableAdres WHERE $AdresID = $familieID";
 	
 	$result				= mysqli_query($db, $sql_persoon);
 	$result				= mysqli_query($db, $sql_adres);

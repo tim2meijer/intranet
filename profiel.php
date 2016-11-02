@@ -120,7 +120,7 @@ if(in_array($_SESSION['ID'], $familie) OR in_array(1, getMyGroups($_SESSION['ID'
 		echo "	<td valign='top'>".NL;
 		echo "	<a href='admin/editGegevens.php?action=splits&id=$id'>Splits familielid af</a><br>".NL;
 		echo "	<a href='admin/editGegevens.php?action=combine&id=$id'>Combineer persoon</a><br>".NL;
-		echo "	<a href='admin/editGegevens.php?action=add&id=$id'>Voeg persoon toe</a><br>".NL;
+		echo "	<a href='admin/editGegevens.php?action=add'>Voeg persoon toe</a><br>".NL;
 		echo "	<a href='admin/editGegevens.php?action=addFam&id=$id'>Voeg familielid toe</a><br>".NL;
 		echo "	<a href='admin/editGegevens.php?action=remove&id=$id'>Verwijder familielid</a><br>".NL;
 		echo "	<a href='admin/editGegevens.php?action=removeFam&id=$id'>Verwijder hele familie</a><br>".NL;
