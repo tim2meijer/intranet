@@ -25,7 +25,9 @@ $kop[] = 'Gender';
 $kop[] = 'Group Membership';
 $kop[] = 'E-mail 1 - Value';
 $kop[] = 'E-mail 2 - Value';
+$kop[] = 'Phone 1 - Type';
 $kop[] = 'Phone 1 - Value';
+$kop[] = 'Phone 2 - Type';
 $kop[] = 'Phone 2 - Value';
 $kop[] = 'Address 1 - Type';
 $kop[] = 'Address 1 - Street';
@@ -56,16 +58,25 @@ foreach($leden as $lid) {
 	}
 	
 	if($data['prive_tel'] == '') {
-		$veld[] = $data['fam_tel'];
+		$veld[] = 'Thuis';
+		$veld[] = $data['fam_tel'];		
+		$veld[] = '';
 		$veld[] = '';
 	} else {
+		if(substr($data['prive_tel'], 0, 2) == '06') {
+			$veld[] = 'Mobiel';
+		} else {
+			$veld[] = 'Thuis';
+		}
 		$veld[] = $data['prive_tel'];
-		$veld[] = $data['fam_tel'];
+				
+		$veld[] = 'Thuis';
+		$veld[] = $data['fam_tel'];		
 	}
 	
-	$veld[] = 'Home';
+	$veld[] = 'Thuis';
 	$veld[] = $data['straat']	.' '.	$data['huisnummer'];
-	$veld[] = $data['plaats'];
+	$veld[] = ucfirst($data['plaats']);
 	$veld[] = $data['PC'];
 	
 	$output .= implode(";", $veld)."\n";
