@@ -43,7 +43,8 @@ if(isset($_POST['save'])) {
 	
 	foreach($groepen as $groep) {
 		$data = getGroupDetails($groep);
-		$text[] = "	<option value='$groep'". ($groep == $groepData['beheer'] ? ' selected' : '').($groep == $id ? ' disabled' : '') .">". $data['naam'] ."</option>";
+		//$text[] = "	<option value='$groep'". ($groep == $groepData['beheer'] ? ' selected' : '').($groep == $id ? ' disabled' : '') .">". $data['naam'] ."</option>";
+		$text[] = "	<option value='$groep'". ($groep == $groepData['beheer'] ? ' selected' : '') .">". $data['naam'] ."</option>";
 	}
 	$text[] = "	</select></td>";
 	$text[] = "</tr>";

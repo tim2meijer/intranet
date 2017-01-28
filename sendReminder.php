@@ -41,9 +41,7 @@ foreach($diensten as $dienst) {
 			$onderwerp				= $roosterData['onderwerp_mail'];
 			$var['FromName']	= $roosterData['naam_afzender'];
 			$var['from']			= $roosterData['mail_afzender'];
-			
-			$HTMLMail .= "<p>Ps. : mocht je onderling geruild hebben, wil je deze mail dan doorsturen naar de betreffende persoon?<br>In het vervolg kan je die ruiling ook doorgeven via <a href='$ScriptURL/showRooster.php?rooster=$rooster'>het rooster</a> zelf, dan komt de mail direct goed terecht.";	
-									
+															
 			foreach($vulling as $lid => $naam) {
 				$team = excludeID($vulling, $lid);
 				
@@ -57,7 +55,7 @@ foreach($diensten as $dienst) {
 					$ReplacedBericht = str_replace ('[[voornaam]]', makeName($lid, 1), $ReplacedBericht);
 					$ReplacedBericht = str_replace ('[[achternaam]]', makeName($lid, 4), $ReplacedBericht);
 					$ReplacedBericht = str_replace ('[[dag]]', strftime ("%A", $dienstData['start']), $ReplacedBericht);
-					
+										
 					# Als er meer dan 1 teamlid is dan een opsommingslijst, anders gewoon een vermelding
 					if(count($team) == 1) {
 						$ReplacedBericht = str_replace ('[[team]]', current($team), $ReplacedBericht);
@@ -86,6 +84,10 @@ foreach($diensten as $dienst) {
 					}
 										
 					if($i==0) {
+						$memberData = getMemberDetails($lid);
+						$ReplacedBericht .= "<p>Ps 1. : mocht je onderling geruild hebben, wil je deze mail dan doorsturen naar de betreffende persoon?<br>In het vervolg kan je die ruiling ook doorgeven via <a href='$ScriptURL/showRooster.php?rooster=$rooster'>het rooster</a> zelf, dan komt de mail direct goed terecht.";	
+						$ReplacedBericht .= "<br>Ps 2. : je kan je persoonlijke 3GK-rooster opnemen in je digitale agenda door <a href='$ScriptURL/ical/".$memberData['username'].'-'. $memberData['hash'] .".ics'>deze link</a> toe te voegen.";
+						
 						$FinalHTMLMail = $ReplacedBericht;
 					} else {
 						$FinalSubject = $ReplacedBericht;

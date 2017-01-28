@@ -12,6 +12,7 @@ $UserAchternaam			= "achternaam";
 $UserMeisjesnaam		= "meisjesnaam";
 $UserUsername				= "username";
 $UserPassword				= "password";
+$UserHash						= "hash";
 $UserGeboorte				= "geboortedatum";
 $UserTelefoon				= "telefoon";
 $UserMail						= "email";

@@ -15,22 +15,22 @@ function generateUsername($id) {
 		$voor = strtoupper(str_replace('.', '', $data['voorletters']));
 	}
 	
-	$achter = ucfirst($data['achternaam']);
-	
+	$achter = ucfirst(str_replace(' ', '', $data['achternaam']));
+
 	$username = $voor.$achter;
 	
 	while(!isUniqueUsername($username)) {
 		if($data['meisjesnaam'] != '') {
-			$username = $voor.$achter.ucfirst($data['meisjesnaam']);
+			$username = $voor.$achter.ucfirst(str_replace(' ', '', $data['meisjesnaam']));
 		} elseif($data['voornaam'] != '') {
-			$username = ucfirst($data['voornaam']).$achter;
+			$username = ucfirst(str_replace(' ', '', $data['voornaam'])).$achter;
 		} else {
 			$username = $voor.$achter.$i;
 			$i++;
 		}
 	}
 	
-	return $username;	
+	return $username;
 }
 
 function isUniqueUsername($username) {
@@ -125,6 +125,13 @@ function generatePassword ($length = 8) {
   return ucfirst($password);
 }
 
+function generateID($length=8) { 
+    //$s = strtoupper(md5(uniqid(rand(),true))); 
+    $s = strtoupper(bin2hex(openssl_random_pseudo_bytes($length)));
+    $guidText = substr($s,0,$length); 
+    return $guidText;
+}
+
 function getAllKerkdiensten($fromNow = false) {
 	global $TableDiensten, $DienstID, $DienstEind;
 	$db = connect_db();
@@ -216,7 +223,7 @@ function getGroupMembers($commID) {
 }
 
 function getMemberDetails($id) {
-	global $TableUsers, $UserID, $UserAdres, $UserGeslacht, $UserUsername, $UserVoorletters, $UserVoornaam, $UserTussenvoegsel, $UserAchternaam, $UserMeisjesnaam, $UserGeboorte, $UserTelefoon, $UserMail, $UserTwitter, $UserFacebook, $UserLinkedin, $UserBelijdenis;
+	global $TableUsers, $UserID, $UserAdres, $UserGeslacht, $UserUsername, $UserHash, $UserVoorletters, $UserVoornaam, $UserTussenvoegsel, $UserAchternaam, $UserMeisjesnaam, $UserGeboorte, $UserTelefoon, $UserMail, $UserTwitter, $UserFacebook, $UserLinkedin, $UserBelijdenis;
 	global $TableAdres, $AdresID, $AdresStraat, $AdresHuisnummer, $AdresPC, $AdresPlaats, $AdresTelefoon, $AdresMail, $AdresWijk;
 	
 	$db = connect_db();
@@ -237,6 +244,7 @@ function getMemberDetails($id) {
 	$data['achternaam']			= $row[$UserAchternaam];
 	$data['meisjesnaam']		= $row[$UserMeisjesnaam];
 	$data['username']				= $row[$UserUsername];
+	$data['hash']						= $row[$UserHash];
 	$data['geboorte']				= $row[$UserGeboorte];		
 	$data['jaar']						= substr($row[$UserGeboorte], 0, 4);
 	$data['maand']					= substr($row[$UserGeboorte], 5, 2);
@@ -740,7 +748,7 @@ function sendMail($ontvanger, $subject, $bericht, $var) {
 		return false;
 	} else {
 		return true;
-	}	
+	}
 }
 
 

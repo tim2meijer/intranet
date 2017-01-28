@@ -21,9 +21,11 @@ $kop[] = 'Additional Name';
 $kop[] = 'Initials';
 $kop[] = 'Maiden Name';
 $kop[] = 'Birthday';
-$kop[] = 'Gender';
+//$kop[] = 'Gender';
 $kop[] = 'Group Membership';
+$kop[] = 'E-mail 1 - Type';
 $kop[] = 'E-mail 1 - Value';
+$kop[] = 'E-mail 2 - Type';
 $kop[] = 'E-mail 2 - Value';
 $kop[] = 'Phone 1 - Type';
 $kop[] = 'Phone 1 - Value';
@@ -46,35 +48,38 @@ foreach($leden as $lid) {
 	$veld[] = $data['voorletters'];
 	$veld[] = $data['meisjesnaam'];
 	$veld[] = $data['geboorte'];
-	$veld[] = $data['geslacht'];
+	//$veld[] = $data['geslacht'];
 	$veld[] = $groupData['naam'];
 	
 	if($data['prive_mail'] == '') {
+		$veld[] = 'Home';
 		$veld[] = $data['fam_mail'];
 		$veld[] = '';
+		$veld[] = '';
 	} else {
+		$veld[] = 'Prive';
 		$veld[] = $data['prive_mail'];
+		$veld[] = 'Home';
 		$veld[] = $data['fam_mail'];
 	}
 	
 	if($data['prive_tel'] == '') {
-		$veld[] = 'Thuis';
-		$veld[] = $data['fam_tel'];		
+		$veld[] = 'Home';
+		$veld[] = '+31'.str_replace('-','', substr($data['fam_tel'], 1));
 		$veld[] = '';
 		$veld[] = '';
 	} else {
 		if(substr($data['prive_tel'], 0, 2) == '06') {
-			$veld[] = 'Mobiel';
+			$veld[] = 'Mobile';
 		} else {
-			$veld[] = 'Thuis';
+			$veld[] = 'Home';
 		}
-		$veld[] = $data['prive_tel'];
-				
-		$veld[] = 'Thuis';
-		$veld[] = $data['fam_tel'];		
+		$veld[] = '+31'.str_replace('-','', substr($data['prive_tel'], 1));
+		$veld[] = 'Home';
+		$veld[] = '+31'.str_replace('-','', substr($data['fam_tel'], 1));
 	}
 	
-	$veld[] = 'Thuis';
+	$veld[] = 'Home';
 	$veld[] = $data['straat']	.' '.	$data['huisnummer'];
 	$veld[] = ucfirst($data['plaats']);
 	$veld[] = $data['PC'];

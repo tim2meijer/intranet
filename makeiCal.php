@@ -6,7 +6,7 @@ $db = connect_db();
 
 $header[] = "BEGIN:VCALENDAR";
 $header[] = "VERSION:2.0";
-$header[] = "X-WR-CALNAME:". $ScriptTitle;
+$header[] = "X-WR-CALNAME:[[NAAM]]";
 $header[] = "X-WR-CALDESC:Kalender met daarin jouw persoonlijke 3GK-agenda.";
 $header[] = "BEGIN:VTIMEZONE";
 $header[] = "TZID:Europe/Amsterdam";
@@ -59,7 +59,8 @@ foreach($ids as $id) {
 			$einde = $data_dienst['eind'];
 						
 			$ics[] = "BEGIN:VEVENT";	
-			$ics[] = "UID:3GK-". $dienst .'-'. date("Ymd", $start);
+			//$ics[] = "UID:3GK-". $dienst . $rooster .'-'. date("Ymd", $start);
+			$ics[] = "UID:3GK-". substr('00'.$dienst, -3) .'.'. substr('00'.$rooster, -3) .'.'. substr('00'.$id, -3);
 			$ics[] = "DTSTART;TZID=Europe/Amsterdam:". date("Ymd\THis", $start);
 			$ics[] = "DTEND;TZID=Europe/Amsterdam:". date("Ymd\THis", $einde);	
 			$ics[] = "LAST-MODIFIED:". date("Ymd\THis", time());
@@ -72,8 +73,8 @@ foreach($ids as $id) {
 		} while($row = mysqli_fetch_array($result));
 	}
 	
-	$file = fopen('ical\\'.md5($memberData['username']).'.ics', 'w+');
-	fwrite($file, implode("\r\n", $header));
+	$file = fopen('ical/'.$memberData['username'].'-'. $memberData['hash'] .'.ics', 'w+');
+	fwrite($file, implode("\r\n", str_replace('[[NAAM]]', '3GK ('. makeName($id, 1) .')', $header)));
 	fwrite($file, "\r\n");
 	fwrite($file, implode("\r\n", $ics));
 	fwrite($file, "\r\n");
