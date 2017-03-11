@@ -715,6 +715,10 @@ function sendMail($ontvanger, $subject, $bericht, $var) {
 	$HTMLFooter	.= '</html>'.NL;
 					
 	$HTMLMail = $HTMLHeader.$bericht.$HTMLFooter;
+	
+	$html =& new html2text($HTMLMail);
+	$html->set_base_url($ScriptURL);
+	$PlainMail = $html->get_text();
 		
 	$mail = new PHPMailer;
 	
@@ -734,9 +738,22 @@ function sendMail($ontvanger, $subject, $bericht, $var) {
 	$mail->Subject	= $SubjectPrefix . $subject;
 	$mail->IsHTML(true);
 	$mail->Body			= $HTMLMail;
-	//$mail->AltBody	= $PlainMail;
+	$mail->AltBody	= $PlainMail;
 	
-	if($var['file'] != "") {
+	//echo $UserData['mail'];
+		
+	# Als de ouders ook een CC moeten
+	# Alleen bij mensen onder de 18
+	if(isset($var['ouderCC'])) {
+		if(($UserData['mail'] != $UserData['fam_mail']) AND $UserData['jaar'] > (date("Y")-18)) {
+			$mail->AddCC($UserData['fam_mail']);
+			//echo ' -> '. $UserData['fam_mail'];
+		}
+	}		
+	
+	//echo  '<br>';
+		
+	if(isset($var['file']) AND $var['file'] != "") {
 		if($var['name'] != "") {
 			$mail->addAttachment($var['file'], $var['name']);
 		} else {

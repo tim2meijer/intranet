@@ -29,28 +29,44 @@ if($row = mysqli_fetch_array($result)) {
 }
 */
 
+$oppassers = getGroupMembers(7);
+
 $roosters = getRoosters();
 
-foreach($roosters as $rooster) {
+foreach($roosters as $rooster) {	
 	$details = getRoosterDetails($rooster);
 	$leden = getGroupMembers($details['groep']);
 	
-	$sql = "SELECT $TablePlanning.$PlanningUser FROM $TablePlanning, $TableDiensten WHERE $TablePlanning.$PlanningGroup = ". $details['groep'] ." AND $TablePlanning.$PlanningDienst = $TableDiensten.$DienstID  AND $TableDiensten.$DienstStart > ". time();
+	echo "<h1>". $details['naam'] ."</h1>";
+	
+	$sql = "SELECT $TablePlanning.$PlanningUser FROM $TablePlanning, $TableDiensten WHERE $TablePlanning.$PlanningGroup = $rooster AND $TablePlanning.$PlanningDienst = $TableDiensten.$DienstID  AND $TableDiensten.$DienstStart > ". time();
+	
+	//echo "[$sql]";
 		
 	$result = mysqli_query($db, $sql);
 	if($row = mysqli_fetch_array($result)) {
 		do {
-			makeName($row[$PlanningUser], 5) .' gevonden<br>';
+			echo $row[$PlanningUser] .'|'. makeName($row[$PlanningUser], 5) .' gevonden<br>';
 			
 			$key = array_search($row[$PlanningUser], $leden);
 			unset($leden[$key]);
+			
+			if($rooster >= 3 AND $rooster <= 5) {
+				$key_op = array_search($row[$PlanningUser], $oppassers);
+				unset($oppassers[$key_op]);
+			}
+			
 		} while($row = mysqli_fetch_array($result));		
 	}	
 	
 	foreach($leden as $lid) {
 		echo makeName($lid, 5) .' ['. $lid .'] staat niet op het rooster voor '. $details['naam'] .'<br>';
-	}	
+	}
 }
+
+foreach($oppassers as $lid) {
+	echo makeName($lid, 5) .' ['. $lid .'] staat niet op het rooster.<br>';
+}	
 
 
 ?>

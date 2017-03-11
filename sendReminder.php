@@ -2,6 +2,7 @@
 include_once('include/functions.php');
 include_once('include/config.php');
 include_once('../../general_include/class.phpmailer.php');
+include_once('../../general_include/class.html2text.php');
 $db = connect_db();
 
 #$startTijd = mktime(0, 0, 0, date("n"), date("j"), date("Y"));
@@ -41,6 +42,8 @@ foreach($diensten as $dienst) {
 			$onderwerp				= $roosterData['onderwerp_mail'];
 			$var['FromName']	= $roosterData['naam_afzender'];
 			$var['from']			= $roosterData['mail_afzender'];
+			# Stuur bij 'tieners' een CC naar de ouders
+			$var['ouderCC']		= 1;
 															
 			foreach($vulling as $lid => $naam) {
 				$team = excludeID($vulling, $lid);
