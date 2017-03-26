@@ -6,14 +6,6 @@ $cfgProgDir = 'auth/';
 include($cfgProgDir. "secure.php");
 $db = connect_db();
 
-/*
-if(!isset($_REQUEST['id'])) {
-	$id = $_SESSION['ID'];
-} else {
-	$id = $_REQUEST['id'];
-}
-*/
-
 $id = getParam('id', $_SESSION['ID']);
 
 $personData = getMemberDetails($id);
@@ -32,7 +24,12 @@ echo "	<td width=44% valign='top'>";
 echo "	<table>".NL;
 echo "	<tr>".NL;
 echo "		<td><b>Adres</b></td>".NL;
-echo "		<td><a href='https://www.google.nl/maps/place/". urlencode($personData['straat'] .' '. $personData['huisnummer'] .', '. $personData['PC'] .' '. $personData['plaats']) ."' target='_blank'>". $personData['straat'] .' '. $personData['huisnummer'] ."</a></td>".NL;
+echo "		<td><a href='https://www.google.nl/maps/place/". urlencode($personData['straat'] .' '. $personData['huisnummer'] .', '. $personData['PC'] .' '. $personData['plaats']) ."' target='_blank'>". $personData['straat'] .' '. $personData['huisnummer'] ."</a>";
+if(!in_array($_SESSION['ID'], $familie)) {
+	$ownData = getMemberDetails($_SESSION['ID']);
+	echo " <a href='https://www.google.nl/maps/dir/". urlencode($ownData['straat'] .' '. $ownData['huisnummer'] .', '. $ownData['PC'] .' '. $ownData['plaats']) ."/". urlencode($personData['straat'] .' '. $personData['huisnummer'] .', '. $personData['PC'] .' '. $personData['plaats']) ."' title='klik hier om de route te tonen' target='_blank'><img src='images/GoogleMaps.png'></a>";
+}
+echo "	</td>".NL;
 echo "	</tr>".NL;
 echo "	<tr>".NL;
 echo "		<td><b>Postcode</b></td>".NL;
@@ -75,7 +72,7 @@ echo "		<td>".$personData['wijk'] ."</td>".NL;
 echo "	</tr>".NL;
 echo "	<tr>".NL;
 echo "		<td><b>Geboortedatum</b></td>".NL;
-echo "		<td>". strftime("%d %B %Y", $personData['geb_unix']) ."</td>".NL;
+echo "		<td>". strftime("%d %B '%y", $personData['geb_unix']) ."</td>".NL;
 echo "	</tr>".NL;
 if($personData['twitter'] != '' OR $personData['fb'] != '' OR $personData['linkedin'] != '') {
 	echo "	<tr>".NL;

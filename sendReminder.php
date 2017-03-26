@@ -14,6 +14,10 @@ $eindTijd = mktime(23, 59, 59, date("n"), (date("j")+3), date("Y"));
 $diensten = getKerkdiensten($startTijd, $eindTijd);
 $roosters = getRoosters(0);
 
+# Sommige roosters worden geimporteerd.
+# Deze moeten een iets andere Ps krijgen
+$importRoosters = array(7, 8, 9, 10);
+
 # Mochten er diensten zijn, dan even alle teams opvragen
 # Van deze teamID's een naam-array maken ($teamVulling).
 # Deze $teamVulling wegschrijven in een array met alle team-vullingen per rooster ($teams)
@@ -88,9 +92,18 @@ foreach($diensten as $dienst) {
 										
 					if($i==0) {
 						$memberData = getMemberDetails($lid);
-						$ReplacedBericht .= "<p>Ps 1. : mocht je onderling geruild hebben, wil je deze mail dan doorsturen naar de betreffende persoon?<br>In het vervolg kan je die ruiling ook doorgeven via <a href='$ScriptURL/showRooster.php?rooster=$rooster'>het rooster</a> zelf, dan komt de mail direct goed terecht.";	
-						$ReplacedBericht .= "<br>Ps 2. : je kan je persoonlijke 3GK-rooster opnemen in je digitale agenda door <a href='$ScriptURL/ical/".$memberData['username'].'-'. $memberData['hash'] .".ics'>deze link</a> toe te voegen.";
+						$ReplacedBericht .= "<p>";
+						$ReplacedBericht .= "Ps 1. : je kan je persoonlijke 3GK-rooster opnemen in je digitale agenda door <a href='$ScriptURL/ical/".$memberData['username'].'-'. $memberData['hash'] .".ics'>deze link</a> toe te voegen.<br>";
+						$ReplacedBericht .= "Ps 2. : mocht je onderling geruild hebben, wil je deze mail dan doorsturen naar de betreffende persoon?<br>";
 						
+						# Sommige rooster worden automatisch geimporteerd.
+						# Ruilen moet dus niet via de site
+						if(in_array($rooster, $importRoosters)) {
+							$ReplacedBericht .= "Als je een volgende keer de ruiling doorgeeft aan de roostermaker, zorgt die dat het op deze site ook wordt aangepast.";	
+						} else {
+							$ReplacedBericht .= "In het vervolg kan je die ruiling ook doorgeven via <a href='$ScriptURL/showRooster.php?rooster=$rooster'>het rooster</a> zelf, dan komt de mail direct goed terecht.";	
+						}
+												
 						$FinalHTMLMail = $ReplacedBericht;
 					} else {
 						$FinalSubject = $ReplacedBericht;

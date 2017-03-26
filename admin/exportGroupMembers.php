@@ -7,13 +7,21 @@ $cfgProgDir = '../auth/';
 include($cfgProgDir. "secure.php");
 $db = connect_db();
 
-if(!isset($_REQUEST['groep'])) {
-	echo "geen groep gedefinieerd";
+if(!isset($_REQUEST['groep']) AND !isset($_REQUEST['wijk'])) {
+	echo "geen groep of wijk gedefinieerd";
 	exit;
 }
 
-$leden = getGroupMembers($_REQUEST['groep']);
-$groupData = getGroupDetails($_REQUEST['groep']);
+if(isset($_REQUEST['groep'])) {
+	$leden = getGroupMembers($_REQUEST['groep']);
+	$groupData = getGroupDetails($_REQUEST['groep']);
+	$categorie = $groupData['naam'];
+	$file_name = $groupData['naam'].'.csv';
+} else {
+	$leden = getWijkMembers($_REQUEST['wijk']);
+	$categorie = 'Wijk '. $_REQUEST['wijk'];
+	$file_name = 'wijk_'.$_REQUEST['wijk'].'.csv';
+}
 
 if(isset($_REQUEST['type']) AND $_REQUEST['type'] == 'google') {
 	$kop[] = 'Given Name';
@@ -50,7 +58,7 @@ if(isset($_REQUEST['type']) AND $_REQUEST['type'] == 'google') {
 		$veld[] = $data['meisjesnaam'];
 		$veld[] = $data['geboorte'];
 		//$veld[] = $data['geslacht'];
-		$veld[] = $groupData['naam'];
+		$veld[] = $categorie;
 		
 		if($data['prive_mail'] == '') {
 			$veld[] = 'Home';
@@ -120,16 +128,18 @@ if(isset($_REQUEST['type']) AND $_REQUEST['type'] == 'google') {
 	}
 }
 
-$file_name = $groupData['naam'].'.csv';
-
-header('Content-Description: File Transfer');
-header('Content-Type: application/octet-stream');
-header('Content-Disposition: attachment; filename="'.$file_name.'"');
-header('Expires: 0');
-header('Cache-Control: must-revalidate');
-header('Pragma: public');
-header('Content-Length:'.strlen($output));
-echo $output;
-exit;
+if(isset($_REQUEST['onscreen'])) {
+	echo $output;
+} else {
+	header('Content-Description: File Transfer');
+	header('Content-Type: application/octet-stream');
+	header('Content-Disposition: attachment; filename="'.$file_name.'"');
+	header('Expires: 0');
+	header('Cache-Control: must-revalidate');
+	header('Pragma: public');
+	header('Content-Length:'.strlen($output));
+	echo $output;
+	exit;
+}
 
 ?>

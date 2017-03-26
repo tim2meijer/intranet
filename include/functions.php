@@ -887,4 +887,23 @@ function excludeID($oldArray, $id) {
 	return $newArray;
 }
 
+function getWijkMembers($wijk) {
+	global $TableAdres, $AdresID;
+	global $TableUsers, $UserID, $UserAdres, $AdresWijk, $UserAchternaam;
+	$db = connect_db();
+	
+	$data = array();
+	$sql = "SELECT $TableUsers.$UserID FROM $TableUsers, $TableAdres WHERE $TableAdres.$AdresID = $TableUsers.$UserAdres AND $TableAdres.$AdresWijk like '$wijk' ORDER BY $TableUsers.$UserAchternaam";
+	
+	echo $sql;
+	
+	$result = mysqli_query($db, $sql);
+	if($row = mysqli_fetch_array($result)) {
+		do {
+			$data[] = $row[$UserID];
+		} while($row = mysqli_fetch_array($result));		
+	}
+	return $data;	
+}
+
 ?>
