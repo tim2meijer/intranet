@@ -2,50 +2,74 @@
 include_once('../include/functions.php');
 include_once('../include/config.php');
 
-$db = connect_db();
+$wijken[] = 'test.txt';
 
-$wijken['A'] = 'wijkA.txt';
-$wijken['B'] = 'wijkB.txt';
-$wijken['C'] = 'wijkC.txt';
-$wijken['D'] = 'wijkD.txt';
-$wijken['E'] = 'wijkE.txt';
-$wijken['F'] = 'wijkF.txt';
-$wijken['G'] = 'wijkG.txt';
-$wijken['H'] = 'wijkH.txt';
-$wijken['I'] = 'wijkI.txt';
-$wijken['J'] = 'wijkJ.txt';
+$onScreen = false;
 
-mysqli_query($db, "TRUNCATE $TableUsers");
-mysqli_query($db, "TRUNCATE $TableAdres");
+if(!$onScreen) {
+	$db = connect_db();
 
-$naam = true;
+	$TableUsers .= '_new';
+	$TableAdres .= '_new';
+
+	mysqli_query($db, "TRUNCATE $TableUsers");
+	mysqli_query($db, "TRUNCATE $TableAdres");
+}
+
+$wegschrijven = false;
 $straat = $nummer = $postcode = $plaats = '';
-$vorige_wijk = 'A';
+$mail = $telefoon = array();
 
-foreach($wijken as $wijk_key => $txt_file) {
+foreach($wijken as $txt_file) {
 	$regels = file($txt_file);
-	$new_file = true;
+	
 	foreach($regels as $r => $regel) {
-		if(!strpos($regel, 'Adressenlijst 3GK')) {	
+		#echo '> '. $regel .'<br>';
+		
+		if(strpos($regel, '2017 Wijk ')) {
+			$wijk = substr (trim($regel), -1);
+		}
+				
+		if(!strpos($regel, 'Adressenlijst 3GK')) {			
 			# Nieuw persoon
-			if(strpos($regel, ' V ') OR strpos($regel, ' M ')) {
-				# Eerst even vorig adres inschrijven
-				if(!$naam) {
-					# kerkelijk adres inschrijven
-					$sql = "INSERT INTO $TableAdres (`straat`, `nummer`, `postcode`, `plaats`, `mail`, `telefoon`, `wijk`) VALUES ('". addslashes(trim($straat)) ."', '". trim($nummer) ."', '". trim($postcode) ."', '". addslashes(trim($plaats)) ."', '". trim($mail[0]) ."', '". trim($telefoon[0]) ."', '". trim($wijk_key) ."')";
-					if(!mysqli_query($db, $sql)) {
-						echo 'ERROR : '. $straat .'|'. $nummer .'|'. $postcode .'|'. $plaats .'|'. $mail[0]  .'|'. $telefoon[0] .'<br>';
-					}
-					$kerkelijkID = mysqli_insert_id($db);
-											
-					# leden inschrijven op kerkelijk adres 
-					//if($new_file) {
-					//	$wijk = $vorige_wijk;
-					//	$new_file = false;
-					//} else {
-					//	$wijk = $wijk_key;
-					//}
+			if(strpos($regel, ' V ') OR strpos($regel, ' M ') OR ($r+1) == count($regels)) {				
+				$persoonData = true;
+				
+				# Als er een komma op dezelfde regel staat als een geslacht
+				# staat er een naam én een adres op dezelfde rij
+				# even opknippen
+				if(strpos($regel, ',')) {
+					$delen = explode(' ', $regel);
 					
+					$keyV = array_search ('V', $delen);
+					$keyM = array_search ('M', $delen);
+					
+					if($keyV == false) {
+						$key = array_search ('M', $delen);
+					} else {
+						$key = $keyV;						
+					}
+										
+					$adresRegel = implode(' ', array_slice($delen, ($key+2)));
+					$regel = implode(' ', array_slice($delen, 0, ($key+2)));
+				}
+																								
+				# Eerst even vorig adres inschrijven
+				if($wegschrijven OR ($r+1) == count($regels)) {
+					
+					# kerkelijk adres inschrijven					
+					if($onScreen) {
+						echo 'straat : '. $straat .'| nummer : '. $nummer .'| PC : '. $postcode .'| Plaats : '. $plaats .'| Mail : '. $mail[0]  .'| Telefoon : '. $telefoon[0]  .'| Wijk : '.  $wijk .'<br>';
+					} else {
+						$sql = "INSERT INTO $TableAdres (`straat`, `nummer`, `postcode`, `plaats`, `mail`, `telefoon`, `wijk`) VALUES ('". addslashes(trim($straat)) ."', '". trim($nummer) ."', '". trim($postcode) ."', '". addslashes(trim($plaats)) ."', '". trim($mail[0]) ."', '". trim($telefoon[0]) ."', '". trim($wijk) ."')";
+					
+						if(!mysqli_query($db, $sql)) {
+							echo 'ERROR : '. $straat .'|'. $nummer .'|'. $postcode .'|'. $plaats .'|'. $mail[0]  .'|'. $telefoon[0]  .'|'. $wijk .'<br>';
+						}						
+						$kerkelijkID = mysqli_insert_id($db);								
+					}
+					
+					# personen op dat adres inschrijven
 					foreach($persoon as $key => $value) {					
 						$data = convertName($value);
 						
@@ -73,25 +97,27 @@ foreach($wijken as $wijk_key => $txt_file) {
 						if(array_key_exists($key, $telefoon) AND $key > 0) {
 							$tel = $telefoon[$key];
 						}
-												
-						$sql = "INSERT INTO `leden` (`kerk_adres`, `geslacht`, `voorletters`, `voornaam`, `tussenvoegsel`, `achternaam`, `meisjesnaam`, `geboortedag`, `geboortemaand`, `geboortejaar`, `telefoon`, `email`, `belijdenis`) VALUES ('$kerkelijkID', '". trim($sexe) ."', '". trim($data['voorletters']) ."', '". addslashes(trim($data['voornaam'])) ."', '". addslashes(trim($data['tussenvoegsel'])) ."', '". addslashes(trim($data['achternaam'])) ."', '". addslashes(trim($data['meisjesnaam'])) ."', '". trim($geb_dag) ."', '". trim($geb_maand) ."', '". trim($geb_jaar) ."', '". trim($tel) ."', '". trim($email) ."', '". trim($soort) ."')";
-						if(!mysqli_query($db, $sql)) {
-							echo 'ERROR :'.$data['voorletters'] .", ". $data['voornaam'] .", ". $data['tussenvoegsel'] .", ". $data['achternaam'] .", ". $email .", ". $tel .'<br>';
-						}
+						
+						if($onScreen) {
+							echo $data['voorletters'] .", ". $data['voornaam'] .", ". $data['tussenvoegsel'] .", ". $data['achternaam'] .", ". $email .", ". $tel ."<br>";
+						} else {
+							$sql = "INSERT INTO $TableUsers (`kerk_adres`, `geslacht`, `voorletters`, `voornaam`, `tussenvoegsel`, `achternaam`, `meisjesnaam`, `geboortedatum`, `telefoon`, `email`, `belijdenis`) VALUES ('$kerkelijkID', '". trim($sexe) ."', '". trim($data['voorletters']) ."', '". addslashes(trim($data['voornaam'])) ."', '". addslashes(trim($data['tussenvoegsel'])) ."', '". addslashes(trim($data['achternaam'])) ."', '". addslashes(trim($data['meisjesnaam'])) ."', '". trim($geb_jaar) .'-'. trim($geb_maand) .'-'. trim($geb_dag) ."', '". trim($tel) ."', '". trim($email) ."', '". trim($soort) ."')";
+							if(!mysqli_query($db, $sql)) {
+								echo 'ERROR :'.$data['voorletters'] .", ". $data['voornaam'] .", ". $data['tussenvoegsel'] .", ". $data['achternaam'] .", ". $email .", ". $tel ."<br>$sql<br>";
+							}
+						}					
+						
 						$email = $tel = $geb_dag = $geb_maand = $geb_jaar = $sexe = $soort = '';
 					}
-													
-					//echo '<hr>';
-					//echo "\n\n\n\n";
 													
 					$mail = $telefoon = $persoon = $belijdenis = $geslacht = $geboortedatum = $data_ouder = array();
 					$straat = $nummer = $postcode = $plaats = $sexe = '';
 				}				
 				
-				$naam = true;
+				$wegschrijven = false;
 				
 				$delen = explode(' ', $regel);
-				
+								
 				$laatste = array_pop($delen);
 				
 				if(strlen($laatste) > 3) {
@@ -105,11 +131,20 @@ foreach($wijken as $wijk_key => $txt_file) {
 				$geboortedatum[] = array_pop($delen);
 				
 				$volledige_naam = implode(' ', $delen);
-				$persoon[] = $volledige_naam;
-			# Adres gegevens
+				$persoon[] = $volledige_naam;			
 			} else {
-				$naam = false;
+				$persoonData = false;
+				$wegschrijven = true;
+			}
 			
+			# Adres gegevens
+			if(isset($adresRegel) OR !$persoonData) {
+				
+				if(isset($adresRegel)) {
+					$regel = $adresRegel;
+					unset($adresRegel);
+				}
+										
 				# mailadressen
 				if(strpos($regel, '@')) {
 					$mail[] = $regel;
@@ -133,10 +168,11 @@ foreach($wijken as $wijk_key => $txt_file) {
 			}
 		}
 	}
-	$vorige_wijk = $wijk_key;
 }
 
-mysqli_query($db, "UPDATE `adressen` SET `plaats` = 'DEVENTER' WHERE `plaats` like ''");
+if(!$onScreen) {
+	mysqli_query($db, "UPDATE $TableAdres SET `plaats` = 'DEVENTER' WHERE `plaats` like ''");
+}
 
 /*
 $namen[] = 'J. (Johan) Bluemink';

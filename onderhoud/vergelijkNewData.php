@@ -40,7 +40,7 @@ if($row = mysqli_fetch_array($result)) {
 			$row_old = mysqli_fetch_array($result_old);
 						
 			foreach($veldenPersoon as $veld) {
-				if($row[$veld] != '' AND $row_old[$veld] != $row[$veld]) {
+				if($row[$veld] != '' AND (strtolower($row_old[$veld]) != strtolower($row[$veld]))) {
 					echo $veld .' is anders voor '.$voornaam .' '. $achternaam .' (was '. $row_old[$veld] .'; nu '. $row[$veld] .") <a href='$ScriptURL/gegevens.php?id=". $row_old[$UserID]."' target='blank'>wijzig</a> | <a href='$ScriptURL/profiel.php?id=". $row_old[$UserID]."' target='blank'>profiel</a><br>\n"; 
 				}
 			}
