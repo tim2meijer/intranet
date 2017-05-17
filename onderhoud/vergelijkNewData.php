@@ -40,8 +40,8 @@ if($row = mysqli_fetch_array($result)) {
 			$row_old = mysqli_fetch_array($result_old);
 						
 			foreach($veldenPersoon as $veld) {
-				if($row[$veld] != '' AND (strtolower($row_old[$veld]) != strtolower($row[$veld]))) {
-					echo $veld .' is anders voor '.$voornaam .' '. $achternaam .' (was '. $row_old[$veld] .'; nu '. $row[$veld] .") <a href='$ScriptURL/gegevens.php?id=". $row_old[$UserID]."' target='blank'>wijzig</a> | <a href='$ScriptURL/profiel.php?id=". $row_old[$UserID]."' target='blank'>profiel</a><br>\n"; 
+				if($row[$veld] != '' AND (strtolower(trim($row_old[$veld])) != strtolower(trim($row[$veld]))) AND (str_replace(' ', '', trim($row_old[$veld])) != str_replace(' ', '', trim($row[$veld])))) {
+					echo $veld .' is anders voor '.$voornaam .' '. $achternaam .' (was '. strtolower(trim($row_old[$veld])) .'; nu '. strtolower(trim($row[$veld])) .") <a href='$ScriptURL/gegevens.php?id=". $row_old[$UserID]."' target='blank'>wijzig</a> | <a href='$ScriptURL/profiel.php?id=". $row_old[$UserID]."' target='blank'>profiel</a><br>\n"; 
 				}
 			}
 			
@@ -54,7 +54,7 @@ if($row = mysqli_fetch_array($result)) {
 			$row_adres_old = mysqli_fetch_array($result_adres_old);
 			
 			foreach($veldenAdres as $veld) {
-				if($row_adres[$veld] != '' AND $row_adres_old[$veld] != $row_adres[$veld]) {
+				if($row_adres[$veld] != '' AND (strtolower(trim($row_adres_old[$veld])) != strtolower(trim($row_adres[$veld]))) AND (str_replace(' ', '', trim($row_adres_old[$veld])) != str_replace(' ', '', trim($row_adres[$veld])))) {
 					echo '[ADRES] '. $veld .' in adres is anders voor '.$voornaam .' '. $achternaam .' (was '. $row_adres_old[$veld] .'; nu '. $row_adres[$veld] .") <a href='$ScriptURL/gegevens.php?id=". $row_old[$UserID]."' target='blank'>wijzig</a> | <a href='$ScriptURL/profiel.php?id=". $row_old[$UserID]."' target='blank'>profiel</a><br>\n"; 
 				}
 			}

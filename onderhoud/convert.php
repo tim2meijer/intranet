@@ -23,7 +23,8 @@ $mail = $telefoon = array();
 foreach($wijken as $txt_file) {
 	$regels = file($txt_file);
 	
-	foreach($regels as $r => $regel) {
+	foreach($regels as $r => $tempRegel) {
+		$regel = utf8_encode($tempRegel);
 		#echo '> '. $regel .'<br>';
 		
 		if(strpos($regel, '2017 Wijk ')) {
