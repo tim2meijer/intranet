@@ -7,7 +7,7 @@ $cfgProgDir = '../auth/';
 include($cfgProgDir. "secure.php");
 $db = connect_db();
 
-if(!isset($_REQUEST['groep']) AND !isset($_REQUEST['wijk'])) {
+if(!isset($_REQUEST['groep']) AND !isset($_REQUEST['wijk']) AND !isset($_REQUEST['ids'])) {
 	echo "geen groep of wijk gedefinieerd";
 	exit;
 }
@@ -17,10 +17,14 @@ if(isset($_REQUEST['groep'])) {
 	$groupData = getGroupDetails($_REQUEST['groep']);
 	$categorie = $groupData['naam'];
 	$file_name = $groupData['naam'].'.csv';
-} else {
+} elseif(isset($_REQUEST['wijk'])) {
 	$leden = getWijkMembers($_REQUEST['wijk']);
 	$categorie = 'Wijk '. $_REQUEST['wijk'];
 	$file_name = 'wijk_'.$_REQUEST['wijk'].'.csv';
+} else {
+	$leden = explode('|', $_REQUEST['ids']);
+	$categorie = 'Export';
+	$file_name = 'export.csv';
 }
 
 if(isset($_REQUEST['type']) AND $_REQUEST['type'] == 'google') {
