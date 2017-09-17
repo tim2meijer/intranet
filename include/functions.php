@@ -387,7 +387,7 @@ function getMyRoostersBeheer($id) {
 }
 
 function getRoosterDetails($id) {
-	global $TableRoosters, $RoostersID, $RoostersNaam, $RoostersGroep, $RoostersFields, $RoostersMail, $RoostersSubject, $RoostersFrom, $RoostersFromAddr;
+	global $TableRoosters, $RoostersID, $RoostersNaam, $RoostersGroep, $RoostersFields, $RoostersMail, $RoostersSubject, $RoostersFrom, $RoostersFromAddr, $RoostersGelijk;
 	$db = connect_db();
 	
 	$data = array();
@@ -402,6 +402,7 @@ function getRoosterDetails($id) {
 		$data['onderwerp_mail']	= urldecode($row[$RoostersSubject]);		
 		$data['naam_afzender']	= urldecode($row[$RoostersFrom]);
 		$data['mail_afzender']	= urldecode($row[$RoostersFromAddr]);
+		$data['gelijk']	= $row[$RoostersGelijk];		
 	}
 	return $data;	
 }
@@ -917,6 +918,21 @@ function getWijkMembers($wijk) {
 		} while($row = mysqli_fetch_array($result));		
 	}
 	return $data;	
+}
+
+function gelijkeDienst($dienst, $gelijk) {
+	if($gelijk == 0) {
+		return false;
+	} else {
+		$details = getKerkdienstDetails($dienst);
+		$diensten = getKerkdiensten(mktime(0,0,0,date("n", $details['start']),date("j", $details['start']),date("Y", $details['start'])), mktime(23,59,59,date("n", $details['start']),date("j", $details['start']),date("Y", $details['start'])));
+		
+		if($diensten[0] == $dienst) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 }
 
 ?>

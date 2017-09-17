@@ -43,7 +43,7 @@ if(isset($_POST['save']) OR isset($_POST['maanden'])) {
 	}
 	toLog('info', $_SESSION['ID'], '', 'Rooster '. $RoosterData['naam'] .' aangepast');
 	
-	$sql = "UPDATE $TableRoosters SET $RoostersLastChange = '". date("Y-m-d H:i:s") ."' WHERE $RoostersID like ". $_POST['rooster'];
+	$sql = "UPDATE $TableRoosters SET $RoostersGelijk = '". $_POST['gelijkeDiensten'] ."', $RoostersLastChange = '". date("Y-m-d H:i:s") ."' WHERE $RoostersID like ". $_POST['rooster'];
 	mysql_query($sql);
 }
 
@@ -78,34 +78,40 @@ foreach($IDs as $member) {
 }	
 
 # Haal alle kerkdiensten binnen een tijdsvak op
-$diensten = getKerkdiensten(time(), mktime(date("H"),date("i"),date("s"),(date("n")+(3*$blokken)),date("j"),date("Y")));
+$diensten = getKerkdiensten(mktime(0,0,0), mktime(date("H"),date("i"),date("s"),(date("n")+(3*$blokken))));
 $nrFields = $RoosterData['aantal'];
 
 $block_1[] = "<form method='post' action='$_SERVER[PHP_SELF]'>";
 $block_1[] = "<input type='hidden' name='rooster' value='". $_REQUEST['rooster'] ."'>";
 $block_1[] = "<input type='hidden' name='blokken' value='$blokken'>";
 $block_1[] = "<table>";
+$block_1[] = "<tr>";
+$block_1[] = "	<td align='right' valign='top'><input type='checkbox' name='gelijkeDiensten' value='1'". ($RoosterData['gelijk'] == 1 ? ' checked' : '') ."></td>";
+$block_1[] = "	<td colspan='$nrFields' align='left'>Bij meer diensten/dag is het rooster gelijk<br><small>(pas effect na opslaan)</small></td>";
+$block_1[] = "</tr>";
 
 foreach($diensten as $dienst) {
-	$details = getKerkdienstDetails($dienst);
-	$vulling = getRoosterVulling($_REQUEST['rooster'], $dienst);
-	$selected = current($vulling);
-	
-	$block_1[] = "<tr>";
-	$block_1[] = "	<td align='right'>". strftime("%A %d %b %H:%M", $details['start'])."</td>";
-	
-	for($n=0 ; $n < $nrFields ; $n++) {
-		$block_1[] = "	<td><select name='persoon[$dienst][]'>";
-		$block_1[] = "	<option value=''>&nbsp;</option>";
-						
-		foreach($namen as $key => $naam) {
-			$block_1[] = "	<option value='$key'". ($selected == $key ? " selected" : '') .">$naam</option>";
-		}		
+	if(!gelijkeDienst($dienst, $RoosterData['gelijk'])) {	
+		$details = getKerkdienstDetails($dienst);
+		$vulling = getRoosterVulling($_REQUEST['rooster'], $dienst);
+		$selected = current($vulling);
 		
-		$block_1[] = "</select></td>";
-		$selected = next($vulling);
-	}	
-	$block_1[] = "</tr>";
+		$block_1[] = "<tr>";
+		$block_1[] = "	<td align='right'>". strftime("%A %d %b %H:%M", $details['start'])."</td>";
+		
+		for($n=0 ; $n < $nrFields ; $n++) {
+			$block_1[] = "	<td><select name='persoon[$dienst][]'>";
+			$block_1[] = "	<option value=''>&nbsp;</option>";
+							
+			foreach($namen as $key => $naam) {
+				$block_1[] = "	<option value='$key'". ($selected == $key ? " selected" : '') .">$naam</option>";
+			}		
+			
+			$block_1[] = "</select></td>";
+			$selected = next($vulling);
+		}	
+		$block_1[] = "</tr>";
+	}
 }
 
 $block_1[] = "<tr>";

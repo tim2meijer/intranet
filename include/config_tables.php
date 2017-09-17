@@ -23,7 +23,6 @@ $UserBelijdenis			= "belijdenis";
 $UserLastChange			= "last_change";
 $UserLastVisit			= "last_visit";
 
-
 $TableAdres					= "adressen";
 $AdresID						= "id";
 $AdresStraat				= "straat";
@@ -52,6 +51,7 @@ $RoostersMail				= "mail";
 $RoostersSubject		= "onderwerp";
 $RoostersFrom				= "naam_afzender";
 $RoostersFromAddr		= "mail_afzender";
+$RoostersGelijk			= "gelijke_diensten";
 $RoostersLastChange	= "last_change";
 
 $TableGrpUsr				= "group_member";

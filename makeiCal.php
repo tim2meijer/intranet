@@ -49,27 +49,36 @@ foreach($ids as $id) {
 		$memberData = getMemberDetails($id);
 				
 		do {
-			$dienst = $row[$PlanningDienst];
-			$rooster = $row[$PlanningGroup];
-			
-			$data_dienst = getKerkdienstDetails($dienst);			
+			$dienst_tmp = $row[$PlanningDienst];
+			$rooster = $row[$PlanningGroup];			
 			$data_rooster = getRoosterDetails($rooster);
 			
-			$start = $data_dienst['start'];
-			$einde = $data_dienst['eind'];
-						
-			$ics[] = "BEGIN:VEVENT";	
-			//$ics[] = "UID:3GK-". $dienst . $rooster .'-'. date("Ymd", $start);
-			$ics[] = "UID:3GK-". substr('00'.$dienst, -3) .'.'. substr('00'.$rooster, -3) .'.'. substr('00'.$id, -3);
-			$ics[] = "DTSTART;TZID=Europe/Amsterdam:". date("Ymd\THis", $start);
-			$ics[] = "DTEND;TZID=Europe/Amsterdam:". date("Ymd\THis", $einde);	
-			$ics[] = "LAST-MODIFIED:". date("Ymd\THis", time());
-			$ics[] = "SUMMARY:". $data_rooster[$RoostersNaam];
-			//$ics[] = "LOCATION:". convertToReadable($data['adres']) .", ". $data['plaats'];
-			//$ics[] = "DESCRIPTION:". implode('\n', $description);
-			$ics[] = "STATUS:CONFIRMED";	
-			$ics[] = "TRANSP:TRANSPARENT";
-			$ics[] = "END:VEVENT";
+			if($data_rooster['gelijk'] == 1) {				
+				$details = getKerkdienstDetails($dienst_tmp);				
+				$diensten = getKerkdiensten(mktime(0,0,0,date("n", $details['start']),date("j", $details['start']),date("Y", $details['start'])), mktime(23,59,59,date("n", $details['start']),date("j", $details['start']),date("Y", $details['start'])));
+			} else {
+				$diensten[] = $dienst_tmp;
+			}
+			
+			foreach($diensten as $dienst) {
+				$data_dienst = getKerkdienstDetails($dienst);
+				
+				$start = $data_dienst['start'];
+				$einde = $data_dienst['eind'];
+				
+				$ics[] = "BEGIN:VEVENT";	
+				//$ics[] = "UID:3GK-". $dienst . $rooster .'-'. date("Ymd", $start);
+				$ics[] = "UID:3GK-". substr('00'.$dienst, -3) .'.'. substr('00'.$rooster, -3) .'.'. substr('00'.$id, -3);
+				$ics[] = "DTSTART;TZID=Europe/Amsterdam:". date("Ymd\THis", $start);
+				$ics[] = "DTEND;TZID=Europe/Amsterdam:". date("Ymd\THis", $einde);	
+				$ics[] = "LAST-MODIFIED:". date("Ymd\THis", time());
+				$ics[] = "SUMMARY:". $data_rooster[$RoostersNaam];
+				//$ics[] = "LOCATION:". convertToReadable($data['adres']) .", ". $data['plaats'];
+				//$ics[] = "DESCRIPTION:". implode('\n', $description);
+				$ics[] = "STATUS:CONFIRMED";	
+				$ics[] = "TRANSP:TRANSPARENT";
+				$ics[] = "END:VEVENT";
+			}
 		} while($row = mysqli_fetch_array($result));
 	}
 	
