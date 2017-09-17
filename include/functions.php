@@ -795,6 +795,19 @@ function getFamilieleden($id) {
 	return $data;	
 }
 
+function getParents($id) {
+	$familie = getFamilieleden($id);
+	
+	foreach($familie as $lid) {
+		$data = getMemberDetails($lid);
+		if($data['belijdenis'] == 'B') {
+			$parents[] = $lid;
+		}
+	}
+	
+	return $parents;
+}
+
 function getJarigen($dag, $maand) {
 	global $TableUsers, $UserID, $UserGeboorte;
 	$db = connect_db();

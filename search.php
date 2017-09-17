@@ -122,11 +122,19 @@ if(isset($_POST['search'])) {
 		do {
 			$lid = $row[$UserID];
 			$text[] = "<li><a href='profiel.php?id=$lid'>". makeName($lid, 5) ."</a></li>";
-			$ids[] = $lid;
+			$ids[] = $lid;			
+			
+			$ouders = getParents($lid);			
+			foreach($ouders as $ouder) {
+				$parentIDs[$ouder] = $ouder;
+			}
+			
 		} while($row = mysqli_fetch_array($result));		
 		$text[] = '</ol>';
 		
 		$text[] = "<a href='admin/exportGroupMembers.php?ids=".implode('|', $ids)."'>Exporteer deze gegevens</a>";
+		$text[] = "<a href='admin/exportGroupMembers.php?ids=".implode('|', $parentIDs)."'>Exporteer de ouders van deze gegevens</a>";
+		
 	}
 }
 
