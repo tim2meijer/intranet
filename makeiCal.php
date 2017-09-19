@@ -49,6 +49,7 @@ foreach($ids as $id) {
 		$memberData = getMemberDetails($id);
 				
 		do {
+			$diensten = array();
 			$dienst_tmp = $row[$PlanningDienst];
 			$rooster = $row[$PlanningGroup];			
 			$data_rooster = getRoosterDetails($rooster);
