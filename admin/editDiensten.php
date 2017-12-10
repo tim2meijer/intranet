@@ -7,6 +7,141 @@ $cfgProgDir = '../auth/';
 include($cfgProgDir. "secure.php");
 $db = connect_db();
 
+# Als er op een knop gedrukt is, het rooster wegschrijven
+if(isset($_POST['save']) OR isset($_POST['maanden'])) {
+	
+	foreach($_POST['sDag'] as $dienst => $dummy) {
+		$startTijd = mktime($_POST['sUur'][$dienst], $_POST['sMin'][$dienst], 0, $_POST['sMaand'][$dienst], $_POST['sDag'][$dienst], $_POST['sJaar'][$dienst]);
+		$eindTijd = mktime($_POST['eUur'][$dienst], $_POST['eMin'][$dienst], 0, $_POST['eMaand'][$dienst], $_POST['eDag'][$dienst], $_POST['eJaar'][$dienst]);
+		
+		$sql = "UPDATE $TableDiensten SET ";
+		$sql .= $DienstStart .' = '. $startTijd .', ';
+		$sql .= $DienstEind .' = '. $eindTijd .', ';
+		$sql .= $DienstVoorganger .' = \''. urlencode($_POST['voorganger'][$dienst]) .'\', ';
+		$sql .= $DienstCollecte_1 .' = \''. urlencode($_POST['collecte_1'][$dienst]) .'\', ';
+		$sql .= $DienstCollecte_2 .' = \''. urlencode($_POST['collecte_2'][$dienst]) .'\', ';
+		$sql .= $DienstOpmerking .' = \''. urlencode($_POST['bijz'][$dienst]) .'\'';
+		$sql .= " WHERE $DienstID = ". $dienst;
+		
+		mysql_query($sql);		
+	}
+}
+
+
+# Als er op de knop van 3 maanden extra geklikt is, 3 maanden bij de eindtijd toevoegen
+# Eerst initeren, event. later ophogen
+if(isset($_POST['blokken'])) {
+	$blokken = $_POST['blokken'];
+} else {
+	$blokken = 1;
+}
+
+if(isset($_POST['maanden'])) {
+	$blokken++;
+}
+
+# Haal alle kerkdiensten binnen een tijdsvak op
+$diensten = getKerkdiensten(mktime(0,0,0), mktime(date("H"),date("i"),date("s"),(date("n")+(3*$blokken))));
+
+$text[] = "<form method='post' action='$_SERVER[PHP_SELF]'>";
+//$text[] = "<input type='hidden' name='rooster' value='". $_REQUEST['rooster'] ."'>";
+$text[] = "<input type='hidden' name='blokken' value='$blokken'>";
+$text[] = "<table>";
+$text[] = "<tr>";
+$text[] = "	<td>Begin</td>";
+$text[] = "	<td>Eind</td>";
+$text[] = "	<td>Voorganger</td>";
+$text[] = "	<td>Collecte 1</td>";
+$text[] = "	<td>Collecte 2</td>";
+$text[] = "	<td>Bijzonderheid</td>";
+$text[] = "</tr>";
+
+foreach($diensten as $dienst) {
+	$data = getKerkdienstDetails($dienst);
+	
+	$sMin		= date("i", $data['start']);
+	$sUur		= date("H", $data['start']);
+	$sDag		= date("d", $data['start']);
+	$sMaand	= date("m", $data['start']);
+	$sJaar	= date("Y", $data['start']);
+	
+	$eMin		= date("i", $data['eind']);
+	$eUur		= date("H", $data['eind']);
+	$eDag		= date("d", $data['eind']);
+	$eMaand	= date("m", $data['eind']);
+	$eJaar	= date("Y", $data['eind']);
+	
+	$text[] = "<tr>";
+	$text[] = "	<td><select name='sDag[$dienst]'>";
+	for($d=1 ; $d<32 ; $d++) {
+		$text[] = "	<option value='$d'". ($d == $sDag ? ' selected' : '') .">$d</option>";
+	}
+	$text[] = "	</select>";
+	$text[] = "	<select name='sMaand[$dienst]'>";
+	for($m=1 ; $m<13 ; $m++) {
+		$text[] = "	<option value='$m'". ($m == $sMaand ? ' selected' : '') .">". $maandArray[$m] ."</option>";
+	}
+	$text[] = "	</select>";
+	$text[] = "	<select name='sJaar[$dienst]'>";
+	for($j=date("Y"); $j<=(date("Y")+10) ; $j++) {
+		$text[] = "	<option value='$j'". ($j == $sJaar ? ' selected' : '') .">". substr($j, -2). "</option>";
+	}
+	$text[] = "	</select>";
+	$text[] = "	<select name='sUur[$dienst]'>";
+	for($u=0; $u<24 ; $u++) {
+		$text[] = "	<option value='$u'". ($u == $sUur ? ' selected' : '') .">$u</option>";
+	}
+	$text[] = "	</select>";
+	$text[] = "	<select name='sMin[$dienst]'>";
+	for($m=0; $m<60 ; $m++) {
+		$text[] = "	<option value='$m'". ($m == $sMin ? ' selected' : '') .">". substr('0'.$m, -2) ."</option>";
+	}
+	$text[] = "	</select></td>";
+	//$text[] = "	<td>&nbsp;</td>";
+	
+	$text[] = "	<td><select name='eDag[$dienst]'>";
+	for($d=1 ; $d<32 ; $d++) {
+		$text[] = "	<option value='$d'". ($d == $eDag ? ' selected' : '') .">$d</option>";
+	}
+	$text[] = "	</select>";
+	$text[] = "	<select name='eMaand[$dienst]'>";
+	for($m=1 ; $m<13 ; $m++) {
+		$text[] = "	<option value='$m'". ($m == $eMaand ? ' selected' : '') .">". $maandArray[$m] ."</option>";
+	}
+	$text[] = "	</select>";
+	$text[] = "	<select name='eJaar[$dienst]'>";
+	for($j=date("Y"); $j<=(date("Y")+10) ; $j++) {
+		$text[] = "	<option value='$j'". ($j == $eJaar ? ' selected' : '') .">". substr($j, -2). "</option>";
+	}
+	$text[] = "	</select>";
+	$text[] = "	<select name='eUur[$dienst]'>";
+	for($u=0; $u<24 ; $u++) {
+		$text[] = "	<option value='$u'". ($u == $eUur ? ' selected' : '') .">$u</option>";
+	}
+	$text[] = "	</select>";
+	$text[] = "	<select name='eMin[$dienst]'>";
+	for($m=0; $m<60 ; $m++) {
+		$text[] = "	<option value='$m'". ($m == $eMin ? ' selected' : '') .">". substr('0'.$m, -2) ."</option>";
+	}
+	$text[] = "	</select></td>";
+	
+	$text[] = "	<td><input type='text' name='voorganger[$dienst]' value='". $data['voorganger'] ."'></td>";
+	$text[] = "	<td><input type='text' name='collecte_1[$dienst]' value='". $data['collecte_1'] ."'></td>";
+	$text[] = "	<td><input type='text' name='collecte_2[$dienst]' value='". $data['collecte_2'] ."'></td>";
+	$text[] = "	<td><input type='text' name='bijz[$dienst]' value='". $data['bijzonderheden'] ."'></td>";
+	$text[] = "<tr>";
+}
+
+$text[] = "<tr>";
+$text[] = "<td colspan='6' align='middle'><input type='submit' name='save' value='Diensten opslaan'>&nbsp;<input type='submit' name='maanden' value='Volgende 3 maanden'></td>";
+$text[] = "</tr>";
+$text[] = "</table>";
+$text[] = "</form>";
+
+
+
+/*
+
 if(isset($_POST['save'])) {
 	$startTijd = mktime($_POST['sUur'], $_POST['sMin'], 0, $_POST['sMaand'], $_POST['sDag'], $_POST['sJaar']);
 	$eindTijd = mktime($_POST['eUur'], $_POST['eMin'], 0, $_POST['eMaand'], $_POST['eDag'], $_POST['eJaar']);
@@ -119,6 +254,7 @@ if(isset($_POST['save'])) {
 		$text[] = "<a href='?id=$dienst'>".date("d-m H:i", $data['start']) ."-".date("H:i", $data['eind']) ."</a><br>";
 	}	
 }
+*/
 
 echo $HTMLHeader;
 echo implode("\n", $text);

@@ -62,6 +62,10 @@ $TableDiensten			= "kerkdiensten";
 $DienstID						= "id";
 $DienstStart				= "start";
 $DienstEind					= "eind";
+$DienstVoorganger		= "voorganger";
+$DienstCollecte_1		= "collecte_1";
+$DienstCollecte_2		= "collecte_2";
+$DienstOpmerking		= "opmerking";
 
 $TablePlanning			= "planning";
 $PlanningDienst			= "dienst";
