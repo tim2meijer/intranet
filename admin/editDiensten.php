@@ -8,8 +8,7 @@ include($cfgProgDir. "secure.php");
 $db = connect_db();
 
 # Als er op een knop gedrukt is, het rooster wegschrijven
-if(isset($_POST['save']) OR isset($_POST['maanden'])) {
-	
+if(isset($_POST['save']) OR isset($_POST['maanden'])) {	
 	foreach($_POST['sDag'] as $dienst => $dummy) {
 		$startTijd = mktime($_POST['sUur'][$dienst], $_POST['sMin'][$dienst], 0, $_POST['sMaand'][$dienst], $_POST['sDag'][$dienst], $_POST['sJaar'][$dienst]);
 		$eindTijd = mktime($_POST['eUur'][$dienst], $_POST['eMin'][$dienst], 0, $_POST['eMaand'][$dienst], $_POST['eDag'][$dienst], $_POST['eJaar'][$dienst]);
@@ -25,6 +24,18 @@ if(isset($_POST['save']) OR isset($_POST['maanden'])) {
 		
 		mysql_query($sql);		
 	}
+	toLog('info', $_SESSION['ID'], '', 'Diensten bijgewerkt');
+}
+
+if(isset($_REQUEST['new'])) {
+	$start	= mktime(10,0,0,date("n"),date("j"), date("Y"));
+	$eind		= mktime(11,30,0,date("n"),date("j"), date("Y"));		
+	$query	= "INSERT INTO $TableDiensten ($DienstStart, $DienstEind) VALUES ('$start', '$eind')";
+	$result = mysqli_query($db, $query);
+		
+	$id		= mysqli_insert_id($db);
+	
+	toLog('info', $_SESSION['ID'], '', 'Dienst van '. date("d-m-Y", $start) .' toegevoegd');
 }
 
 
@@ -137,6 +148,9 @@ $text[] = "<td colspan='6' align='middle'><input type='submit' name='save' value
 $text[] = "</tr>";
 $text[] = "</table>";
 $text[] = "</form>";
+$text[] = "<a href='?new'>Extra dienst toevoegen</a>";
+$text[] = "<p>";
+	
 
 
 
