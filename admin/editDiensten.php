@@ -11,7 +11,7 @@ $db = connect_db();
 if(isset($_POST['save']) OR isset($_POST['maanden'])) {	
 	foreach($_POST['sDag'] as $dienst => $dummy) {
 		$startTijd = mktime($_POST['sUur'][$dienst], $_POST['sMin'][$dienst], 0, $_POST['sMaand'][$dienst], $_POST['sDag'][$dienst], $_POST['sJaar'][$dienst]);
-		$eindTijd = mktime($_POST['eUur'][$dienst], $_POST['eMin'][$dienst], 0, $_POST['eMaand'][$dienst], $_POST['eDag'][$dienst], $_POST['eJaar'][$dienst]);
+		$eindTijd = mktime($_POST['eUur'][$dienst], $_POST['eMin'][$dienst], 0, $_POST['sMaand'][$dienst], $_POST['sDag'][$dienst], $_POST['sJaar'][$dienst]);
 		
 		$sql = "UPDATE $TableDiensten SET ";
 		$sql .= $DienstStart .' = '. $startTijd .', ';
@@ -59,7 +59,8 @@ $text[] = "<form method='post' action='$_SERVER[PHP_SELF]'>";
 $text[] = "<input type='hidden' name='blokken' value='$blokken'>";
 $text[] = "<table>";
 $text[] = "<tr>";
-$text[] = "	<td>Begin</td>";
+$text[] = "	<td>Datum</td>";
+$text[] = "	<td>Start</td>";
 $text[] = "	<td>Eind</td>";
 $text[] = "	<td>Voorganger</td>";
 $text[] = "	<td>Collecte 1</td>";
@@ -97,8 +98,8 @@ foreach($diensten as $dienst) {
 	for($j=date("Y"); $j<=(date("Y")+10) ; $j++) {
 		$text[] = "	<option value='$j'". ($j == $sJaar ? ' selected' : '') .">". substr($j, -2). "</option>";
 	}
-	$text[] = "	</select>";
-	$text[] = "	<select name='sUur[$dienst]'>";
+	$text[] = "	</select></td>";
+	$text[] = "	<td><select name='sUur[$dienst]'>";
 	for($u=0; $u<24 ; $u++) {
 		$text[] = "	<option value='$u'". ($u == $sUur ? ' selected' : '') .">$u</option>";
 	}
@@ -108,9 +109,9 @@ foreach($diensten as $dienst) {
 		$text[] = "	<option value='$m'". ($m == $sMin ? ' selected' : '') .">". substr('0'.$m, -2) ."</option>";
 	}
 	$text[] = "	</select></td>";
-	//$text[] = "	<td>&nbsp;</td>";
+	//$text[] = "	<td>-</td>";
 	
-	$text[] = "	<td><select name='eDag[$dienst]'>";
+	$text[] = "	<td>";/*<select name='eDag[$dienst]'>";	
 	for($d=1 ; $d<32 ; $d++) {
 		$text[] = "	<option value='$d'". ($d == $eDag ? ' selected' : '') .">$d</option>";
 	}
@@ -125,6 +126,7 @@ foreach($diensten as $dienst) {
 		$text[] = "	<option value='$j'". ($j == $eJaar ? ' selected' : '') .">". substr($j, -2). "</option>";
 	}
 	$text[] = "	</select>";
+	*/
 	$text[] = "	<select name='eUur[$dienst]'>";
 	for($u=0; $u<24 ; $u++) {
 		$text[] = "	<option value='$u'". ($u == $eUur ? ' selected' : '') .">$u</option>";

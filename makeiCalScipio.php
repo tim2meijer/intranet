@@ -29,43 +29,56 @@ $header[] = "END:VTIMEZONE";
 
 $footer[] = "END:VCALENDAR";
 
-
 $ics = array();
 
-$sql_rooster = "SELECT $TablePlanning.$PlanningDienst FROM $TablePlanning, $TableDiensten WHERE $TablePlanning.$PlanningDienst = $TableDiensten.$DienstID AND $TableDiensten.$DienstEind > ". time() ." GROUP BY $PlanningDienst";
+//$sql_rooster = "SELECT $TablePlanning.$PlanningDienst FROM $TablePlanning, $TableDiensten WHERE $TablePlanning.$PlanningDienst = $TableDiensten.$DienstID AND $TableDiensten.$DienstEind > ". time() ." GROUP BY $PlanningDienst";
+$sql_rooster = "SELECT $DienstID FROM $TableDiensten WHERE $DienstEind > ". time();
 $result_rooster = mysqli_query($db, $sql_rooster);
 if($row_rooster = mysqli_fetch_array($result_rooster)) {		
 	do {
-		$dienst = $row_rooster[$PlanningDienst];
-		$data_dienst = getKerkdienstDetails($dienst);
-
-		$sql_dienst = "SELECT * FROM $TablePlanning WHERE $PlanningDienst = $dienst GROUP BY $PlanningGroup";
+		# Wat is de ID van de dienst
+		# Welke gegevens horen daar bij
+		# Welke diensten zijn er nog meer die dag
+		$dienst = $row_rooster[$DienstID];		
+		$data_dienst = getKerkdienstDetails($dienst);		
+		$diensten = getKerkdiensten(mktime(0,0,0,date("n", $data_dienst['start']),date("j", $data_dienst['start']),date("Y", $data_dienst['start'])), mktime(23,59,59,date("n", $data_dienst['start']),date("j", $data_dienst['start']),date("Y", $data_dienst['start'])));
+		
+		# Eigenlijke ICS-data
+		$ics[] = "BEGIN:VEVENT";	
+		$ics[] = "UID:3GK-". substr('00'.$dienst, -3);
+		$ics[] = "DTSTART;TZID=Europe/Amsterdam:". date("Ymd\THis", $data_dienst['start']);
+		$ics[] = "DTEND;TZID=Europe/Amsterdam:". date("Ymd\THis", $data_dienst['eind']);	
+		$ics[] = "LAST-MODIFIED:". date("Ymd\THis", time());
+		
+		if(date("H", $data_dienst['start']) < 12) {
+			$ics[] = "SUMMARY:Ochtenddienst ". $data_dienst['voorganger'];
+		} elseif(date("H", $data_dienst['start']) < 18) {
+			$ics[] = "SUMMARY:Middagdienst ". $data_dienst['voorganger'];
+		} else {
+			$ics[] = "SUMMARY:Kerkdienst ". $data_dienst['voorganger'];
+		}
+		
+		$DESCRIPTION = '';
+		$CollecteString = '';
+		$tmpDienst = array();
+		if($data_dienst['collecte_1'] != '')	{ $CollecteString .= '1. '. $data_dienst['collecte_1']; }
+		if($data_dienst['collecte_2'] != '')	{ $CollecteString .= '\n2. '. $data_dienst['collecte_2']; }
+		foreach($diensten as $tmp) { $tmpDienst[] = "$PlanningDienst = $tmp"; }
+		
+		$sql_dienst = "SELECT * FROM $TablePlanning WHERE (". implode(' OR ', $tmpDienst) .") GROUP BY $PlanningGroup";
 		$result_dienst = mysqli_query($db, $sql_dienst);
-		if($row_dienst = mysqli_fetch_array($result_dienst)) {
-			$start = $data_dienst['start'];
-			$einde = $data_dienst['eind'];
-
-			$ics[] = "BEGIN:VEVENT";	
-			$ics[] = "UID:3GK-". substr('00'.$dienst, -3) .'.'. substr('00'.$rooster, -3);
-			$ics[] = "DTSTART;TZID=Europe/Amsterdam:". date("Ymd\THis", $start);
-			$ics[] = "DTEND;TZID=Europe/Amsterdam:". date("Ymd\THis", $einde);	
-			$ics[] = "LAST-MODIFIED:". date("Ymd\THis", time());
-			
-			if(date("H", $start) < 12) {
-				$ics[] = "SUMMARY:Ochtenddienst";
-			} elseif(date("H", $start) < 18) {
-				$ics[] = "SUMMARY:Middagdienst";
-			} else {
-				$ics[] = "SUMMARY:Kerkdienst";
-			}
-			
-			$string = '';
+		if($row_dienst = mysqli_fetch_array($result_dienst)) {			
+			$RoosterString = '';
 		
 			do {
 				$rooster = $row_dienst[$PlanningGroup];			
 				$data_rooster = getRoosterDetails($rooster);
-			
-				$sql_persoon = "SELECT * FROM $TablePlanning WHERE $PlanningGroup = $rooster AND $PlanningDienst = $dienst";
+				
+				if($data_rooster['gelijk'] == 1) {					
+					$sql_persoon = "SELECT * FROM $TablePlanning WHERE $PlanningGroup = $rooster AND (". implode(' OR ', $tmpDienst) .")";
+				} else {
+					$sql_persoon = "SELECT * FROM $TablePlanning WHERE $PlanningGroup = $rooster AND $PlanningDienst = $dienst";
+				}
 				$result_persoon = mysqli_query($db, $sql_persoon);
 								
 				if($row_persoon = mysqli_fetch_array($result_persoon)) {
@@ -75,15 +88,24 @@ if($row_rooster = mysqli_fetch_array($result_rooster)) {
 						$personen[] = makeName($row_persoon[$PlanningUser], 5);
 					} while($row_persoon = mysqli_fetch_array($result_persoon));
 					
-					$string .= '<i>'. $data_rooster[$RoostersNaam] .'<\/i>\n'. implode('\n', $personen) .'\n\n';
+					$RoosterString .= $data_rooster[$RoostersNaam] .'\n- '. implode('\n- ', $personen) .'\n\n';					
 				}
 			} while($row_dienst = mysqli_fetch_array($result_dienst));
+									
+			if($CollecteString != '') {
+				$DESCRIPTION = 'COLLECTEN\n'. $CollecteString.'\n\n';
+			}
 			
-			$ics[] = "DESCRIPTION:".$string;
-			$ics[] = "STATUS:CONFIRMED";	
-			$ics[] = "TRANSP:TRANSPARENT";
-			$ics[] = "END:VEVENT";				
+			if($RoosterString != '') {
+				$DESCRIPTION .= 'ROOSTERS\n'. $RoosterString;
+			}				
 		}
+		
+		$ics[] = 'DESCRIPTION:'.$DESCRIPTION;
+		$ics[] = "STATUS:CONFIRMED";	
+		$ics[] = "TRANSP:TRANSPARENT";
+		$ics[] = "END:VEVENT";
+		
 	} while($row_rooster = mysqli_fetch_array($result_rooster));	
 }
 
