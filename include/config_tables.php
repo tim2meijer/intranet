@@ -73,6 +73,14 @@ $PlanningGroup			= "commissie";
 $PlanningUser				= "lid";
 $PlanningPositie		= "positie";
 
+$TableAgenda				= "agenda";
+$AgendaID 					= "id";
+$AgendaStart 				= "start";
+$AgendaEind 				= "eind";
+$AgendaTitel				= "titel";
+$AgendaDescr 				= "beschrijving";
+$AgendaComment			= "eigenaar";
+
 $TableLog						= "log";
 $LogID							= "id";
 $LogTime						= "tijd";

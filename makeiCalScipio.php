@@ -29,8 +29,6 @@ $header[] = "END:VTIMEZONE";
 
 $footer[] = "END:VCALENDAR";
 
-$ics = array();
-
 //$sql_rooster = "SELECT $TablePlanning.$PlanningDienst FROM $TablePlanning, $TableDiensten WHERE $TablePlanning.$PlanningDienst = $TableDiensten.$DienstID AND $TableDiensten.$DienstEind > ". time() ." GROUP BY $PlanningDienst";
 $sql_rooster = "SELECT $DienstID FROM $TableDiensten WHERE $DienstEind > ". time();
 $result_rooster = mysqli_query($db, $sql_rooster);
@@ -44,8 +42,9 @@ if($row_rooster = mysqli_fetch_array($result_rooster)) {
 		$diensten = getKerkdiensten(mktime(0,0,0,date("n", $data_dienst['start']),date("j", $data_dienst['start']),date("Y", $data_dienst['start'])), mktime(23,59,59,date("n", $data_dienst['start']),date("j", $data_dienst['start']),date("Y", $data_dienst['start'])));
 		
 		# Eigenlijke ICS-data
+		$ics = array();
 		$ics[] = "BEGIN:VEVENT";	
-		$ics[] = "UID:3GK-". substr('00'.$dienst, -3);
+		$ics[] = "UID:3GK-dienst-". substr('00'.$dienst, -3);
 		$ics[] = "DTSTART;TZID=Europe/Amsterdam:". date("Ymd\THis", $data_dienst['start']);
 		$ics[] = "DTEND;TZID=Europe/Amsterdam:". date("Ymd\THis", $data_dienst['eind']);	
 		$ics[] = "LAST-MODIFIED:". date("Ymd\THis", time());
@@ -106,7 +105,29 @@ if($row_rooster = mysqli_fetch_array($result_rooster)) {
 		$ics[] = "TRANSP:TRANSPARENT";
 		$ics[] = "END:VEVENT";
 		
+		$vEvent[] = implode("\r\n", $ics);		
 	} while($row_rooster = mysqli_fetch_array($result_rooster));	
+}
+
+
+$sql_agenda = "SELECT * FROM $TableAgenda WHERE $AgendaEind > ". time();
+$result_agenda = mysqli_query($db, $sql_agenda);
+if($row_agenda = mysqli_fetch_array($result_agenda)) {
+	do {
+		# Eigenlijke ICS-data
+		$ics = array();
+		$ics[] = "BEGIN:VEVENT";	
+		$ics[] = "UID:3GK-agenda-". substr('00'.$row_agenda[$AgendaID], -3);
+		$ics[] = "DTSTART;TZID=Europe/Amsterdam:". date("Ymd\THis", $row_agenda[$AgendaStart]);
+		$ics[] = "DTEND;TZID=Europe/Amsterdam:". date("Ymd\THis", $row_agenda[$AgendaEind]);	
+		$ics[] = "LAST-MODIFIED:". date("Ymd\THis", time());
+		$ics[] = "SUMMARY:". urldecode($row_agenda[$AgendaTitel]);
+		$ics[] = 'DESCRIPTION:'.urldecode($row_agenda[$AgendaDescr]);
+		$ics[] = "STATUS:CONFIRMED";	
+		$ics[] = "TRANSP:TRANSPARENT";
+		$ics[] = "END:VEVENT";
+		$vEvent[] = implode("\r\n", $ics);
+	}while($row_agenda = mysqli_fetch_array($result_agenda));
 }
 
 $file_name = 'ical/scipio.ics';
@@ -114,7 +135,7 @@ $file_name = 'ical/scipio.ics';
 $file = fopen($file_name, 'w+');
 fwrite($file, implode("\r\n", $header));
 fwrite($file, "\r\n");
-fwrite($file, implode("\r\n", $ics));
+fwrite($file, implode("\r\n", $vEvent));
 fwrite($file, "\r\n");
 fwrite($file, implode("\r\n", $footer));
 fclose($file);
