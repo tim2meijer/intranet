@@ -48,3 +48,5 @@ Temporary Items
 include/config.php
 include/config_db.php
 include/config_db.php
+admin/log.php
+admin/log.php
