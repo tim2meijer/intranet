@@ -87,7 +87,7 @@ $block_1[] = "<input type='hidden' name='blokken' value='$blokken'>";
 $block_1[] = "<table>";
 $block_1[] = "<tr>";
 $block_1[] = "	<td align='right' valign='top'><input type='checkbox' name='gelijkeDiensten' value='1'". ($RoosterData['gelijk'] == 1 ? ' checked' : '') ."></td>";
-$block_1[] = "	<td colspan='$nrFields' align='left'>Bij meer diensten/dag is het rooster gelijk<br><small>(pas effect na opslaan)</small></td>";
+$block_1[] = "	<td colspan='". ($nrFields+1) ."' align='left'>Bij meer diensten/dag is het rooster gelijk<br><small>(pas effect na opslaan)</small></td>";
 $block_1[] = "</tr>";
 
 foreach($diensten as $dienst) {
@@ -109,13 +109,15 @@ foreach($diensten as $dienst) {
 			
 			$block_1[] = "</select></td>";
 			$selected = next($vulling);
-		}	
+		}
+		
+		$block_1[] = "	<td>". $details['bijzonderheden']."</td>";
 		$block_1[] = "</tr>";
 	}
 }
 
 $block_1[] = "<tr>";
-$block_1[] = "<td colspan='". ($nrFields+1) ."' align='middle'><input type='submit' name='save' value='Rooster opslaan'>&nbsp;<input type='submit' name='maanden' value='Volgende 3 maanden'></td>";
+$block_1[] = "<td colspan='". ($nrFields+2) ."' align='middle'><input type='submit' name='save' value='Rooster opslaan'>&nbsp;<input type='submit' name='maanden' value='Volgende 3 maanden'></td>";
 $block_1[] = "</tr>";
 $block_1[] = "</table>";
 $block_1[] = "</form>";
