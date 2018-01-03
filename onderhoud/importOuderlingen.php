@@ -23,7 +23,7 @@ foreach($diakenen as $lid) {
 
 # Kerkdiensten inlezen
 $start = time() - (30*24*60*60);
-$eind = $start + (4*30*24*60*60);
+$eind = $start + (6*30*24*60*60);
 $diensten = getKerkdiensten($start, $eind);
 
 foreach($diensten as $dienst) {
