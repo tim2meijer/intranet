@@ -33,7 +33,7 @@ if(isset($_POST['opvragen'])) {
 		$Mail[] = "Loginnaam : ". $data['username'] ."<br>";
 		$Mail[] = "Wachtwoord : ". $nieuwPassword;
 		$Mail[] = "<p>";
-		$Mail[] = "Met deze gegevens kan je via <a href='". $ScriptURL ."account.php'>". $ScriptURL ."account.php</a> je eigen wachtwoord instellen";	
+		$Mail[] = "Met deze gegevens kan je via <a href='". $ScriptURL ."/account.php'>". $ScriptURL ."account.php</a> je eigen wachtwoord instellen";	
 		$HTMLMail = implode("\n", $Mail);
 
 		if(!sendMail($id, "Nieuw wachtwoord voor $ScriptTitle", $HTMLMail, $var)) {			
