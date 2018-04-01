@@ -187,17 +187,17 @@ function getKerkdienstDetails($id) {
 }
 
 function getMembers($type = 'all') {
-	global $TableUsers, $UserID, $UserAdres, $UserGeboorte, $UserAchternaam, $UserMeisjesnaam;	
+	global $TableUsers, $UserActief, $UserID, $UserAdres, $UserGeboorte, $UserAchternaam, $UserMeisjesnaam;	
 	$db = connect_db();
 	
 	$data = array();
 	
 	if($type == 'all') {
-		$sql = "SELECT $UserID FROM $TableUsers ORDER BY $UserAchternaam";
+		$sql = "SELECT $UserID FROM $TableUsers WHERE $UserActief = '1' ORDER BY $UserAchternaam";
 	} elseif($type == 'volwassen') {
-		$sql = "SELECT $UserID FROM $TableUsers WHERE $UserGeboorte < '". (date("Y")-18) ."-". date("m-d") ."' ORDER BY $UserAchternaam";
+		$sql = "SELECT $UserID FROM $TableUsers WHERE $UserActief = '1' AND $UserGeboorte < '". (date("Y")-18) ."-". date("m-d") ."' ORDER BY $UserAchternaam";
 	} elseif($type == 'adressen') {
-		$sql = "SELECT $UserID FROM $TableUsers GROUP BY $UserAdres ORDER BY $UserAchternaam";
+		$sql = "SELECT $UserID FROM $TableUsers WHERE $UserActief = '1' GROUP BY $UserAdres ORDER BY $UserAchternaam";
 	}
 		
 	$result = mysqli_query($db, $sql);
@@ -610,7 +610,7 @@ function makeName($id, $type) {
 	# 14 = voorletters achternaam (vrouw)	A. (Alberdien) van Ginkel
 
 	
-	if($achter_m != '' AND ($type == 4 OR $type == 6 OR $type == 10)) {
+	if($achter_m != '' AND ($type == 4 OR $type == 6 OR $type == 10 OR $type == 13)) {
 		$achter .= '-'.$achter_m;
 	} elseif($achter_m != '' AND ($type == 7 OR $type == 11)) {
 		$achter = $achter_m;
@@ -785,12 +785,12 @@ function showBlock($block, $width) {
 }
 
 function getFamilieleden($id) {
-	global $TableUsers, $UserAdres, $UserID;
+	global $TableUsers, $UserAdres, $UserActief, $UserID;
 	$db = connect_db();
 	
 	$data = array();
 	
-	$sql = "SELECT $UserID FROM $TableUsers WHERE $UserAdres IN (SELECT $UserAdres FROM $TableUsers WHERE $UserID = $id)";
+	$sql = "SELECT $UserID FROM $TableUsers WHERE $UserAdres IN (SELECT $UserAdres FROM $TableUsers WHERE $UserID = $id) AND $UserActief = '1' ";
 	$result = mysqli_query($db, $sql);
 	if($row = mysqli_fetch_array($result)) {
 		do {
@@ -814,12 +814,12 @@ function getParents($id) {
 }
 
 function getJarigen($dag, $maand) {
-	global $TableUsers, $UserID, $UserGeboorte;
+	global $TableUsers, $UserActief, $UserID, $UserGeboorte;
 	$db = connect_db();
 	
 	$data = array();
 	
-	$sql = "SELECT $UserID FROM $TableUsers WHERE DAYOFMONTH($UserGeboorte) = $dag AND MONTH($UserGeboorte) = $maand";
+	$sql = "SELECT $UserID FROM $TableUsers WHERE $UserActief = '1' AND DAYOFMONTH($UserGeboorte) = $dag AND MONTH($UserGeboorte) = $maand";
 	$result = mysqli_query($db, $sql);
 	if($row = mysqli_fetch_array($result)) {
 		do {
@@ -907,11 +907,11 @@ function excludeID($oldArray, $id) {
 
 function getWijkMembers($wijk) {
 	global $TableAdres, $AdresID;
-	global $TableUsers, $UserID, $UserAdres, $AdresWijk, $UserAchternaam;
+	global $TableUsers, $UserActief, $UserID, $UserAdres, $AdresWijk, $UserAchternaam;
 	$db = connect_db();
 	
 	$data = array();
-	$sql = "SELECT $TableUsers.$UserID FROM $TableUsers, $TableAdres WHERE $TableAdres.$AdresID = $TableUsers.$UserAdres AND $TableAdres.$AdresWijk like '$wijk' ORDER BY $TableUsers.$UserAchternaam";
+	$sql = "SELECT $TableUsers.$UserID FROM $TableUsers, $TableAdres WHERE $TableAdres.$AdresID = $TableUsers.$UserAdres AND $TableUsers.$UserActief = '1' AND $TableAdres.$AdresWijk like '$wijk' ORDER BY $TableUsers.$UserAchternaam";
 	
 	echo $sql;
 	

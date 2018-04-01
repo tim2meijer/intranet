@@ -3,6 +3,8 @@
 # Tabel- en veldnamen voor de verschillende tabellen in MySQL
 $TableUsers					= "leden";
 $UserID							= "id";
+$UserActief					= "actief";
+$UserScipioID				= "scipio_id";
 $UserAdres					= "kerk_adres";
 $UserGeslacht				= "geslacht";
 $UserVoorletters		= "voorletters";
