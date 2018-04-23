@@ -13,7 +13,15 @@ setlocale(LC_ALL, 'nl_NL');
 $ScriptURL				= '';
 $ScriptTitle			= '';	# Naam van het script (is naam van afzender in mails)
 $ScriptMailAdress	= '';			# Mailadres van het script (is mailadres van afzender in mails)
-$Version					= '';		# Versie nummer
-$SubjectPrefix		= '';		# Voorvoegsel bij de onderwerpregel bij het versturen van mails
+$Version					= '2.0';		# Versie nummer
+$SubjectPrefix		= '[3GK] ';		# Voorvoegsel bij de onderwerpregel bij het versturen van mails
+
+$scipioParams = array(
+	'Username' => '',
+	'Password' => '',
+	'Pincode' => ''
+);
+
+$lengthHash = 64;
 
 ?>
