@@ -25,7 +25,7 @@ if($row = mysqli_fetch_array($result)) {
 		}
 		
 		if($data['hash'] == '') {
-			$hash = generateID(16);
+			$hash = generateID($lengthHash);
 			
 			$sql_update = "UPDATE $TableUsers SET $UserHash = '$hash' WHERE $UserID = $id";
 			mysqli_query($db, $sql_update);

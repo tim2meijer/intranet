@@ -22,6 +22,8 @@ if(count($allRoosters) > 0) {
 		}
 		$txtRooster[] = "<a class='$class' href='showRooster.php?rooster=$rooster' target='_blank'>".$data['naam']."</a>";
 	}
+	
+	$txtRooster[] = "<a class='$class' href='showCombineRooster.php' target='_blank'>Toon combinatie-rooster</a>";
 		
 	$blockArray[] = implode("<br>".NL, $txtRooster);
 }
@@ -117,8 +119,9 @@ if(in_array(1, getMyGroups($_SESSION['ID']))) {
 	$adminLinks['admin/editGroepen.php'] = 'Groepen wijzigen';	
 	$adminLinks['admin/editRoosters.php'] = 'Roosters wijzigen';	
 	$adminLinks['admin/crossCheck.php'] = 'Check databases';
+	$adminLinks['admin/cleanUpDb.php'] = 'Verwijder oude diensten';
 	$adminLinks['admin/log.php'] = 'Bekijk logfiles';
-	$adminLinks['showCombineRooster.php'] = 'Toon combi-rooster';
+	$adminLinks['scipio/ScipioImport.php'] = 'Data inladen';
 	$adminLinks['../dumper/'] = 'Dumper';
 	
 	foreach($adminLinks as $link => $naam) {
@@ -139,7 +142,7 @@ $blockArray[] = implode("<br>".NL, $links);
 $site[] = "<b>Site</b>";
 $site[] = "<a href='account.php' target='_blank'>Account</a>";
 $site[] = "<a href='profiel.php' target='_blank'>Profiel</a>";
-$site[] = "<a href='gegevens.php' target='_blank'>Gegevens wijzigen</a>";
+//$site[] = "<a href='gegevens.php' target='_blank'>Gegevens wijzigen</a>";
 $site[] = "<a href='ledenlijst.php' target='_blank'>Ledenlijst</a>";
 $site[] = "<a href='search.php' target='_blank'>Zoeken</a>";
 $site[] = "<a href='auth/objects/logout.php' target='_blank'>Log-out</a>";

@@ -94,7 +94,7 @@ if(isset($_POST['search'])) {
 	toLog('debug', $_SESSION['ID'], '', "Gezocht op S:$searchString G:$geslacht W:$wijk B:$sDag-$sMaand-$sJaar E:$eDag-$eMaand-$eJaar");
 	
 	$where[] = "$UserGeboorte BETWEEN '$sJaar-$sMaand-$sDag' AND '$eJaar-$eMaand-$eDag'";
-	$where[] = "$UserActief like '1'";
+	$where[] = "$UserStatus like 'actief'";
 	$table[] = $TableUsers;
 	
 	if($geslacht != '') {
@@ -111,8 +111,7 @@ if(isset($_POST['search'])) {
 	}
 		
 	if($wijk != '') {
-		$where[] = "$TableUsers.$UserAdres = $TableAdres.$AdresID AND $TableAdres.$AdresWijk like '$wijk'";
-		$table[] = $TableAdres;
+		$where[] = "$UserWijk like '$wijk'";
 	}
 	
 	$sql = "SELECT $TableUsers.$UserID$having1 FROM ". implode(', ', $table)." WHERE ". implode(' AND ', $where) ."$having2 ORDER BY $UserAchternaam";

@@ -66,7 +66,7 @@ $IDs = getGroupMembers($RoosterData['groep']);
 
 # Als er geen groep is, gewoon de hele gemeente nemen
 if(count($IDs) == 0) {
-	$IDs = getMembers('volwassen');
+	$IDs = getMembers('adressen');
 	$type = 13;
 } else {
 	$type = 5;

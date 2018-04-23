@@ -10,32 +10,41 @@ $kop = explode(";", array_shift($scipio_raw));
 
 $GeboorteID = array_search('Geboortedatum', $kop);
 $AchternaamID = array_search('Achternaam', $kop);
+$RoepnaamID = array_search('Roepnaam', $kop);
 $RegnrID = array_search('Regnr.', $kop);
 
-foreach($scipio_raw as $rij) {
-	$velden = explode(";", $rij);
-	$id			= $velden[$RegnrID];
-	
-	$sql = "SELECT * FROM $TableUsers WHERE $UserScipioID = $id";
-	$result = mysqli_query($db, $sql);
-	
-	if(mysqli_num_rows($result) == 0) {
-		$datum	= replaceDatum($velden[$GeboorteID]);
-		$naam		= $velden[$AchternaamID];
+for($i=0; $i<8 ; $i++) {
+	set_time_limit(30);
+	echo "<h1>$i</h1>\n";
+	foreach($scipio_raw as $rij) {
+		$velden = explode(";", $rij);
+		$id			= $velden[$RegnrID];
 		
-		$sql = "SELECT * FROM $TableUsers WHERE $UserGeboorte like '$datum' AND $UserScipioID = 0";
-		//$sql = "SELECT * FROM $TableUsers WHERE $UserAchternaam like '$naam' AND $UserGeboorte like '$datum' AND $UserScipioID = 0";
-		//$sql = "SELECT * FROM $TableUsers WHERE $UserMeisjesnaam like '$naam' AND $UserGeboorte like '$datum' AND $UserScipioID = 0";
-		//$sql = "SELECT * FROM $TableUsers WHERE $UserAchternaam like '$naam' AND $UserScipioID = 0";
-		//$sql = "SELECT * FROM $TableUsers WHERE $UserMeisjesnaam like '$naam' AND $UserScipioID = 0";
+		$sql = "SELECT * FROM $TableUsers WHERE $oldUserScipioID = $id";
 		$result = mysqli_query($db, $sql);
 		
-		if(mysqli_num_rows($result) == 1) {
-			$row = mysqli_fetch_array($result);
-			$sql_update = "UPDATE $TableUsers SET $UserScipioID = $id WHERE $UserID = $row[$UserID]";
-			$result = mysqli_query($db, $sql_update);
-		} elseif(mysqli_num_rows($result) > 1) {
-			echo $naam ." meerdere malen gevonden : ". $velden[$GeboorteID].'|'. $id ."|$sql<br>";
+		if(mysqli_num_rows($result) == 0) {
+			$datum	= replaceDatum($velden[$GeboorteID]);
+			$naam		= $velden[$AchternaamID];
+			$roepnaam		= $velden[$RoepnaamID];
+			
+			if($i==0)			$sql = "SELECT * FROM $TableUsers WHERE $oldUserGeboorte like '$datum' AND $oldUserScipioID = 0";
+			elseif($i==1)	$sql = "SELECT * FROM $TableUsers WHERE $oldUserAchternaam like '$naam' AND $oldUserGeboorte like '$datum' AND $oldUserScipioID = 0";
+			elseif($i==2)	$sql = "SELECT * FROM $TableUsers WHERE $oldUserVoornaam like '$roepnaam' AND $oldUserAchternaam like '$naam' AND $oldUserGeboorte like '$datum' AND $oldUserScipioID = 0";
+			elseif($i==3)	$sql = "SELECT * FROM $TableUsers WHERE $oldUserMeisjesnaam like '$naam' AND $oldUserGeboorte like '$datum' AND $oldUserScipioID = 0";
+			elseif($i==4)	$sql = "SELECT * FROM $TableUsers WHERE $oldUserVoornaam like '$roepnaam' AND $oldUserMeisjesnaam like '$naam' AND $oldUserGeboorte like '$datum' AND $oldUserScipioID = 0";
+			elseif($i==5)	$sql = "SELECT * FROM $TableUsers WHERE $oldUserAchternaam like '$naam' AND $oldUserScipioID = 0";
+			elseif($i==6)	$sql = "SELECT * FROM $TableUsers WHERE $oldUserMeisjesnaam like '$naam' AND $oldUserScipioID = 0";
+			elseif($i==7)	$sql = "SELECT * FROM $TableUsers WHERE $oldUserVoornaam like '$roepnaam' AND $oldUserScipioID = 0";
+			$result = mysqli_query($db, $sql);
+			
+			if(mysqli_num_rows($result) == 1) {
+				$row = mysqli_fetch_array($result);
+				$sql_update = "UPDATE $TableUsers SET $oldUserScipioID = $id WHERE $oldUserID = $row[$oldUserID]";
+				$result = mysqli_query($db, $sql_update);
+			} elseif(mysqli_num_rows($result) > 1) {
+				echo "meerdere hits gevonden : ". $id ."|$sql<br>";
+			}
 		}
 	}
 }

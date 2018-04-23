@@ -1,10 +1,34 @@
 <?php
 
 # Tabel- en veldnamen voor de verschillende tabellen in MySQL
+
+$TableOldUsers					= "old_leden";
+$oldUserID							= "id";
+$oldUserActief					= "actief";
+$oldUserScipioID				= "scipio_id";
+$oldUserAdres					= "kerk_adres";
+$oldUserGeslacht				= "geslacht";
+$oldUserVoorletters		= "voorletters";
+$oldUserVoornaam				= "voornaam";
+$oldUserTussenvoegsel	= "tussenvoegsel";
+$oldUserAchternaam			= "achternaam";
+$oldUserMeisjesnaam		= "meisjesnaam";
+$oldUserUsername				= "username";
+$oldUserPassword				= "password";
+$oldUserHash						= "hash";
+$oldUserGeboorte				= "geboortedatum";
+$oldUserTelefoon				= "telefoon";
+$oldUserMail						= "email";
+$oldUserTwitter				= "twitter";
+$oldUserFacebook				= "facebook";
+$oldUserLinkedin				= "linkedin";
+$oldUserBelijdenis			= "belijdenis";
+$oldUserLastChange			= "last_change";
+$oldUserLastVisit			= "last_visit";
+
 $TableUsers					= "leden";
-$UserID							= "id";
-$UserActief					= "actief";
-$UserScipioID				= "scipio_id";
+$UserID							= "scipio_id";
+$UserStatus					= "status";
 $UserAdres					= "kerk_adres";
 $UserGeslacht				= "geslacht";
 $UserVoorletters		= "voorletters";
@@ -12,18 +36,23 @@ $UserVoornaam				= "voornaam";
 $UserTussenvoegsel	= "tussenvoegsel";
 $UserAchternaam			= "achternaam";
 $UserMeisjesnaam		= "meisjesnaam";
-$UserUsername				= "username";
-$UserPassword				= "password";
-$UserHash						= "hash";
+$UserStraat					= "straat";
+$UserHuisnummer			= "nummer";
+$UserToevoeging			= "toevoeging";
+$UserPC							= "postcode";
+$UserPlaats					= "plaats";
 $UserGeboorte				= "geboortedatum";
 $UserTelefoon				= "telefoon";
 $UserMail						= "email";
-$UserTwitter				= "twitter";
-$UserFacebook				= "facebook";
-$UserLinkedin				= "linkedin";
 $UserBelijdenis			= "belijdenis";
+$UserBurgelijk			= "burgstaat";
+$UserRelatie				= "relatie";
 $UserLastChange			= "last_change";
 $UserLastVisit			= "last_visit";
+$UserWijk						= "wijk";
+$UserUsername				= "username";
+$UserPassword				= "password";
+$UserHash						= "hash";
 
 $TableAdres					= "adressen";
 $AdresID						= "id";

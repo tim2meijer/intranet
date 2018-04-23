@@ -102,7 +102,7 @@ if($letter != '') {
 	$sql = "SELECT $UserID FROM $TableUsers WHERE $UserAchternaam like '$letter%' ORDER BY $UserAchternaam";
 	toLog('debug', $_SESSION['ID'], '', "Ledenlijst letter $letter");
 } elseif($wijk != '') {
-	$sql = "SELECT $TableUsers.$UserID FROM $TableUsers, $TableAdres WHERE $TableAdres.$AdresID = $TableUsers.$UserAdres AND $TableAdres.$AdresWijk like '$wijk' ORDER BY $TableUsers.$UserAchternaam";
+	$sql = "SELECT $UserID FROM $TableUsers WHERE $UserStatus = 'actief' AND $UserWijk like '$wijk' ORDER BY $UserAchternaam";
 	toLog('debug', $_SESSION['ID'], '', "Ledenlijst wijk $wijk");
 }
 

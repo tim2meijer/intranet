@@ -10,7 +10,6 @@ if($row_dienst = mysqli_fetch_array($result_dienst)) {
 	do {
 		# Wat is de ID van de dienst
 		# Welke gegevens horen daar bij
-		# Welke diensten zijn er nog meer die dag
 		$dienst = $row_dienst[$DienstID];		
 		$data_dienst = getKerkdienstDetails($dienst);
 		

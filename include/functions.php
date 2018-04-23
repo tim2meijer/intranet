@@ -187,17 +187,17 @@ function getKerkdienstDetails($id) {
 }
 
 function getMembers($type = 'all') {
-	global $TableUsers, $UserActief, $UserID, $UserAdres, $UserGeboorte, $UserAchternaam, $UserMeisjesnaam;	
+	global $TableUsers, $UserStatus, $UserID, $UserAdres, $UserGeboorte, $UserAchternaam, $UserRelatie;	
 	$db = connect_db();
 	
 	$data = array();
 	
 	if($type == 'all') {
-		$sql = "SELECT $UserID FROM $TableUsers WHERE $UserActief = '1' ORDER BY $UserAchternaam";
+		$sql = "SELECT $UserID FROM $TableUsers WHERE $UserStatus = 'actief' ORDER BY $UserAchternaam";
 	} elseif($type == 'volwassen') {
-		$sql = "SELECT $UserID FROM $TableUsers WHERE $UserActief = '1' AND $UserGeboorte < '". (date("Y")-18) ."-". date("m-d") ."' ORDER BY $UserAchternaam";
+		$sql = "SELECT $UserID FROM $TableUsers WHERE $UserStatus = 'actief' AND $UserGeboorte < '". (date("Y")-18) ."-". date("m-d") ."' ORDER BY $UserAchternaam";
 	} elseif($type == 'adressen') {
-		$sql = "SELECT $UserID FROM $TableUsers WHERE $UserActief = '1' GROUP BY $UserAdres ORDER BY $UserAchternaam";
+		$sql = "SELECT $UserID FROM $TableUsers WHERE $UserStatus = 'actief' AND ($UserRelatie like 'gezinshoofd' OR $UserRelatie like 'zelfstandig') GROUP BY $UserAdres ORDER BY $UserAchternaam";
 	}
 		
 	$result = mysqli_query($db, $sql);
@@ -227,8 +227,10 @@ function getGroupMembers($commID) {
 }
 
 function getMemberDetails($id) {
-	global $TableUsers, $UserID, $UserAdres, $UserGeslacht, $UserUsername, $UserHash, $UserVoorletters, $UserVoornaam, $UserTussenvoegsel, $UserAchternaam, $UserMeisjesnaam, $UserGeboorte, $UserTelefoon, $UserMail, $UserTwitter, $UserFacebook, $UserLinkedin, $UserBelijdenis;
-	global $TableAdres, $AdresID, $AdresStraat, $AdresHuisnummer, $AdresPC, $AdresPlaats, $AdresTelefoon, $AdresMail, $AdresWijk;
+	global $TableUsers, $UserID, $UserStatus, $UserAdres, $UserGeslacht, $UserVoorletters, $UserVoornaam, $UserTussenvoegsel,
+	$UserAchternaam, $UserMeisjesnaam, $UserUsername, $UserPassword, $UserHash, $UserGeboorte, $UserTelefoon, $UserMail,
+	$UserBelijdenis, $UserLastChange, $UserLastVisit, $UserBurgelijk, $UserRelatie, $UserStraat, $UserHuisnummer,
+	$UserToevoeging, $UserPC, $UserPlaats, $UserWijk;
 	
 	$db = connect_db();
 	
@@ -239,6 +241,7 @@ function getMemberDetails($id) {
 	$row = mysqli_fetch_array($result);
 		
 	$data['id']							= $row[$UserID];
+	$data['status']					= $row[$UserStatus];
 	$data['adres']					= $row[$UserAdres];
 	$data['geslacht']				= $row[$UserGeslacht];
 	$data['belijdenis']			= $row[$UserBelijdenis];
@@ -254,36 +257,17 @@ function getMemberDetails($id) {
 	$data['maand']					= substr($row[$UserGeboorte], 5, 2);
 	$data['dag']						= substr($row[$UserGeboorte], 8, 2);	
 	$data['geb_unix']				= mktime(0,0,0,$data['maand'],$data['dag'],$data['jaar']);
-	$data['prive_tel']			= $row[$UserTelefoon];
-	$data['prive_mail']			= $row[$UserMail];
-	$data['twitter']				= $row[$UserTwitter];
-	$data['fb']							= $row[$UserFacebook];
-	$data['linkedin']				= $row[$UserLinkedin];
-		
-	$sql_a = "SELECT * FROM $TableAdres WHERE $AdresID = ". $row[$UserAdres];
-	$result_a = mysqli_query($db, $sql_a);
-	$row_a = mysqli_fetch_array($result_a);
+	$data['straat']					= $row[$UserStraat];
+	$data['huisnummer']			= $row[$UserHuisnummer];
+	$data['toevoeging']			= $row[$UserToevoeging];
+	$data['PC']							= $row[$UserPC];
+	$data['plaats']					= $row[$UserPlaats];
+	$data['wijk']						= $row[$UserWijk];
+	$data['burgelijk']			= $row[$UserBurgelijk];
+	$data['relatie']				= $row[$UserRelatie];	
+	$data['tel']						= $row[$UserTelefoon];
+	$data['mail']						= $row[$UserMail];
 	
-	$data['straat']					= $row_a[$AdresStraat];
-	$data['huisnummer']			= $row_a[$AdresHuisnummer];
-	$data['PC']							= $row_a[$AdresPC];
-	$data['plaats']					= $row_a[$AdresPlaats];		
-	$data['fam_tel']				= $row_a[$AdresTelefoon];
-	$data['fam_mail']				= $row_a[$AdresMail];
-	$data['wijk']						= $row_a[$AdresWijk];
-	
-	if($data['prive_tel'] == '') {
-		$data['tel']					= $data['fam_tel'];
-	} else {
-		$data['tel']					= $data['prive_tel'];
-	}
-	
-	if($data['prive_mail'] == '') {
-		$data['mail']					= $data['fam_mail'];
-	} else {
-		$data['mail']					= $data['prive_mail'];
-	}
-
 	return $data;
 }
 
@@ -738,21 +722,31 @@ function sendMail($ontvanger, $subject, $bericht, $var) {
 	} else {
 		$mail->FromName = $ScriptTitle;
 	}
-			
-	$mail->AddAddress($UserData['mail'], makeName($ontvanger, 5));
+	
+	if($UserData['mail'] != '') {
+		$mail->AddAddress($UserData['mail'], makeName($ontvanger, 5));
+		//echo '|'. $UserData['mail'] .'|'. makeName($ontvanger, 5) .'<br>';
+	} else {
+		$hoofd = getParents($ontvanger, true);
+		$HoofdData = getMemberDetails($hoofd[0]);
+		$mail->AddAddress($HoofdData['mail'], makeName($ontvanger, 5));
+		//echo '-> '. $HoofdData['mail'] .'|'. makeName($ontvanger, 5) .'<br>';
+	}
 	$mail->Subject	= $SubjectPrefix . $subject;
 	$mail->IsHTML(true);
 	$mail->Body			= $HTMLMail;
 	$mail->AltBody	= $PlainMail;
-	
-	//echo $UserData['mail'];
 		
 	# Als de ouders ook een CC moeten
-	# Alleen bij mensen onder de 18
-	if(isset($var['ouderCC'])) {
-		if(($UserData['mail'] != $UserData['fam_mail']) AND $UserData['jaar'] > (date("Y")-18)) {
-			$mail->AddCC($UserData['fam_mail']);
-			//echo ' -> '. $UserData['fam_mail'];
+	# Alleen bij mensen die als relatie 'zoon' of 'dochter' hebben
+	if(isset($var['ouderCC']) AND ($UserData['relatie'] == 'zoon' OR  $UserData['relatie'] == 'dochter')) {
+		$ouders = getParents($ontvanger);
+		foreach($ouders as $ouder){
+			$OuderData = getMemberDetails($ouder);
+			if($OuderData['mail'] != $UserData['mail']) {
+				$mail->AddCC($OuderData['mail']);
+				//echo '<b>Ouder in CC</b> : '. makeName($ouder, 5) .', '. $OuderData['mail'] .'<br>';
+			}
 		}
 	}		
 	
@@ -766,11 +760,13 @@ function sendMail($ontvanger, $subject, $bericht, $var) {
 		}
 	}
 	
+	/*
 	if(!$mail->Send()) {
 		return false;
 	} else {
 		return true;
 	}
+	*/
 }
 
 
@@ -785,12 +781,13 @@ function showBlock($block, $width) {
 }
 
 function getFamilieleden($id) {
-	global $TableUsers, $UserAdres, $UserActief, $UserID;
+	global $TableUsers, $UserAdres, $UserStatus, $UserID;
 	$db = connect_db();
 	
 	$data = array();
 	
-	$sql = "SELECT $UserID FROM $TableUsers WHERE $UserAdres IN (SELECT $UserAdres FROM $TableUsers WHERE $UserID = $id) AND $UserActief = '1' ";
+	$sql = "SELECT $UserID FROM $TableUsers WHERE $UserAdres IN (SELECT $UserAdres FROM $TableUsers WHERE $UserID = $id) AND $UserStatus = 'actief' ";
+		
 	$result = mysqli_query($db, $sql);
 	if($row = mysqli_fetch_array($result)) {
 		do {
@@ -800,12 +797,12 @@ function getFamilieleden($id) {
 	return $data;	
 }
 
-function getParents($id) {
+function getParents($id, $hoofd = false) {
 	$familie = getFamilieleden($id);
 	
 	foreach($familie as $lid) {
 		$data = getMemberDetails($lid);
-		if($data['belijdenis'] == 'B') {
+		if(($data['relatie'] == 'echtgenote' AND !$hoofd) OR $data['relatie'] == 'gezinshoofd') {
 			$parents[] = $lid;
 		}
 	}
@@ -814,12 +811,12 @@ function getParents($id) {
 }
 
 function getJarigen($dag, $maand) {
-	global $TableUsers, $UserActief, $UserID, $UserGeboorte;
+	global $TableUsers, $UserStatus, $UserID, $UserGeboorte;
 	$db = connect_db();
 	
 	$data = array();
 	
-	$sql = "SELECT $UserID FROM $TableUsers WHERE $UserActief = '1' AND DAYOFMONTH($UserGeboorte) = $dag AND MONTH($UserGeboorte) = $maand";
+	$sql = "SELECT $UserID FROM $TableUsers WHERE $UserStatus = 'actief' AND DAYOFMONTH($UserGeboorte) = $dag AND MONTH($UserGeboorte) = $maand";
 	$result = mysqli_query($db, $sql);
 	if($row = mysqli_fetch_array($result)) {
 		do {
@@ -906,15 +903,12 @@ function excludeID($oldArray, $id) {
 }
 
 function getWijkMembers($wijk) {
-	global $TableAdres, $AdresID;
-	global $TableUsers, $UserActief, $UserID, $UserAdres, $AdresWijk, $UserAchternaam;
+	global $TableUsers, $UserStatus, $UserID, $UserWijk, $UserAchternaam;
 	$db = connect_db();
 	
 	$data = array();
-	$sql = "SELECT $TableUsers.$UserID FROM $TableUsers, $TableAdres WHERE $TableAdres.$AdresID = $TableUsers.$UserAdres AND $TableUsers.$UserActief = '1' AND $TableAdres.$AdresWijk like '$wijk' ORDER BY $TableUsers.$UserAchternaam";
-	
-	echo $sql;
-	
+	$sql = "SELECT $UserID FROM $TableUsers WHERE $UserStatus = 'actief' AND $UserWijk like '$wijk' ORDER BY $UserAchternaam";
+			
 	$result = mysqli_query($db, $sql);
 	if($row = mysqli_fetch_array($result)) {
 		do {

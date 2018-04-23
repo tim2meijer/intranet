@@ -9,8 +9,8 @@ $db = connect_db();
 
 if(isset($_POST['opvragen'])) {
 	$invoer	= $_POST['invoer'];
-	//$sql		= "SELECT * FROM $TableUsers WHERE $UserUsername like '$invoer' OR $UserMail like '$invoer'";
-	$sql		= "SELECT $TableUsers.$UserID FROM $TableUsers, $TableAdres WHERE $TableUsers.$UserUsername like '$invoer' OR $TableUsers.$UserMail like '$invoer' OR ($TableUsers.$UserAdres = $TableAdres.$UserID AND $TableAdres.$AdresMail like '$invoer')";
+	$sql		= "SELECT $UserID FROM $TableUsers WHERE $UserUsername like '$invoer' OR $UserMail like '$invoer'";
+	//$sql		= "SELECT $TableUsers.$UserID FROM $TableUsers WHERE $TableUsers.$UserUsername like '$invoer' OR $TableUsers.$UserMail like '$invoer'";
 	$result = mysqli_query($db, $sql);
 			
 	if(mysqli_num_rows($result) == 0) {
@@ -35,6 +35,8 @@ if(isset($_POST['opvragen'])) {
 		$Mail[] = "<p>";
 		$Mail[] = "Met deze gegevens kan je via <a href='". $ScriptURL ."/account.php'>". $ScriptURL ."account.php</a> je eigen wachtwoord instellen";	
 		$HTMLMail = implode("\n", $Mail);
+		
+		//echo $$HTMLMail;
 
 		if(!sendMail($id, "Nieuw wachtwoord voor $ScriptTitle", $HTMLMail, $var)) {			
 			toLog('error', $id, '', 'problemen met wachtwoord-mail versturen');
