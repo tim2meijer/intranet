@@ -2,14 +2,12 @@
 include_once('../include/functions.php');
 include_once('../include/config.php');
 
-$test = true;
+$test = false;
 
 $db = connect_db();
 
 $client = new SoapClient("ScipioConnect.wsdl");
 
-//echo var_dump($client->__getTypes());
-//echo var_dump($client->__getFunctions());
 if(!$test) {
 	$object = $client->__soapCall("GetLedenOverzicht", array($scipioParams));
 	$temp =  (array) $object;
@@ -80,8 +78,10 @@ foreach ($xml->persoon as $element) {
 		$sql_insert = "INSERT INTO $TableUsers (". implode(', ', array_keys($velden)) .") VALUES ('". implode("', '", array_values($velden)) ."')";
 		if(!mysqli_query($db, $sql_insert)) {
 			 echo '<b>'. $sql_insert ."</b><br>\n";
+			 toLog('error', '', $element->regnr, 'Toevoegen mislukt');
 		} else {
 			echo makeName($element->regnr, 5). " toegevoegd<br>\n";
+			toLog('info', '', $element->regnr, 'Toegevoegd');
 		}
 		
 	# Ja -> updaten
@@ -93,6 +93,7 @@ foreach ($xml->persoon as $element) {
 		$sql_update = "UPDATE $TableUsers SET ". implode(', ', $update) ." WHERE $UserID like '". $element->regnr ."'";
 		if(!mysqli_query($db, $sql_update)) {
 			 echo '<b>'. $sql_update ."</b><br>\n";
+			 toLog('error', '', $element->regnr, 'Updaten mislukt');
 		}
 	}
 }
