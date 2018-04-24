@@ -886,9 +886,12 @@ function getLogData($start, $end, $types, $dader, $subject, $message, $aantal) {
 }
 
 function makeOpsomming($array, $first = ',', $last = 'en') {
-	$lastElement = array_pop($array);
-	
-	return implode("$first ", $array)." $last ".$lastElement;
+	if(count($array) > 1) {
+		$lastElement = array_pop($array);
+		return implode("$first ", $array)." $last ".$lastElement;
+	} else {
+		return implode("$first ", $array);
+	}
 }
 
 function excludeID($oldArray, $id) {

@@ -97,4 +97,6 @@ foreach ($xml->persoon as $element) {
 		}
 	}
 }
+
+toLog('info', '', '', 'Scipio data ingeladen');
 ?>
