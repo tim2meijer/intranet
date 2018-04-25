@@ -3,6 +3,7 @@ include_once('../include/functions.php');
 include_once('../include/config.php');
 
 $test = false;
+$debug = false;
 
 $db = connect_db();
 
@@ -12,11 +13,16 @@ if(!$test) {
 	$object = $client->__soapCall("GetLedenOverzicht", array($scipioParams));
 	$temp =  (array) $object;
 	$xmlfile = $temp['GetLedenOverzichtResult'];
+	if($debug) {
+		$file = fopen('dump.txt', 'w+');
+		fwrite($file, $xmlfile);
+		fclose($file);
+	}
 } else {
 	$xmlfile = file_get_contents('dump.txt');
 }
 
-$xml = new SimpleXMLElement(utf8_encode($xmlfile));
+$xml = new SimpleXMLElement($xmlfile);
 
 foreach ($xml->persoon as $element) {
 	$namen = explode(' - ', $element->aanschrijfnaam);
