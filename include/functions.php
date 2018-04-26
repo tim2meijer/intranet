@@ -760,13 +760,11 @@ function sendMail($ontvanger, $subject, $bericht, $var) {
 		}
 	}
 	
-	/*
 	if(!$mail->Send()) {
 		return false;
 	} else {
 		return true;
 	}
-	*/
 }
 
 
