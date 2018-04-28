@@ -63,20 +63,20 @@ body{font-family:arial;background:#FFFFFF;text-align:center;}
 #entry{margin:2em auto;background:#fff;border:8px solid #eee;width:500px;text-align:left;position:relative;}
 #entry a, #entry a:visited{color:#0283b2;}
 #entry a:hover{color:#111;}
-#entry h1{text-align:center;background:#3B8CCA;color:#fff;font-size:16px;padding:16px 25px;margin:0 0 1.5em 0;border-bottom:1px solid #007dab;}
+#entry h1{text-align:center;background:#8C1974;color:#fff;font-size:16px;padding:16px 25px;margin:0 0 1.5em 0;border-bottom:1px solid #007dab;}
 #entry p{text-align:center;}
 #entry div{margin:.5em 25px;background:#eee;padding:4px;text-align:right;position:relative;}
 #entry label{float:left;line-height:30px;padding-left:10px;}
 #entry .field{border:1px solid #ccc;width:280px;font-size:12px;line-height:1em;padding:4px;}
 #entry div.submit{background:none;margin:1em 25px;text-align:center;}
 #entry div.submit label{float:none;display:inline;font-size:11px;}
-#entry button{border:0;padding:0 30px;height:30px;line-height:30px;text-align:center;font-size:16px;font-weight:bold;color:#fff;background:#3B8CCA;cursor:pointer;}
+#entry button{border:0;padding:0 30px;height:30px;line-height:30px;text-align:center;font-size:16px;font-weight:bold;color:#fff;background:#8C1974;cursor:pointer;}
 </style>
 </head>
 <body>
 
 <!-- Place your logo here -->
-        <P><IMG SRC="<?php echo $cfgProgDir ?>/images/logo.png" height='200' ALT="phpSecurePages logo"></P>
+        <P><IMG SRC="<?php echo $cfgProgDir ?>../images/logoKoningsKerk.png" height='200' ALT="phpSecurePages logo"></P>
 <!-- Place your logo here -->
 
 <?php

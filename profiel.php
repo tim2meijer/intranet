@@ -43,11 +43,15 @@ echo "		<td><a href='mailto:". makeName($id, 5) ." <".$personData['mail'] .">'>"
 echo "	</tr>".NL;
 echo "	<tr>".NL;
 echo "		<td><b>Wijk</b></td>".NL;
-echo "		<td>".$personData['wijk'] ."</td>".NL;
+echo "		<td><a href='ledenlijst.php?wijk=". $personData['wijk'] ."'>".$personData['wijk'] ."</a></td>".NL;
 echo "	</tr>".NL;
 echo "	<tr>".NL;
 echo "		<td><b>Geboortedatum</b></td>".NL;
 echo "		<td>". strftime("%d %B '%y", $personData['geb_unix']) ."</td>".NL;
+echo "	</tr>".NL;
+echo "	<tr>".NL;
+echo "		<td><b>Kerkelijke status</b></td>".NL;
+echo "		<td>". $personData['belijdenis'] ."</td>".NL;
 echo "	</tr>".NL;
 echo "	</table>".NL;
 echo "	</td>".NL;
@@ -61,7 +65,7 @@ if(count($familie) > 1) {
 	foreach($familie as $leden) {
 		if($leden != $id) {
 			$famData = getMemberDetails($leden);
-			echo "	<a href='?id=$leden'>". makeName($leden, 5) ."</a> ('". substr($famData['jaar'], -2) .")<br>";
+			echo "<a href='?id=$leden'>". makeName($leden, 5) ."</a> ('". substr($famData['jaar'], -2) .")<br>";
 		}
 	}
 } else {

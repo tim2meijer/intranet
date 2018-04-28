@@ -105,7 +105,7 @@ foreach($diensten as $dienst) {
 	}
 	$text[] = "	</select>";
 	$text[] = "	<select name='sMin[$dienst]'>";
-	for($m=0; $m<60 ; $m++) {
+	for($m=0; $m<60 ; $m=$m+15) {
 		$text[] = "	<option value='$m'". ($m == $sMin ? ' selected' : '') .">". substr('0'.$m, -2) ."</option>";
 	}
 	$text[] = "	</select></td>";
@@ -133,7 +133,7 @@ foreach($diensten as $dienst) {
 	}
 	$text[] = "	</select>";
 	$text[] = "	<select name='eMin[$dienst]'>";
-	for($m=0; $m<60 ; $m++) {
+	for($m=0; $m<60 ; $m=$m+15) {
 		$text[] = "	<option value='$m'". ($m == $eMin ? ' selected' : '') .">". substr('0'.$m, -2) ."</option>";
 	}
 	$text[] = "	</select></td>";

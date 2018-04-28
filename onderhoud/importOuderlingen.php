@@ -57,9 +57,11 @@ for($r=1 ; $r < $aantal ; $r++) {
 			$ouderlingID = array();			
 						
 			foreach($Oud as $ouderling) {
-				$id = array_search ($ouderling, $namenOud);
-				echo $ouderling .' ('. $id .')|';
-				$ouderlingID[] = $id;
+				$id = array_search_closest($ouderling, $namenOud);
+				if($ouderling!= '' AND $id != 0) {
+					echo $ouderling .' -> '. $namenOud[$id] .' ('. $id .')<br>';
+					$ouderlingID[] = $id;
+				}
 			}
 			echo '<br>';
 			
@@ -82,9 +84,9 @@ for($r=1 ; $r < $aantal ; $r++) {
 			$diakenID = array();
 			
 			foreach($Diak as $diaken) {
-				$id = array_search ($diaken, $namenDiak);
-				if($diaken != '') {
-					echo $diaken .' ('. $id .')|';
+				$id = array_search_closest ($diaken, $namenDiak);
+				if($diaken != '' AND $id != 0) {
+					echo $diaken .' -> '. $namenDiak[$id] .' ('. $id .')<br>';
 					$diakenID[] = $id;
 				}
 			}

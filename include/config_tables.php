@@ -2,30 +2,6 @@
 
 # Tabel- en veldnamen voor de verschillende tabellen in MySQL
 
-$TableOldUsers					= "old_leden";
-$oldUserID							= "id";
-$oldUserActief					= "actief";
-$oldUserScipioID				= "scipio_id";
-$oldUserAdres					= "kerk_adres";
-$oldUserGeslacht				= "geslacht";
-$oldUserVoorletters		= "voorletters";
-$oldUserVoornaam				= "voornaam";
-$oldUserTussenvoegsel	= "tussenvoegsel";
-$oldUserAchternaam			= "achternaam";
-$oldUserMeisjesnaam		= "meisjesnaam";
-$oldUserUsername				= "username";
-$oldUserPassword				= "password";
-$oldUserHash						= "hash";
-$oldUserGeboorte				= "geboortedatum";
-$oldUserTelefoon				= "telefoon";
-$oldUserMail						= "email";
-$oldUserTwitter				= "twitter";
-$oldUserFacebook				= "facebook";
-$oldUserLinkedin				= "linkedin";
-$oldUserBelijdenis			= "belijdenis";
-$oldUserLastChange			= "last_change";
-$oldUserLastVisit			= "last_visit";
-
 $TableUsers					= "leden";
 $UserID							= "scipio_id";
 $UserStatus					= "status";
@@ -53,16 +29,6 @@ $UserWijk						= "wijk";
 $UserUsername				= "username";
 $UserPassword				= "password";
 $UserHash						= "hash";
-
-$TableAdres					= "adressen";
-$AdresID						= "id";
-$AdresStraat				= "straat";
-$AdresHuisnummer		= "nummer";
-$AdresPC						= "postcode";
-$AdresPlaats				= "plaats";
-$AdresMail					= "mail";
-$AdresTelefoon			= "telefoon";
-$AdresWijk					= "wijk";
 
 $TableGroups				= "groepen";
 $GroupID						= "id";
@@ -120,8 +86,12 @@ $LogUser						= "dader";
 $LogSubject					= "slachtoffer";
 $LogMessage					= "message";
 
-$wijkArray = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J');
-$maandArray = array(1 => 'jan', 2 => 'feb', 3 => 'mrt', 4 => 'apr', 5 => 'mei', 6 => 'jun', 7 => 'jul', 8 => 'aug', 9 => 'sep', 10 => 'okt', 11 => 'nov', 12 => 'dec');
-$letterArray = array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+$wijkArray			= array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J');
+$statusArray		= array('actief', 'afgemeld', 'afgevoerd', 'onttrokken', 'overleden', 'vertrokken');
+$burgelijkArray	= array('gehuwd', 'gereg. partner', 'gescheiden', 'ongehuwd', 'weduwe', 'weduwnaar');
+$gezinArray			= array('dochter', 'echtgenoot', 'echtgenote', 'gezinshoofd', 'levenspartner', 'zelfstandig', 'zoon');
+$kerkelijkArray	= array('belijdend lid', 'betrokkene', 'dooplid', 'gast', 'gedoopt gastlid', 'geen lid', 'ongedoopt kind', 'overige');
+$maandArray			= array(1 => 'jan', 2 => 'feb', 3 => 'mrt', 4 => 'apr', 5 => 'mei', 6 => 'jun', 7 => 'jul', 8 => 'aug', 9 => 'sep', 10 => 'okt', 11 => 'nov', 12 => 'dec');
+$letterArray		= array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
 
 ?>

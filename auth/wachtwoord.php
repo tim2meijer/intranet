@@ -20,23 +20,16 @@ if(isset($_POST['opvragen'])) {
 		$id		= $row[$UserID];
 		$data = getMemberDetails($id);
 		
-		$nieuwPassword = generatePassword(12);
-		
-		$sql_update = "UPDATE $TableUsers SET $UserPassword = '". md5($nieuwPassword) ."' WHERE $UserID = $id";
-		mysqli_query($db, $sql_update);
-								
 		$Mail[] = "Beste ". $data['voornaam'] .",";
 		$Mail[] = "<p>";
 		$Mail[] = "je hebt een nieuw wachtwoord aangevraagd voor $ScriptTitle.<br>";
-		$Mail[] = "Je kan inloggen met :";
 		$Mail[] = "<p>";
-		$Mail[] = "Loginnaam : ". $data['username'] ."<br>";
-		$Mail[] = "Wachtwoord : ". $nieuwPassword;
-		$Mail[] = "<p>";
-		$Mail[] = "Met deze gegevens kan je via <a href='". $ScriptURL ."/account.php'>". $ScriptURL ."account.php</a> je eigen wachtwoord instellen";	
+		$Mail[] = "Door <a href='". $ScriptURL ."/account.php?hash=". $data['hash'] ."'>deze link</a> te volgen kun je een wachtwoord instellen.<br>";
+		$Mail[] = "Iemand met deze link kan zonder in te loggen bij je account, wees er dus zuinig op.";
+		
 		$HTMLMail = implode("\n", $Mail);
 		
-		//echo $$HTMLMail;
+		echo $$HTMLMail;
 
 		if(!sendMail($id, "Nieuw wachtwoord voor $ScriptTitle", $HTMLMail, $var)) {			
 			toLog('error', $id, '', 'problemen met wachtwoord-mail versturen');
@@ -50,7 +43,7 @@ if(isset($_POST['opvragen'])) {
 	$text[] = "<form action='". $_SERVER['PHP_SELF'] ."' method='post'>\n";
 	$text[] = "<table>";
 	$text[] = "<tr>";
-	$text[] = "	<td>Voer uw loginnaam of email-adres in. Het systeem zal dan een nieuw wachtwoord mailen.</td>";
+	$text[] = "	<td>Voer uw loginnaam of email-adres in. Het systeem zal dan een link sturen waarmee u een nieuw wachtwoord kunt instellen.</td>";
 	$text[] = "</tr>";
 	$text[] = "<tr>";
 	$text[] = "	<td><input type='text' name='invoer' value='". $_REQUEST['invoer'] ."' size='75'></td>";

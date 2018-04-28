@@ -654,7 +654,7 @@ function sendMail($ontvanger, $subject, $bericht, $var) {
 	$HTMLHeader	.= '<body>'.NL;
 	$HTMLHeader	.= '<table width="700" cellpadding="0" cellspacing="0" align="center" bgcolor="ffffff">'.NL;
 	$HTMLHeader	.= '	<tr>'.NL;
-	$HTMLHeader	.= '		<td colspan="2" height="20" bgcolor="#34383D">&nbsp;</td>'.NL;
+	$HTMLHeader	.= '		<td colspan="2" height="20" bgcolor="#8C1974">&nbsp;</td>'.NL;
 	$HTMLHeader	.= '	</tr>'.NL;
 	$HTMLHeader	.= '	<tr>'.NL;
 	$HTMLHeader	.= '		<td colspan="2" height="10">&nbsp;</td>'.NL;
@@ -667,7 +667,7 @@ function sendMail($ontvanger, $subject, $bericht, $var) {
 	$HTMLHeader	.= '      <td>'.NL;
 	$HTMLHeader	.= '			<table cellspacing="0" cellpadding="0">'.NL;
 	$HTMLHeader	.= '			<tr>'.NL;
-	$HTMLHeader	.= '				<td class="onderwerp" align="left" height="80" valign="bottom">SAMENWERKINGSGEMEENTE CGK-GKV-NGK DEVENTER</td>'.NL;
+	$HTMLHeader	.= '				<td class="onderwerp" align="left" height="80" valign="bottom">KONINGSKERK DEVENTER</td>'.NL;
 	$HTMLHeader	.= '			</tr>'.NL;
 	$HTMLHeader	.= '			</table>'.NL;
 	$HTMLHeader	.= '      </td>'.NL;
@@ -695,7 +695,7 @@ function sendMail($ontvanger, $subject, $bericht, $var) {
 	$HTMLFooter	.= '		</td>'.NL;
 	$HTMLFooter	.= '	</tr>'.NL;
 	$HTMLFooter	.= '	<tr>'.NL;
-	$HTMLFooter	.= '		<td colspan="2" height="20" bgcolor="#34383D">&nbsp;</td>'.NL;
+	$HTMLFooter	.= '		<td colspan="2" height="20" bgcolor="#8C1974">&nbsp;</td>'.NL;
 	$HTMLFooter	.= '	</tr>'.NL;
 	$HTMLFooter	.= '</table>'.NL;
 	$HTMLFooter	.= '</table>'.NL;
@@ -730,7 +730,6 @@ function sendMail($ontvanger, $subject, $bericht, $var) {
 		$hoofd = getParents($ontvanger, true);
 		$HoofdData = getMemberDetails($hoofd[0]);
 		$mail->AddAddress($HoofdData['mail'], makeName($ontvanger, 5));
-		//echo '-> '. $HoofdData['mail'] .'|'. makeName($ontvanger, 5) .'<br>';
 	}
 	$mail->Subject	= $SubjectPrefix . $subject;
 	$mail->IsHTML(true);
@@ -745,12 +744,10 @@ function sendMail($ontvanger, $subject, $bericht, $var) {
 			$OuderData = getMemberDetails($ouder);
 			if($OuderData['mail'] != $UserData['mail']) {
 				$mail->AddCC($OuderData['mail']);
-				//echo '<b>Ouder in CC</b> : '. makeName($ouder, 5) .', '. $OuderData['mail'] .'<br>';
+				toLog('debug', '', $ontvanger, makeName($ouder, 5) .' ('. $OuderData['mail'] .') als ouder in CC opgenomen');
 			}
 		}
-	}		
-	
-	//echo  '<br>';
+	}
 		
 	if(isset($var['file']) AND $var['file'] != "") {
 		if($var['name'] != "") {
@@ -760,13 +757,11 @@ function sendMail($ontvanger, $subject, $bericht, $var) {
 		}
 	}
 	
-	/*
 	if(!$mail->Send()) {
 		return false;
 	} else {
 		return true;
 	}
-	*/
 }
 
 
@@ -933,6 +928,53 @@ function gelijkeDienst($dienst, $gelijk) {
 		} else {
 			return true;
 		}
+	}
+}
+
+function array_search_closest($input, $array) {
+	# http://php.net/manual/en/function.levenshtein.php
+	
+	if($input != '') {
+		// no shortest distance found, yet
+		$shortest = -1;
+		
+		foreach ($array as $id => $word) {
+  	  $lev = levenshtein($input, $word);
+  	  if ($lev == 0) {
+  	      // closest word is this one (exact match)
+  	      $closest = $id;
+  	      $shortest = 0;
+  	
+  	      // break out of the loop; we've found an exact match
+  	      break;
+  	  }
+  	
+  	  if ($lev <= $shortest || $shortest < 0) {
+  	      // set the closest match, and shortest distance
+  	      $closest  = $id;
+  	      $shortest = $lev;
+  	  }
+  	}
+  } else {
+  	$closest = 0;
+  }
+  
+  return $closest;
+}
+
+function isValidHash($hash) {
+	global $TableUsers, $UserID, $UserHash;
+	
+	$db = connect_db();
+	
+	$sql = "SELECT $UserID FROM $TableUsers WHERE $UserHash like '$hash'";
+	$result	= mysqli_query($db, $sql);
+	
+	if(mysqli_num_rows($result) == 0) {
+		return false;
+	} else {
+		$row = mysqli_fetch_array($result);
+		return $row[$UserID];
 	}
 }
 

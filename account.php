@@ -2,9 +2,27 @@
 include_once('include/functions.php');
 include_once('include/config.php');
 include_once('include/HTML_TopBottom.php');
-$cfgProgDir = 'auth/';
-include($cfgProgDir. "secure.php");
-$db = connect_db();
+
+$showLogin = true;
+
+if(isset($_REQUEST['hash'])) {
+	$id = isValidHash($_REQUEST['hash']);
+	
+	if(!is_numeric($id)) {
+		toLog('error', '', '', 'ongeldige hash (account)');
+		$showLogin = true;
+	} else {
+		$showLogin = false;
+		$_SESSION['ID'] = $id;
+		toLog('info', $id, '', 'account mbv hash');
+	}
+}
+
+if($showLogin) {
+	$cfgProgDir = 'auth/';
+	include($cfgProgDir. "secure.php");
+	$db = connect_db();
+}
 
 $id = getParam('id', $_SESSION['ID']);
 

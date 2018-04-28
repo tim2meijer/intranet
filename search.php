@@ -6,139 +6,229 @@ $cfgProgDir = 'auth/';
 include($cfgProgDir. "secure.php");
 $db = connect_db();
 
-$geslacht			= getParam('geslacht', '');
+/*
+foreach($_POST as $key => $value) {
+	echo "$key -> $value<br>";
+}
+*/
+
+$geslacht			= getParam('geslacht', array('M', 'V'));
 $sDag					= getParam('sDag', 1);
 $sMaand				= getParam('sMaand', 1);
 $sJaar				= getParam('sJaar', 1900);
 $eDag					= getParam('eDag', date("d"));
 $eMaand				= getParam('eMaand', date("m"));
 $eJaar				= getParam('eJaar', date("Y"));
-$wijk					= getParam('wijk', '');
+$wijk					= getParam('wijk', $wijkArray);
+$status				= getParam('status', array('actief'));
+$burgerlijk		= getParam('burgerlijk', $burgelijkArray);
+$gezin				= getParam('gezin', $gezinArray);
+$kerkelijk		= getParam('kerkelijk', $kerkelijkArray);
 $searchString	= getParam('searchString', '');
 
-$text[] = "<form action='". $_SERVER['PHP_SELF'] ."' method='post'>";
-$text[] = "<table>";
-$text[] = "<tr>";
-$text[] = "	<td align='center'>Geslacht</td>";
-$text[] = "	<td align='center'>&nbsp;</td>";
-$text[] = "	<td align='center'>Geboren na</td>";
-$text[] = "	<td align='center'>&nbsp;</td>";
-$text[] = "	<td align='center'>Geboren voor</td>";
-$text[] = "	<td align='center'>&nbsp;</td>";
-$text[] = "	<td align='center'>Wijk</td>";
-$text[] = "	<td align='center'>&nbsp;</td>";
-$text[] = "	<td align='center'>(deel van) naam</td>";
-$text[] = "</tr>";
-$text[] = "<tr>";
-$text[] = "	<td>";
-$text[] = "	<select name='geslacht'>";
-$text[] = "	<option value=''". ($geslacht == '' ? ' selected' : '') .">Man of vrouw</option>";
-$text[] = "	<option value='M'". ($geslacht == 'M' ? ' selected' : '') .">Man</option>";
-$text[] = "	<option value='V'". ($geslacht == 'V' ? ' selected' : '') .">Vrouw</option>";
-$text[] = "	</select>";
-$text[] = "	</td>";
-$text[] = "	<td>&nbsp;</td>";
-$text[] = "	<td><select name='sDag'>";
+$links[] = "<form action='". $_SERVER['PHP_SELF'] ."' method='post'>";
+$links[] = "<table border=0>";
+
+$links[] = "<tr>";
+$links[] = "	<td align='right' valign='top'>Geslacht</td>";
+$links[] = "	<td>&nbsp;</td>";
+$links[] = "	<td align='left' valign='top'>";
+$links[] = "	<input type='checkbox' name='geslacht[]' value='M'". (in_array('M', $geslacht) ? ' checked' : '') .">Man<br>";
+$links[] = "	<input type='checkbox' name='geslacht[]' value='V'". (in_array('V', $geslacht) ? ' checked' : '') .">Vrouw</option>";
+$links[] = "	</select></td>";
+$links[] = "</tr>";
+
+$links[] = "<tr>";
+$links[] = "	<td align='right' valign='top'>Geboren na</td>";
+$links[] = "	<td>&nbsp;</td>";
+$links[] = "	<td align='left' valign='top'><select name='sDag'>";
 for($d=1 ; $d<32 ; $d++) {
-	$text[] = "	<option value='$d'". ($d == $sDag ? ' selected' : '') .">$d</option>";
+	$links[] = "	<option value='$d'". ($d == $sDag ? ' selected' : '') .">$d</option>";
 }
-$text[] = "	</select> - ";
-$text[] = "	<select name='sMaand'>";
+$links[] = "	</select> - ";
+$links[] = "	<select name='sMaand'>";
 for($m=1 ; $m<13 ; $m++) {
-	$text[] = "	<option value='$m'". ($m == $sMaand ? ' selected' : '') .">". $maandArray[$m] ."</option>";
+	$links[] = "	<option value='$m'". ($m == $sMaand ? ' selected' : '') .">". $maandArray[$m] ."</option>";
 }
-$text[] = "	</select> - ";
-$text[] = "	<select name='sJaar'>";
+$links[] = "	</select> - ";
+$links[] = "	<select name='sJaar'>";
 for($j=1900 ; $j<=date("Y") ; $j++) {
-	$text[] = "	<option value='$j'". ($j == $sJaar ? ' selected' : '') .">$j</option>";
+	$links[] = "	<option value='$j'". ($j == $sJaar ? ' selected' : '') .">$j</option>";
 }
-$text[] = "	</select>";
-$text[] = "	</td>";
-$text[] = "	<td>&nbsp;</td>";
-$text[] = "	<td><select name='eDag'>";
+$links[] = "	</select>";
+$links[] = "	</td>";
+$links[] = "</tr>";
+
+$links[] = "<tr>";
+$links[] = "	<td align='right' valign='top'>Geboren voor</td>";
+$links[] = "	<td>&nbsp;</td>";
+$links[] = "	<td align='left' valign='top'><select name='eDag'>";
 for($d=1 ; $d<32 ; $d++) {
-	$text[] = "	<option value='$d'". ($d == $eDag ? ' selected' : '') .">$d</option>";
+	$links[] = "	<option value='$d'". ($d == $eDag ? ' selected' : '') .">$d</option>";
 }
-$text[] = "	</select> - ";
-$text[] = "	<select name='eMaand'>";
+$links[] = "	</select> - ";
+$links[] = "	<select name='eMaand'>";
 for($m=1 ; $m<13 ; $m++) {
-	$text[] = "	<option value='$m'". ($m == $eMaand ? ' selected' : '') .">". $maandArray[$m] ."</option>";
+	$links[] = "	<option value='$m'". ($m == $eMaand ? ' selected' : '') .">". $maandArray[$m] ."</option>";
 }
-$text[] = "	</select> - ";
-$text[] = "	<select name='eJaar'>";
+$links[] = "	</select> - ";
+$links[] = "	<select name='eJaar'>";
 for($j=1900 ; $j<=date("Y") ; $j++) {
-	$text[] = "	<option value='$j'". ($j == $eJaar ? ' selected' : '') .">$j</option>";
+	$links[] = "	<option value='$j'". ($j == $eJaar ? ' selected' : '') .">$j</option>";
 }
-$text[] = "	</select>";
-$text[] = "	</td>";
-$text[] = "	<td>&nbsp;</td>";
-$text[] = "	<td valign='top'><select name='wijk'>";
-$text[] = "	<option value=''". ($wijk == '' ? ' selected' : '') .">Alle wijken</option>";
+$links[] = "	</select></td>";
+$links[] = "</tr>";
+
+$links[] = "<tr>";
+$links[] = "	<td align='right' valign='top''>Wijk</td>";
+$links[] = "	<td>&nbsp;</td>";
+$links[] = "	<td align='left' valign='top'>";
 foreach($wijkArray as $w) {
-	$text[] = "	<option value='$w'". ($w == $wijk ? ' selected' : '') .">Wijk $w</option>";
+	$links[] = "	<input type='checkbox' name='wijk[]' value='$w'". (in_array($w, $wijk) ? ' checked' : '') .">Wijk $w<br>"; 
 }
-$text[] = "	</select></td>";
-$text[] = "	<td>&nbsp;</td>";
-$text[] = "	<td><input type='text' name='searchString' value='$searchString'></td>";
-//$text[] = "	<td>&nbsp;</td>";
-$text[] = "</tr>";
-$text[] = "<tr>";
-$text[] = "	<td colspan='9'>&nbsp;</td>";
-$text[] = "</tr>";
-$text[] = "<tr>";
-$text[] = "	<td colspan='9' align='center'><input type='submit' name='search' value='Zoeken'></td>";
-$text[] = "</tr>";
-$text[] = "</table>"; 
+$links[] = "	</td>";
+$links[] = "</tr>";
+
+$links[] = "<tr>";
+$links[] = "	<td align='right' valign='top'>Status</td>";
+$links[] = "	<td>&nbsp;</td>";
+$links[] = "	<td align='left' valign='top'>";
+foreach($statusArray as $s) {
+	$links[] = "	<input type='checkbox' name='status[]' value='$s'". (in_array($s, $status) ? ' checked' : '') .">". ucfirst($s) ."<br>";
+}
+$links[] = "	</td>";
+$links[] = "</tr>";
+
+$links[] = "<tr>";
+$links[] = "	<td align='right' valign='top'>Burgerlijke staat</td>";
+$links[] = "	<td>&nbsp;</td>";
+$links[] = "	<td align='left' valign='top'>";
+foreach($burgelijkArray as $b) {
+	$links[] = "	<input type='checkbox' name='burgerlijk[]' value='$b'". (in_array($b, $burgerlijk) ? ' checked' : '') .">". ucfirst($b) ."<br>";
+}
+$links[] = "	</td>";
+$links[] = "</tr>";
+
+$links[] = "<tr>";
+$links[] = "	<td align='right' valign='top'>Kerkelijke staat</td>";
+$links[] = "	<td>&nbsp;</td>";
+$links[] = "	<td align='left' valign='top'>";
+foreach($kerkelijkArray as $k) {
+	$links[] = "	<input type='checkbox' name='kerkelijk[]' value='$k'". (in_array($k, $kerkelijk) ? ' checked' : '') .">". ucfirst($k) ."<br>";
+}
+$links[] = "	</td>";
+$links[] = "</tr>";
+
+$links[] = "<tr>";
+$links[] = "	<td align='right' valign='top'>Gezinsrelatie</td>";
+$links[] = "	<td>&nbsp;</td>";
+$links[] = "	<td align='left' valign='top'>";
+foreach($gezinArray as $g) {
+	$links[] = "	<input type='checkbox' name='gezin[]' value='$g'". (in_array($g, $gezin) ? ' checked' : '') .">". ucfirst($g) ."<br>";
+}
+$links[] = "	</td>";
+$links[] = "</tr>";
+
+$links[] = "<tr>";
+$links[] = "	<td align='right' valign='top'>(deel van) naam</td>";
+$links[] = "	<td>&nbsp;</td>";
+$links[] = "	<td align='left' valign='top'><input type='text' name='searchString' value='$searchString'></td>";
+$links[] = "</tr>";
+
+$links[] = "<tr>";
+$links[] = "	<td colspan='3'>&nbsp;</td>";
+$links[] = "</tr>";
+
+$links[] = "<tr>";
+$links[] = "	<td colspan='3' align='center'><input type='submit' name='search' value='Zoeken'></td>";
+$links[] = "</tr>";
+$links[] = "</table>"; 
 
 if(isset($_POST['search'])) {
-	toLog('debug', $_SESSION['ID'], '', "Gezocht op S:$searchString G:$geslacht W:$wijk B:$sDag-$sMaand-$sJaar E:$eDag-$eMaand-$eJaar");
+	//toLog('debug', $_SESSION['ID'], '', "Gezocht op S:$searchString G:$geslacht W:$wijk B:$sDag-$sMaand-$sJaar E:$eDag-$eMaand-$eJaar");
 	
-	$where[] = "$UserGeboorte BETWEEN '$sJaar-$sMaand-$sDag' AND '$eJaar-$eMaand-$eDag'";
-	$where[] = "$UserStatus like 'actief'";
-	$table[] = $TableUsers;
-	
-	if($geslacht != '') {
-		$where[] = "$UserGeslacht like '$geslacht'";
+	# Geslacht
+	foreach($geslacht as $g) {
+		$sql_geslacht[] = "$UserGeslacht like '$g'";
 	}
+	$where[] = "(". implode(' OR ', $sql_geslacht).")";
 	
+	# Geboren
+	$where[] = "$UserGeboorte BETWEEN '$sJaar-$sMaand-$sDag' AND '$eJaar-$eMaand-$eDag'";
+	
+	# Wijk
+	foreach($wijk as $w) {
+		$sql_wijk[] = "$UserWijk like '$w'";
+	}
+	$where[] = "(". implode(' OR ', $sql_wijk).")";
+	
+	# Status
+	foreach($status as $s) {
+		$sql_status[] = "$UserStatus like '$s'";
+	}
+	$where[] = "(". implode(' OR ', $sql_status).")";
+	
+	# Burgelijke staat
+	foreach($burgerlijk as $b) {
+		$sql_burgerlijk[] = "$UserBurgelijk like '$b'";
+	}
+	$where[] = "(". implode(' OR ', $sql_burgerlijk).")";
+	
+	# Kerkelijke staat
+	foreach($kerkelijk as $k) {
+		$sql_kerkelijk[] = "$UserBelijdenis like '$k'";
+	}
+	$where[] = "(". implode(' OR ', $sql_kerkelijk).")";
+	
+	# Gezinsrelatie
+	foreach($gezin as $g) {
+		$sql_gezin[] = "$UserRelatie like '$g'";
+	}
+	$where[] = "(". implode(' OR ', $sql_gezin).")";	
+	
+	# Naam		
 	if($searchString != '') {
 		$searchString = strtolower($searchString);
-		$having1 = ", LOWER(CONCAT_WS(' ', $UserVoornaam, $UserAchternaam)) as naamKort, LOWER(CONCAT_WS(' ', $UserVoornaam, $UserTussenvoegsel, $UserAchternaam)) as naamLang";
-		$having2 = " HAVING naamKort like '%$searchString%' OR naamKort like '$searchString%' OR naamKort like '%$searchString'	OR naamLang like '%$searchString%' OR naamLang like '$searchString%' OR naamLang like '%$searchString'";
+		$having1 = ", LOWER(CONCAT_WS(' ', $UserVoornaam, $UserAchternaam)) as naamKort, LOWER(CONCAT_WS(' ', $UserVoornaam, $UserTussenvoegsel, $UserAchternaam)) as naamLang, LOWER(CONCAT_WS(' ', $UserVoornaam, $UserMeisjesnaam)) as naamMeisjes";
+		$having2 = " HAVING naamKort like '%$searchString%' OR naamKort like '$searchString%' OR naamKort like '%$searchString' OR naamLang like '%$searchString%' OR naamLang like '$searchString%' OR naamLang like '%$searchString' OR naamMeisjes like '%$searchString%' OR naamMeisjes like '$searchString%' OR naamMeisjes like '%$searchString'";
 	} else {
 		$having1 = '';
 		$having2 = '';
 	}
-		
-	if($wijk != '') {
-		$where[] = "$UserWijk like '$wijk'";
-	}
 	
-	$sql = "SELECT $TableUsers.$UserID$having1 FROM ". implode(', ', $table)." WHERE ". implode(' AND ', $where) ."$having2 ORDER BY $UserAchternaam";
+	$sql = "SELECT $UserID$having1 FROM $TableUsers WHERE ". implode(' AND ', $where) ."$having2 ORDER BY $UserAchternaam";
 	$result = mysqli_query($db, $sql);
 	if($row = mysqli_fetch_array($result)) {
-		$text[] = '<p>';
-		$text[] = '<ol>';
+		$rechts[] = '<ol>';
 		do {
 			$lid = $row[$UserID];
-			$text[] = "<li><a href='profiel.php?id=$lid'>". makeName($lid, 5) ."</a></li>";
+			$rechts[] = "<li><a href='profiel.php?id=$lid'>". makeName($lid, 5) ."</a></li>";
 			$ids[] = $lid;			
 			
+			/*
 			$ouders = getParents($lid);			
 			foreach($ouders as $ouder) {
 				$parentIDs[$ouder] = $ouder;
 			}
+			*/
 			
 		} while($row = mysqli_fetch_array($result));		
-		$text[] = '</ol>';
+		$rechts[] = '</ol>';
 		
-		$text[] = "<a href='admin/exportGroupMembers.php?ids=".implode('|', $ids)."'>Exporteer deze gegevens</a>";
-		$text[] = "<a href='admin/exportGroupMembers.php?ids=".implode('|', $parentIDs)."'>Exporteer de ouders van deze gegevens</a>";
-		
+		$rechts[] = "<a href='admin/exportGroupMembers.php?ids=".implode('|', $ids)."'>Exporteer deze gegevens</a>";
+		$rechts[] = "<a href='admin/exportGroupMembers.php?ids=".implode('|', $parentIDs)."'>Exporteer de ouders van deze gegevens</a>";
 	}
+} else {
+	$rechts[] = 'Nog geen resultaten';
 }
 
+
 echo $HTMLHeader;
-echo implode("\n", $text);
+echo "<table width='100%'>";
+echo "<tr>";
+echo "	<td width='50%' valign='top'>". implode("\n", $links) .'</td>';
+echo "	<td width='50%' valign='top'>". implode("\n", $rechts) .'</td>';
+echo "<tr>";
+echo "<table>";
 echo $HTMLFooter;
 ?>
