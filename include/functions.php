@@ -663,14 +663,7 @@ function sendMail($ontvanger, $subject, $bericht, $var) {
 	$HTMLHeader	.= '		<td>'.NL;
 	$HTMLHeader	.= '		<table width="630" cellpadding="0" cellspacing="0" align="center" bgcolor="#ffffff">'.NL;
 	$HTMLHeader	.= '		<tr>'.NL;
-	$HTMLHeader	.= '			<td width="150">&nbsp;</td>'.NL;
-	$HTMLHeader	.= '      <td>'.NL;
-	$HTMLHeader	.= '			<table cellspacing="0" cellpadding="0">'.NL;
-	$HTMLHeader	.= '			<tr>'.NL;
-	$HTMLHeader	.= '				<td class="onderwerp" align="left" height="80" valign="bottom">KONINGSKERK DEVENTER</td>'.NL;
-	$HTMLHeader	.= '			</tr>'.NL;
-	$HTMLHeader	.= '			</table>'.NL;
-	$HTMLHeader	.= '      </td>'.NL;
+	$HTMLHeader	.= '			<td class="onderwerp" align="left" height="80" valign="bottom"><img src="'. $ScriptURL .'/images/logoKoningsKerk.png" height=125 alt="Koningskerk Deventer"></td>'.NL;
 	$HTMLHeader	.= '		</tr>'.NL;
 	$HTMLHeader	.= '    </table>'.NL;
 	$HTMLHeader	.= '    <table width="630" align="center">'.NL;

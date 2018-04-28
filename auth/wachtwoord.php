@@ -20,17 +20,16 @@ if(isset($_POST['opvragen'])) {
 		$id		= $row[$UserID];
 		$data = getMemberDetails($id);
 		
-		$Mail[] = "Beste ". $data['voornaam'] .",";
-		$Mail[] = "<p>";
+		$Mail[] = "Beste ". $data['voornaam'] .",<br>";
+		$Mail[] = "<br>";
 		$Mail[] = "je hebt een nieuw wachtwoord aangevraagd voor $ScriptTitle.<br>";
-		$Mail[] = "<p>";
-		$Mail[] = "Door <a href='". $ScriptURL ."/account.php?hash=". $data['hash'] ."'>deze link</a> te volgen kun je een wachtwoord instellen.<br>";
-		$Mail[] = "Iemand met deze link kan zonder in te loggen bij je account, wees er dus zuinig op.";
+		$Mail[] = "Heb geen nieuw wachtwoord voor je aangemaakt, maar een link gemaakt waarmee je zelf een wachtwoord kan instellen<br>";
+		$Mail[] = "Door <a href='". $ScriptURL ."account.php?hash=". $data['hash'] ."'>deze link</a> te volgen kom je op jouw persoonlijke account-pagina waarop je een wachtwoord kunt instellen.<br>";
+		$Mail[] = "<br>";
+		$Mail[] = "Let wel op, iemand met deze link kan zonder in te loggen bij je account komen, wees er dus zuinig op!";
 		
 		$HTMLMail = implode("\n", $Mail);
-		
-		echo $$HTMLMail;
-
+						
 		if(!sendMail($id, "Nieuw wachtwoord voor $ScriptTitle", $HTMLMail, $var)) {			
 			toLog('error', $id, '', 'problemen met wachtwoord-mail versturen');
 			$text[] = "Inloggegevens konden helaas niet verstuurd worden";			
