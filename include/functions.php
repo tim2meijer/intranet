@@ -768,14 +768,15 @@ function showBlock($block, $width) {
 	return implode(NL, $HTML);
 }
 
-function getFamilieleden($id) {
+function getFamilieleden($id, $all = false) {
 	global $TableUsers, $UserAdres, $UserStatus, $UserID;
 	$db = connect_db();
 	
 	$data = array();
 	
-	$sql = "SELECT $UserID FROM $TableUsers WHERE $UserAdres IN (SELECT $UserAdres FROM $TableUsers WHERE $UserID = $id) AND $UserStatus = 'actief' ";
-		
+	$sql = "SELECT $UserID FROM $TableUsers WHERE $UserAdres IN (SELECT $UserAdres FROM $TableUsers WHERE $UserID = $id)";
+	if(!$all)	$sql .= "AND $UserStatus = 'actief'";
+	
 	$result = mysqli_query($db, $sql);
 	if($row = mysqli_fetch_array($result)) {
 		do {

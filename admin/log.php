@@ -99,7 +99,7 @@ if(count($logData) > 0) {
 		$rij = "<tr>\n";
 		$rij .= "	<td>". date("d-m H:i:s", $data_array['tijd']) ."</td>\n";
 		$rij .= "	<td>&nbsp;</td>\n";
-		$rij .= "	<td><a href='../profiel?id=". $data_array['dader'] ."'>". makeName($data_array['dader'], 5) ."</a></td>\n";
+		$rij .= "	<td><a href='../profiel.php?id=". $data_array['dader'] ."'>". makeName($data_array['dader'], 5) ."</a></td>\n";
 		$rij .= "	<td>&nbsp;</td>\n";
 		$rij .= "	<td>". ($data_array['slachtoffer'] != '' ? "<a href='../profiel.php?id=". $data_array['slachtoffer'] ."'>". makeName($data_array['slachtoffer'], 5) ."</a>" : "&nbsp;") ."</td>\n";
 		$rij .= "	<td>&nbsp;</td>\n";

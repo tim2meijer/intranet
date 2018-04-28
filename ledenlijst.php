@@ -99,7 +99,7 @@ if(!isset($_REQUEST['letter'])) {
 } else {
 */
 if($letter != '') {
-	$sql = "SELECT $UserID FROM $TableUsers WHERE $UserAchternaam like '$letter%' ORDER BY $UserAchternaam";
+	$sql = "SELECT $UserID FROM $TableUsers WHERE $UserStatus = 'actief' AND $UserAchternaam like '$letter%' ORDER BY $UserAchternaam";
 	toLog('debug', $_SESSION['ID'], '', "Ledenlijst letter $letter");
 } elseif($wijk != '') {
 	$sql = "SELECT $UserID FROM $TableUsers WHERE $UserStatus = 'actief' AND $UserWijk like '$wijk' ORDER BY $UserAchternaam";

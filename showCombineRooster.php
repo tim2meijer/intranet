@@ -55,10 +55,10 @@ if(count($roosters) > 0) {
 		
 		if($gevuldeCel) {
 			$text[] = "<tr>";
-			$text[] = "<td valign='top'>".strftime("%a %d %b %H:%M", $dienstData['start'])."</td>";
+			$text[] = "<td valign='top'>".strftime("%a %d %b %H:%M", $dienstData['start'])."<br><i>".$dienstData['bijzonderheden'] ."</i></td>";
 			$text[] = implode("\n", $cel);
 			$text[] = "</tr>";
-			$rij = array_merge(array(strftime("%a %d %b %H:%M", $dienstData['start'])), $rij);
+			$rij = array_merge(array(strftime("%a %d %b %H:%M", $dienstData['start'])."\n".$dienstData['bijzonderheden']), $rij);
 			$data[] = $rij;
 		}		
 	}

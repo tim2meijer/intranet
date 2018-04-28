@@ -13,15 +13,34 @@ p {
 }
 
 .seperator {
-	border-bottom:1px solid #34383D;
+	border-bottom:1px solid #8C1974;
 }
 
 .onderwerp {
-	color:#34383D;
+	color:#8C1974;
 	font-size:24px;
 	font-weight:bold;
 }
 
 .own {
 	font-style: italic;
+}
+
+td a	{
+	color: #2B153B;
+	text-decoration: underline;
+}
+	
+td a:hover	{
+	color: #8C1974;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+a.inactief {
+	color: #D4D0D7;
+}
+
+a.ontrokken {
+	text-decoration:line-through;
 }

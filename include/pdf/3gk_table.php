@@ -118,7 +118,7 @@ class PDF_3GK_Table extends PDF_3GK {
 	
 	function makeTable($header, $data) {
 		# Colors, line width and bold font
-		$this->SetFillColor(59,140,202);
+		$this->SetFillColor(140,25,116);
 		$this->SetTextColor(255);
 		$this->SetDrawColor(0,0,0);
 		$this->SetFont('','B');

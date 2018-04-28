@@ -121,7 +121,8 @@ if(in_array(1, getMyGroups($_SESSION['ID']))) {
 	$adminLinks['admin/crossCheck.php'] = 'Check databases';
 	$adminLinks['admin/cleanUpDb.php'] = 'Verwijder oude diensten';
 	$adminLinks['admin/log.php'] = 'Bekijk logfiles';
-	$adminLinks['scipio/ScipioImport.php'] = 'Data inladen';
+	$adminLinks['onderhoud/importOuderlingen.php'] = 'Importeer ouderlingen/diakenen';
+	$adminLinks['scipio/ScipioImport.php'] = 'Scipio-data inladen';
 	$adminLinks['../dumper/'] = 'Dumper';
 	
 	foreach($adminLinks as $link => $naam) {

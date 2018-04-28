@@ -2,15 +2,10 @@
 include_once('include/functions.php');
 include_once('include/config.php');
 include_once('include/HTML_TopBottom.php');
+$requiredUserGroups = array(1);
 $cfgProgDir = 'auth/';
 include($cfgProgDir. "secure.php");
 $db = connect_db();
-
-/*
-foreach($_POST as $key => $value) {
-	echo "$key -> $value<br>";
-}
-*/
 
 $geslacht			= getParam('geslacht', array('M', 'V'));
 $sDag					= getParam('sDag', 1);
@@ -196,13 +191,22 @@ if(isset($_POST['search'])) {
 		$having2 = '';
 	}
 	
-	$sql = "SELECT $UserID$having1 FROM $TableUsers WHERE ". implode(' AND ', $where) ."$having2 ORDER BY $UserAchternaam";
+	$sql = "SELECT $UserID, $UserStatus$having1 FROM $TableUsers WHERE ". implode(' AND ', $where) ."$having2 ORDER BY $UserAchternaam";
 	$result = mysqli_query($db, $sql);
 	if($row = mysqli_fetch_array($result)) {
 		$rechts[] = '<ol>';
 		do {
 			$lid = $row[$UserID];
-			$rechts[] = "<li><a href='profiel.php?id=$lid'>". makeName($lid, 5) ."</a></li>";
+			
+			if($row[$UserStatus] == 'afgemeld' OR $row[$UserStatus] == 'afgevoerd' OR $row[$UserStatus] == 'onttrokken') {
+				$class = 'ontrokken';
+			} elseif($row[$UserStatus] == 'overleden' OR $row[$UserStatus] == 'vertrokken') {
+				$class = 'inactief';
+			} else {
+				$class = '';
+			}
+			
+			$rechts[] = "<li><a href='profiel.php?id=$lid' class='$class'>". makeName($lid, 5) ."</a></li>";
 			$ids[] = $lid;			
 			
 			/*

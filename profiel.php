@@ -9,7 +9,9 @@ $db = connect_db();
 $id = getParam('id', $_SESSION['ID']);
 
 $personData = getMemberDetails($id);
-$familie = getFamilieleden($id);
+# Als je als admin bent ingelogd zie je alle leden, anders alleen de actieve 
+$familie = getFamilieleden($id, in_array(1, getMyGroups($_SESSION['ID'])));
+
 toLog('debug', $_SESSION['ID'], $id, 'profiel bekeken'); 
 
 # Pagina tonen
@@ -50,8 +52,12 @@ echo "		<td><b>Geboortedatum</b></td>".NL;
 echo "		<td>". strftime("%d %B '%y", $personData['geb_unix']) ."</td>".NL;
 echo "	</tr>".NL;
 echo "	<tr>".NL;
-echo "		<td><b>Kerkelijke status</b></td>".NL;
+echo "		<td><b>Kerkelijke staat</b></td>".NL;
 echo "		<td>". $personData['belijdenis'] ."</td>".NL;
+echo "	</tr>".NL;
+echo "	<tr>".NL;
+echo "		<td><b>Status</b></td>".NL;
+echo "		<td>". $personData['status'] ."</td>".NL;
 echo "	</tr>".NL;
 echo "	</table>".NL;
 echo "	</td>".NL;
@@ -65,7 +71,15 @@ if(count($familie) > 1) {
 	foreach($familie as $leden) {
 		if($leden != $id) {
 			$famData = getMemberDetails($leden);
-			echo "<a href='?id=$leden'>". makeName($leden, 5) ."</a> ('". substr($famData['jaar'], -2) .")<br>";
+			
+			if($famData['status'] == 'afgemeld' OR $famData['status'] == 'afgevoerd' OR $famData['status'] == 'onttrokken') {
+				$class = 'ontrokken';
+			} elseif($famData['status'] == 'overleden' OR $famData['status'] == 'vertrokken') {
+				$class = 'inactief';
+			} else {
+				$class = '';
+			}
+			echo "<a href='?id=$leden' class='$class'>". makeName($leden, 5) ."</a> ('". substr($famData['jaar'], -2) .")<br>";
 		}
 	}
 } else {
