@@ -93,9 +93,11 @@ foreach ($xml->persoon as $element) {
 	# Ja -> updaten
 	} else {
 		$update = array();
+		$update[] = "$UserLastChange = ". time();
 		foreach($velden as $veld => $waarde) {
 			$update[] = "$veld = '$waarde'";
 		}
+					
 		$sql_update = "UPDATE $TableUsers SET ". implode(', ', $update) ." WHERE $UserID like '". $element->regnr ."'";
 		if(!mysqli_query($db, $sql_update)) {
 			 echo '<b>'. $sql_update ."</b><br>\n";

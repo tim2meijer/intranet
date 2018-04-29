@@ -5,7 +5,7 @@ $HTMLHead	= "<!--     Deze pagina is onderdeel van $ScriptTitle $Version gemaakt
 $HTMLHead	.= '<html>'.NL;
 $HTMLHead	.= '<head>'.NL;
 $HTMLHead	.= "	<title>$ScriptTitle $Version</title>\n";
-$HTMLHead	.= "	<link rel='stylesheet' type='text/css' href='". $ScriptURL ."/include/style.css'>\n";
+$HTMLHead	.= "	<link rel='stylesheet' type='text/css' href='". $ScriptURL ."include/style.css'>\n";
 
 $HTMLBody	= '</head>'.NL;
 $HTMLBody	.= '<body>'.NL;
@@ -21,7 +21,7 @@ $HTMLBody	.= '	<td>'.NL;
 $HTMLBody	.= '	<table width="95%" cellpadding="0" cellspacing="0" align="center" bgcolor="#ffffff" border=0>'.NL;
 $HTMLBody	.= '	<tr>'.NL;
 $HTMLBody	.= '		<td width="50">&nbsp;</td>'.NL;
-$HTMLBody	.= '		<td width="150"><a href="'. $ScriptURL .'"><img src="'. $ScriptURL .'/images/logoKoningsKerk.png" height=150 alt=""></a></td>'.NL;
+$HTMLBody	.= '		<td width="150"><a href="'. $ScriptURL .'"><img src="'. $ScriptURL .'images/logoKoningsKerk.png" height=150 alt=""></a></td>'.NL;
 $HTMLBody	.= '    <td width="75">&nbsp;</td>'.NL;
 $HTMLBody	.= '		<td class="onderwerp" align="middle" height="80" valign="middle">&nbsp;</td>'.NL;
 $HTMLBody	.= '		<td width="50">&nbsp;</td>'.NL;

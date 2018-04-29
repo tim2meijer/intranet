@@ -119,7 +119,7 @@ if(in_array(1, getMyGroups($_SESSION['ID']))) {
 	$adminLinks['admin/editGroepen.php'] = 'Groepen wijzigen';	
 	$adminLinks['admin/editRoosters.php'] = 'Roosters wijzigen';	
 	$adminLinks['admin/crossCheck.php'] = 'Check databases';
-	$adminLinks['admin/cleanUpDb.php'] = 'Verwijder oude diensten';
+	$adminLinks['onderhoud/cleanUpDb.php'] = 'Verwijder oude diensten';
 	$adminLinks['admin/log.php'] = 'Bekijk logfiles';
 	$adminLinks['onderhoud/importOuderlingen.php'] = 'Importeer ouderlingen/diakenen';
 	$adminLinks['scipio/ScipioImport.php'] = 'Scipio-data inladen';

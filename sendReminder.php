@@ -93,7 +93,7 @@ foreach($diensten as $dienst) {
 					if($i==0) {
 						$memberData = getMemberDetails($lid);
 						$ReplacedBericht .= "<p>";
-						$ReplacedBericht .= "Ps 1. : je kan je persoonlijke 3GK-rooster opnemen in je digitale agenda door <a href='$ScriptURL/ical/".$memberData['username'].'-'. $memberData['hash'] .".ics'>deze link</a> toe te voegen.<br>";
+						$ReplacedBericht .= "Ps 1. : je kan je persoonlijke 3GK-rooster opnemen in je digitale agenda door <a href='". $ScriptURL ."ical/".$memberData['username'].'-'. $memberData['hash'] .".ics'>deze link</a> toe te voegen.<br>";
 						$ReplacedBericht .= "Ps 2. : mocht je onderling geruild hebben, wil je deze mail dan doorsturen naar de betreffende persoon?<br>";
 						
 						# Sommige rooster worden automatisch geimporteerd.
@@ -101,7 +101,7 @@ foreach($diensten as $dienst) {
 						if(in_array($rooster, $importRoosters)) {
 							$ReplacedBericht .= "Als je een volgende keer de ruiling doorgeeft aan de roostermaker, zorgt die dat het op deze site ook wordt aangepast.";	
 						} else {
-							$ReplacedBericht .= "In het vervolg kan je die ruiling ook doorgeven via <a href='$ScriptURL/showRooster.php?rooster=$rooster'>het rooster</a> zelf, dan komt de mail direct goed terecht.";	
+							$ReplacedBericht .= "In het vervolg kan je die ruiling ook doorgeven via <a href='". $ScriptURL ."showRooster.php?rooster=$rooster'>het rooster</a> zelf, dan komt de mail direct goed terecht.";	
 						}
 												
 						$FinalHTMLMail = $ReplacedBericht;
