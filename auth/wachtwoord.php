@@ -24,7 +24,7 @@ if(isset($_POST['opvragen'])) {
 		$Mail[] = "<br>";
 		$Mail[] = "je hebt een nieuw wachtwoord aangevraagd voor $ScriptTitle.<br>";
 		$Mail[] = "Heb geen nieuw wachtwoord voor je aangemaakt, maar een link gemaakt waarmee je zelf een wachtwoord kan instellen<br>";
-		$Mail[] = "Door <a href='". $ScriptURL ."account.php?hash=". $data['hash'] ."'>deze link</a> te volgen kom je op jouw persoonlijke account-pagina waarop je een wachtwoord kunt instellen.<br>";
+		$Mail[] = "Door <a href='". $ScriptURL ."account.php?hash=". $data['hash_long'] ."'>deze link</a> te volgen kom je op jouw persoonlijke account-pagina waarop je een wachtwoord kunt instellen.<br>";
 		$Mail[] = "<br>";
 		$Mail[] = "Let wel op, iemand met deze link kan zonder in te loggen bij je account komen, wees er dus zuinig op!";
 		
