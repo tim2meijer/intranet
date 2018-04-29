@@ -83,7 +83,7 @@ foreach($ids as $id) {
 		} while($row = mysqli_fetch_array($result));
 	}
 	
-	$file = fopen('ical/'.$memberData['username'].'-'. $memberData['hash'] .'.ics', 'w+');
+	$file = fopen('ical/'.$memberData['username'].'-'. $memberData['hash_short'] .'.ics', 'w+');
 	fwrite($file, implode("\r\n", str_replace('[[NAAM]]', '3GK ('. makeName($id, 1) .')', $header)));
 	fwrite($file, "\r\n");
 	fwrite($file, implode("\r\n", $ics));

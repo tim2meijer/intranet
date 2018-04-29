@@ -1,7 +1,19 @@
 <?php
+define("NL", "\n");
+
+/* Set locale to Dutch */
+setlocale(LC_ALL, 'nl_NL');
+
+$ScriptURL				= '';
+$ScriptTitle			= '';	# Naam van het script (is naam van afzender in mails)
+$ScriptMailAdress	= '';			# Mailadres van het script (is mailadres van afzender in mails)
+$Version					= '2.1';		# Versie nummer
+$SubjectPrefix		= '[3GK] ';		# Voorvoegsel bij de onderwerpregel bij het versturen van mails
+
+$lengthShortHash = 16;
+$lengthLongHash = 64;
 
 # Tabel- en veldnamen voor de verschillende tabellen in MySQL
-
 $TableUsers					= "leden";
 $UserID							= "scipio_id";
 $UserStatus					= "status";
@@ -29,6 +41,8 @@ $UserWijk						= "wijk";
 $UserUsername				= "username";
 $UserPassword				= "password";
 $UserHash						= "hash";
+$UserHashShort			= "hash_short";
+$UserHashLong				= "hash_long";
 
 $TableGroups				= "groepen";
 $GroupID						= "id";

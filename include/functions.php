@@ -228,9 +228,9 @@ function getGroupMembers($commID) {
 
 function getMemberDetails($id) {
 	global $TableUsers, $UserID, $UserStatus, $UserAdres, $UserGeslacht, $UserVoorletters, $UserVoornaam, $UserTussenvoegsel,
-	$UserAchternaam, $UserMeisjesnaam, $UserUsername, $UserPassword, $UserHash, $UserGeboorte, $UserTelefoon, $UserMail,
+	$UserAchternaam, $UserMeisjesnaam, $UserUsername, $UserPassword, $UserHashShort, $UserGeboorte, $UserTelefoon, $UserMail,
 	$UserBelijdenis, $UserLastChange, $UserLastVisit, $UserBurgelijk, $UserRelatie, $UserStraat, $UserHuisnummer,
-	$UserToevoeging, $UserPC, $UserPlaats, $UserWijk;
+	$UserToevoeging, $UserPC, $UserPlaats, $UserWijk, $UserHashLong;
 	
 	$db = connect_db();
 	
@@ -251,7 +251,8 @@ function getMemberDetails($id) {
 	$data['achternaam']			= $row[$UserAchternaam];
 	$data['meisjesnaam']		= $row[$UserMeisjesnaam];
 	$data['username']				= $row[$UserUsername];
-	$data['hash']						= $row[$UserHash];
+	$data['hash_short']			= $row[$UserHashShort];
+	$data['hash_long']			= $row[$UserHashLong];
 	$data['geboorte']				= $row[$UserGeboorte];		
 	$data['jaar']						= substr($row[$UserGeboorte], 0, 4);
 	$data['maand']					= substr($row[$UserGeboorte], 5, 2);
@@ -957,11 +958,11 @@ function array_search_closest($input, $array) {
 }
 
 function isValidHash($hash) {
-	global $TableUsers, $UserID, $UserHash;
+	global $TableUsers, $UserID, $UserHashLong;
 	
 	$db = connect_db();
 	
-	$sql = "SELECT $UserID FROM $TableUsers WHERE $UserHash like '$hash'";
+	$sql = "SELECT $UserID FROM $TableUsers WHERE $UserHashLong like '$hash'";
 	$result	= mysqli_query($db, $sql);
 	
 	if(mysqli_num_rows($result) == 0) {

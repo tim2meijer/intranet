@@ -132,6 +132,20 @@ if(in_array(1, getMyGroups($_SESSION['ID']))) {
 	$blockArray[] = implode("<br>".NL, $adminDeel);
 }
 
+# Koppelingen-deel
+if(in_array(1, getMyGroups($_SESSION['ID']))) {
+	$koppelDeel[] = "<b>Koppelingen</b>";
+	
+	$koppelLinks['makeiCal.php'] = 'Persoonlijke iCals aanmaken';
+	$koppelLinks['makeiCalScipio.php'] = 'iCal voor Scipio aanmaken';
+	
+	foreach($koppelLinks as $link => $naam) {
+		$koppelDeel[] = "<a href='$link' target='_blank'>$naam</a>";
+	}
+	
+	$blockArray[] = implode("<br>".NL, $koppelDeel);
+}
+
 # Hyperlinks
 $links[] = "<b>Links</b>";
 $links[] = "<a href='http://draijer.org/extern/trinitas/' target='_blank'>Trinitas</a>";
@@ -180,7 +194,7 @@ echo '<tr>'.NL;
 echo '	<td valign="top" width="50">&nbsp;</td>'.NL;
 echo '	<td valign="top">'.NL;
 
-$scheiding = round(count($blockArray)/2);
+$scheiding = floor(count($blockArray)/2);
 
 foreach($blockArray as $key => $block) {
 	if($scheiding == $key) {
