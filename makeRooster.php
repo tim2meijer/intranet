@@ -4,6 +4,7 @@ include_once('include/config.php');
 include_once('include/HTML_TopBottom.php');
 
 $db = connect_db();
+$showLogin = true;
 
 if(!isset($_REQUEST['rooster'])) {
 	echo "geen rooster gedefinieerd";
@@ -13,10 +14,25 @@ if(!isset($_REQUEST['rooster'])) {
 # Zoek op wie de beheerder is
 $beheerder = getBeheerder4Rooster($_REQUEST['rooster']);
 
-# Ken kijk-rechten
-$requiredUserGroups = array(1, $beheerder);
-$cfgProgDir = 'auth/';
-include($cfgProgDir. "secure.php");
+if(isset($_REQUEST['hash'])) {
+	$id = isValidHash($_REQUEST['hash']);
+	
+	if(!is_numeric($id)) {
+		toLog('error', '', '', 'ongeldige hash (rooster)');
+		$showLogin = true;
+	} else {
+		$showLogin = false;
+		$_SESSION['ID'] = $id;
+		toLog('info', $id, '', 'rooter mbv hash');
+	}
+}
+
+if($showLogin) {
+	# Ken kijk-rechten
+	$requiredUserGroups = array(1, $beheerder);
+	$cfgProgDir = 'auth/';
+	include($cfgProgDir. "secure.php");
+}
 
 # Eerste keer data ophalen voor in logfiles enzo
 $RoosterData = getRoosterDetails($_REQUEST['rooster']);

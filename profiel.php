@@ -59,6 +59,14 @@ echo "	<tr>".NL;
 echo "		<td><b>Status</b></td>".NL;
 echo "		<td>". $personData['status'] ."</td>".NL;
 echo "	</tr>".NL;
+
+if(in_array(1, getMyGroups($_SESSION['ID']))) {	
+	echo "	<tr>".NL;
+	echo "		<td><b>Hash</b></td>".NL;
+	echo "		<td>". $personData['hash_short'] ."<br>". $personData['hash_long'] ."</td>".NL;
+	echo "	</tr>".NL;
+}
+
 echo "	</table>".NL;
 echo "	</td>".NL;
 echo "	<td width=4%>&nbsp;</td>".NL;
