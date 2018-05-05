@@ -63,7 +63,7 @@ if($row_dienst = mysqli_fetch_array($result_dienst)) {
 		$CollecteString = '';
 		$tmpDienst = array();
 		if($data_dienst['collecte_1'] != '')	{ $CollecteString .= '1. '. $data_dienst['collecte_1']; }
-		if($data_dienst['collecte_2'] != '')	{ $CollecteString .= '<br>2. '. $data_dienst['collecte_2']; }
+		if($data_dienst['collecte_2'] != '')	{ $CollecteString .= '\n2. '. $data_dienst['collecte_2']; }
 		foreach($diensten as $tmp) { $tmpDienst[] = "$PlanningDienst = $tmp"; }
 		
 		$sql_roosters = "SELECT * FROM $TablePlanning WHERE (". implode(' OR ', $tmpDienst) .") GROUP BY $PlanningGroup";
@@ -89,20 +89,20 @@ if($row_dienst = mysqli_fetch_array($result_dienst)) {
 						$personen[] = makeName($row_persoon[$PlanningUser], 5);
 					} while($row_persoon = mysqli_fetch_array($result_persoon));
 					
-					$RoosterString .= '<b>'.$data_rooster[$RoostersNaam] .'</b><br>- '. implode('- ', $personen);
+					$RoosterString .= $data_rooster[$RoostersNaam] .'\n- '. implode('\n- ', $personen) .'\n\n';
 				}
 			} while($row_roosters = mysqli_fetch_array($result_roosters));
 									
 			if($CollecteString != '') {
-				$DESCRIPTION = '<b>Collecten</b><br>'. $CollecteString.'<p>';
+				$DESCRIPTION = 'COLLECTEN\n'. $CollecteString.'\n\n';
 			}
 			
 			if($RoosterString != '') {
-				$DESCRIPTION .= '<b>Roosters</b><br>'. $RoosterString;
+				$DESCRIPTION .= 'ROOSTERS\n'. $RoosterString;
 			}				
 		}
 		
-		$ics[] = 'DESCRIPTION:<![CDATA['.$DESCRIPTION .']]>';
+		$ics[] = 'DESCRIPTION:'.$DESCRIPTION;
 		$ics[] = "STATUS:CONFIRMED";	
 		$ics[] = "TRANSP:TRANSPARENT";
 		$ics[] = "END:VEVENT";
