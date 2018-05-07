@@ -2,10 +2,29 @@
 include_once('../include/functions.php');
 include_once('../include/config.php');
 include_once('../include/HTML_TopBottom.php');
-$requiredUserGroups = array(1);
-$cfgProgDir = '../auth/';
-include($cfgProgDir. "secure.php");
-$db = connect_db();
+
+$showLogin = true;
+
+if(isset($_REQUEST['hash'])) {
+	$id = isValidHash($_REQUEST['hash']);
+	
+	if(!is_numeric($id)) {
+		toLog('error', '', '', 'ongeldige hash (kerkdiensten)');
+		$showLogin = true;
+	} else {
+		$showLogin = false;
+		$_SESSION['ID'] = $id;
+		toLog('info', $id, '', 'kerkdiensten mbv hash');
+	}
+}
+
+if($showLogin) {
+	$requiredUserGroups = array(1);
+	$cfgProgDir = 'auth/';
+	include($cfgProgDir. "secure.php");
+	$db = connect_db();
+}
+
 
 # Als er op een knop gedrukt is, het rooster wegschrijven
 if(isset($_POST['save']) OR isset($_POST['maanden'])) {	

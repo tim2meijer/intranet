@@ -23,7 +23,7 @@ if(isset($_REQUEST['hash'])) {
 	} else {
 		$showLogin = false;
 		$_SESSION['ID'] = $id;
-		toLog('info', $id, '', 'rooter mbv hash');
+		toLog('info', $id, '', 'rooster mbv hash');
 	}
 }
 
