@@ -26,11 +26,14 @@ if(isset($_POST['send_mail'])) {
 		$ReplacedBericht = str_replace ('[[hash_lang]]', $memberData['hash_long'], $ReplacedBericht);
 		
 		if($i==0) {								
-			$FinalHTMLMail = $ReplacedBericht;
+			$FinalHTMLMail = nl2br($ReplacedBericht);
 		} else {
 			$FinalSubject = $ReplacedBericht;
 		}					
 	}
+	
+	$var['from'] = $_POST['mail_afzender'];
+	$var['FromName'] = $_POST['naam_afzender'];
 	
 	if(sendMail($lid, $FinalSubject, $FinalHTMLMail, $var)) {
 		toLog('debug', '', $lid, "Mail met als onderwerp '$FinalSubject' verstuurd");

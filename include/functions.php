@@ -717,6 +717,10 @@ function sendMail($ontvanger, $subject, $bericht, $var) {
 		$mail->FromName = $ScriptTitle;
 	}
 	
+	if($var['ReplyTo'] != "") {
+		$mail->AddReplyTo($var['ReplyTo']);
+	}
+	
 	if($UserData['mail'] != '') {
 		$mail->AddAddress($UserData['mail'], makeName($ontvanger, 5));
 		//echo '|'. $UserData['mail'] .'|'. makeName($ontvanger, 5) .'<br>';
@@ -725,7 +729,7 @@ function sendMail($ontvanger, $subject, $bericht, $var) {
 		$HoofdData = getMemberDetails($hoofd[0]);
 		$mail->AddAddress($HoofdData['mail'], makeName($ontvanger, 5));
 	}
-	$mail->Subject	= $SubjectPrefix . $subject;
+	$mail->Subject	= $SubjectPrefix . trim($subject);
 	$mail->IsHTML(true);
 	$mail->Body			= $HTMLMail;
 	$mail->AltBody	= $PlainMail;

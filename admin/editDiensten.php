@@ -5,6 +5,8 @@ include_once('../include/HTML_TopBottom.php');
 
 $showLogin = true;
 
+$requiredUserGroups = array(1, 20);
+
 if(isset($_REQUEST['hash'])) {
 	$id = isValidHash($_REQUEST['hash']);
 	
@@ -15,12 +17,20 @@ if(isset($_REQUEST['hash'])) {
 		$showLogin = false;
 		$_SESSION['ID'] = $id;
 		toLog('info', $id, '', 'kerkdiensten mbv hash');
+		
+		$authorisatieArray = getMyGroups($id);
+		$overlap = array_intersect ($requiredUserGroups, $authorisatieArray);
+		if(count($overlap) == 0) {
+			$showLogin = true;
+			toLog('error', $id, '', 'geen rechten voor kerkdiensten mbv hash');
+		}
 	}
 }
 
-if($showLogin) {
-	$requiredUserGroups = array(1);
-	$cfgProgDir = 'auth/';
+
+
+if($showLogin) {	
+	$cfgProgDir = '../auth/';
 	include($cfgProgDir. "secure.php");
 	$db = connect_db();
 }
@@ -74,7 +84,6 @@ if(isset($_POST['maanden'])) {
 $diensten = getKerkdiensten(mktime(0,0,0), mktime(date("H"),date("i"),date("s"),(date("n")+(3*$blokken))));
 
 $text[] = "<form method='post' action='$_SERVER[PHP_SELF]'>";
-//$text[] = "<input type='hidden' name='rooster' value='". $_REQUEST['rooster'] ."'>";
 $text[] = "<input type='hidden' name='blokken' value='$blokken'>";
 $text[] = "<table>";
 $text[] = "<tr>";
@@ -128,25 +137,7 @@ foreach($diensten as $dienst) {
 		$text[] = "	<option value='$m'". ($m == $sMin ? ' selected' : '') .">". substr('0'.$m, -2) ."</option>";
 	}
 	$text[] = "	</select></td>";
-	//$text[] = "	<td>-</td>";
-	
-	$text[] = "	<td>";/*<select name='eDag[$dienst]'>";	
-	for($d=1 ; $d<32 ; $d++) {
-		$text[] = "	<option value='$d'". ($d == $eDag ? ' selected' : '') .">$d</option>";
-	}
-	$text[] = "	</select>";
-	$text[] = "	<select name='eMaand[$dienst]'>";
-	for($m=1 ; $m<13 ; $m++) {
-		$text[] = "	<option value='$m'". ($m == $eMaand ? ' selected' : '') .">". $maandArray[$m] ."</option>";
-	}
-	$text[] = "	</select>";
-	$text[] = "	<select name='eJaar[$dienst]'>";
-	for($j=date("Y"); $j<=(date("Y")+10) ; $j++) {
-		$text[] = "	<option value='$j'". ($j == $eJaar ? ' selected' : '') .">". substr($j, -2). "</option>";
-	}
-	$text[] = "	</select>";
-	*/
-	$text[] = "	<select name='eUur[$dienst]'>";
+	$text[] = "	<td><select name='eUur[$dienst]'>";
 	for($u=0; $u<24 ; $u++) {
 		$text[] = "	<option value='$u'". ($u == $eUur ? ' selected' : '') .">$u</option>";
 	}
@@ -158,8 +149,14 @@ foreach($diensten as $dienst) {
 	$text[] = "	</select></td>";
 	
 	$text[] = "	<td><input type='text' name='voorganger[$dienst]' value='". $data['voorganger'] ."'></td>";
-	$text[] = "	<td><input type='text' name='collecte_1[$dienst]' value='". $data['collecte_1'] ."'></td>";
-	$text[] = "	<td><input type='text' name='collecte_2[$dienst]' value='". $data['collecte_2'] ."'></td>";
+	
+	if(in_array(1, getMyGroups($_SESSION['ID']))) {
+		$text[] = "	<td><input type='text' name='collecte_1[$dienst]' value='". $data['collecte_1'] ."'></td>";
+		$text[] = "	<td><input type='text' name='collecte_2[$dienst]' value='". $data['collecte_2'] ."'></td>";
+	} else {
+		$text[] = "	<td><input type='hidden' name='collecte_1[$dienst]' value='". $data['collecte_1'] ."'>". $data['collecte_1'] ."</td>";
+		$text[] = "	<td><input type='hidden' name='collecte_2[$dienst]' value='". $data['collecte_2'] ."'>". $data['collecte_2'] ."</td>";
+	}	
 	$text[] = "	<td><input type='text' name='bijz[$dienst]' value='". $data['bijzonderheden'] ."'></td>";
 	$text[] = "<tr>";
 }
