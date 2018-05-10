@@ -455,14 +455,22 @@ function removeGroupLeden($commID) {
 
 function removeFromRooster($rooster, $dienst) {
 	global $TablePlanning, $PlanningDienst, $PlanningGroup;
+	global $TableRoosOpm, $RoosOpmDienst, $RoosOpmRoos;
+	
 	$db = connect_db();
+	
+	$query[0] = false;
+	$query[1] = false;
 	
 	$sql = "DELETE FROM $TablePlanning WHERE $PlanningDienst = $dienst AND $PlanningGroup = $rooster";
 	if(mysqli_query($db, $sql)) {
-		return true;
-	} else {
-		return false;
+		$query[0] = true;
 	}
+	
+	$sql = "DELETE FROM $TableRoosOpm WHERE $RoosOpmDienst = $dienst AND $RoosOpmRoos = $rooster";
+	if(mysqli_query($db, $sql)) {
+		$query[1] = true;
+	}	
 }
 
 function add2Rooster($rooster, $dienst, $persoon, $positie) {
@@ -974,6 +982,36 @@ function isValidHash($hash) {
 	} else {
 		$row = mysqli_fetch_array($result);
 		return $row[$UserID];
+	}
+}
+
+function updateRoosterOpmerking($rooster, $dienst, $opmerking) {
+	global $TableRoosOpm, $RoosOpmRoos, $RoosOpmDienst, $RoosOpmOpmerking;
+	
+	$db = connect_db();	
+	$sql = "SELECT * FROM $TableRoosOpm WHERE $RoosOpmRoos = $rooster AND $RoosOpmDienst = $dienst";
+	$result	= mysqli_query($db, $sql);
+	
+	if(mysqli_num_rows($result) == 0) {
+		$sql = "INSERT INTO $TableRoosOpm ($RoosOpmRoos, $RoosOpmDienst, $RoosOpmOpmerking) VALUES ($rooster, $dienst, '". urldecode($opmerking) ."')";
+	} else {
+		$sql = "UPDATE $TableRoosOpm SET $RoosOpmOpmerking = '". urldecode($opmerking) ."' WHERE $RoosOpmRoos = $rooster AND $RoosOpmDienst = $dienst";
+	}	
+
+	return mysqli_query($db, $sql);
+}
+
+function getRoosterOpmerking($rooster, $dienst) {
+	global $TableRoosOpm, $RoosOpmRoos, $RoosOpmDienst, $RoosOpmOpmerking;
+	
+	$db = connect_db();	
+	$sql = "SELECT * FROM $TableRoosOpm WHERE $RoosOpmRoos = $rooster AND $RoosOpmDienst = $dienst";
+	$result	= mysqli_query($db, $sql);
+	if(mysqli_num_rows($result) != 0) {
+		$row = mysqli_fetch_array($result);
+		return urldecode($row[$RoosOpmOpmerking]);
+	} else {
+		return '';
 	}
 }
 

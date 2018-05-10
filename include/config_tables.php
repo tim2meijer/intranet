@@ -7,13 +7,14 @@ setlocale(LC_ALL, 'nl_NL');
 $ScriptURL				= '';
 $ScriptTitle			= '';	# Naam van het script (is naam van afzender in mails)
 $ScriptMailAdress	= '';			# Mailadres van het script (is mailadres van afzender in mails)
-$Version					= '2.1';		# Versie nummer
+$Version					= '2.2';		# Versie nummer
 $SubjectPrefix		= '[3GK] ';		# Voorvoegsel bij de onderwerpregel bij het versturen van mails
 
 $lengthShortHash = 16;
 $lengthLongHash = 64;
 
 # Tabel- en veldnamen voor de verschillende tabellen in MySQL
+
 $TableUsers					= "leden";
 $UserID							= "scipio_id";
 $UserStatus					= "status";
@@ -48,9 +49,7 @@ $TableGroups				= "groepen";
 $GroupID						= "id";
 $GroupNaam					= "naam";
 $GroupHTMLIn				= "html_intern";
-#$GroupShowIn				= "show_intern";
 $GroupHTMLEx				= "html_extern";
-#$GroupShowEx				= "show_extern";
 $GroupBeheer				= "beheerder";
 
 $TableRoosters			= "roosters";
@@ -99,6 +98,12 @@ $LogType						= "type";
 $LogUser						= "dader";
 $LogSubject					= "slachtoffer";
 $LogMessage					= "message";
+
+$TableRoosOpm				= "rooster_opmerkingen";
+$RoosOpmID					= "id";
+$RoosOpmRoos				= "rooster";
+$RoosOpmDienst			= "dienst";
+$RoosOpmOpmerking		= "opmerking";
 
 $wijkArray			= array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J');
 $statusArray		= array('actief', 'afgemeld', 'afgevoerd', 'onttrokken', 'overleden', 'vertrokken');
