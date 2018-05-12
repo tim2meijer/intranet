@@ -376,7 +376,7 @@ function getMyRoostersBeheer($id) {
 }
 
 function getRoosterDetails($id) {
-	global $TableRoosters, $RoostersID, $RoostersNaam, $RoostersGroep, $RoostersFields, $RoostersMail, $RoostersSubject, $RoostersFrom, $RoostersFromAddr, $RoostersGelijk;
+	global $TableRoosters, $RoostersID, $RoostersNaam, $RoostersGroep, $RoostersFields, $RoostersMail, $RoostersSubject, $RoostersFrom, $RoostersFromAddr, $RoostersGelijk, $RoostersOpmerking;
 	$db = connect_db();
 	
 	$data = array();
@@ -391,7 +391,8 @@ function getRoosterDetails($id) {
 		$data['onderwerp_mail']	= urldecode($row[$RoostersSubject]);		
 		$data['naam_afzender']	= urldecode($row[$RoostersFrom]);
 		$data['mail_afzender']	= urldecode($row[$RoostersFromAddr]);
-		$data['gelijk']	= $row[$RoostersGelijk];		
+		$data['gelijk']	= $row[$RoostersGelijk];
+		$data['opmerking']	= $row[$RoostersOpmerking];
 	}
 	return $data;	
 }

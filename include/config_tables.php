@@ -7,7 +7,7 @@ setlocale(LC_ALL, 'nl_NL');
 $ScriptURL				= '';
 $ScriptTitle			= '';	# Naam van het script (is naam van afzender in mails)
 $ScriptMailAdress	= '';			# Mailadres van het script (is mailadres van afzender in mails)
-$Version					= '2.2';		# Versie nummer
+$Version					= '2.2.1';		# Versie nummer
 $SubjectPrefix		= '[3GK] ';		# Voorvoegsel bij de onderwerpregel bij het versturen van mails
 
 $lengthShortHash = 16;
@@ -62,6 +62,7 @@ $RoostersSubject		= "onderwerp";
 $RoostersFrom				= "naam_afzender";
 $RoostersFromAddr		= "mail_afzender";
 $RoostersGelijk			= "gelijke_diensten";
+$RoostersOpmerking	= "opmerking";
 $RoostersLastChange	= "last_change";
 
 $TableGrpUsr				= "group_member";

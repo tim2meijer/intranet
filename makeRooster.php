@@ -66,7 +66,7 @@ if(isset($_POST['save']) OR isset($_POST['maanden'])) {
 	
 	toLog('info', $_SESSION['ID'], '', 'Rooster '. $RoosterData['naam'] .' aangepast');
 	
-	$sql = "UPDATE $TableRoosters SET $RoostersGelijk = '". $_POST['gelijkeDiensten'] ."', $RoostersLastChange = '". date("Y-m-d H:i:s") ."' WHERE $RoostersID like ". $_POST['rooster'];
+	$sql = "UPDATE $TableRoosters SET $RoostersGelijk = '". $_POST['gelijkeDiensten'] ."', $RoostersOpmerking = '". $_POST['interneOpmerking'] ."', $RoostersLastChange = '". date("Y-m-d H:i:s") ."' WHERE $RoostersID like ". $_POST['rooster'];
 	mysql_query($sql);
 }
 
@@ -110,15 +110,21 @@ if(isset($_REQUEST['hash'])) {
 	$block_1[] = "<input type='hidden' name='hash' value='". $_REQUEST['hash'] ."'>";
 }
 $block_1[] = "<input type='hidden' name='blokken' value='$blokken'>";
-$block_1[] = "<table>";
+$block_1[] = "<table border=0>";
 $block_1[] = "<tr>";
 $block_1[] = "	<td align='right' valign='top'><input type='checkbox' name='gelijkeDiensten' value='1'". ($RoosterData['gelijk'] == 1 ? ' checked' : '') ."></td>";
-$block_1[] = "	<td colspan='". ($nrFields+2) ."' align='left'>Bij meer diensten/dag is het rooster gelijk <small>(pas effect na opslaan)</small></td>";
+$block_1[] = "	<td colspan='". ($nrFields+1+$RoosterData['opmerking']) ."' align='left'>Bij meer diensten per dag is het rooster voor alle diensten gelijk<br><small>(pas effect na opslaan)</small></td>";
+$block_1[] = "</tr>";
+$block_1[] = "<tr>";
+$block_1[] = "	<td align='right' valign='top'><input type='checkbox' name='interneOpmerking' value='1'". ($RoosterData['opmerking'] == 1 ? ' checked' : '') ."></td>";
+$block_1[] = "	<td colspan='". ($nrFields+1+$RoosterData['opmerking']) ."' align='left'>Mogelijkheid om interne opmerkingen bij het rooster te plaatsen<br><small>(huidige opmerkingen worden verwijderd bij uitvinken)</small></td>";
 $block_1[] = "</tr>";
 $block_1[] = "<tr>";
 $block_1[] = "	<td><b>Dienst</b></td>";
-$block_1[] = "	<td colspan='$nrFields'><b>Persoon</b></td>";
-$block_1[] = "	<td align='left'><b>Interne opmerking</b></td>";
+$block_1[] = "	<td colspan='$nrFields' width='1'><b>Persoon</b></td>";
+if($RoosterData['opmerking'] == 1) {
+	$block_1[] = "	<td align='left'><b>Interne opmerking</b></td>";
+}
 $block_1[] = "	<td align='left'><b>Bijzonderheid</b></td>";
 $block_1[] = "</tr>";
 
@@ -144,14 +150,16 @@ foreach($diensten as $dienst) {
 			$selected = next($vulling);
 		}
 		
-		$block_1[] = "	<td><input type='text' name='opmerking[$dienst]' value='$opmerking'></td>";
+		if($RoosterData['opmerking'] == 1) {
+			$block_1[] = "	<td><input type='text' name='opmerking[$dienst]' value='$opmerking' size='50'></td>";
+		}
 		$block_1[] = "	<td>". $details['bijzonderheden']."</td>";
 		$block_1[] = "</tr>";
 	}
 }
 
 $block_1[] = "<tr>";
-$block_1[] = "<td colspan='". ($nrFields+2) ."' align='middle'><input type='submit' name='save' value='Rooster opslaan'>&nbsp;<input type='submit' name='maanden' value='Volgende 3 maanden'></td>";
+$block_1[] = "<td colspan='". ($nrFields+2+$RoosterData['opmerking']) ."' align='middle'><input type='submit' name='save' value='Rooster opslaan'>&nbsp;<input type='submit' name='maanden' value='Volgende 3 maanden'></td>";
 $block_1[] = "</tr>";
 $block_1[] = "</table>";
 $block_1[] = "</form>";
