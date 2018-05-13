@@ -62,8 +62,16 @@ echo "	</tr>".NL;
 
 if(in_array(1, getMyGroups($_SESSION['ID']))) {	
 	echo "	<tr>".NL;
-	echo "		<td><b>Hash</b></td>".NL;
+	echo "		<td valign='top'><b>Hash</b></td>".NL;
 	echo "		<td>". $personData['hash_short'] ."<br>". $personData['hash_long'] ."</td>".NL;
+	echo "	</tr>".NL;
+	echo "	<tr>".NL;
+	echo "		<td><b>Burgerlijk</b></td>".NL;
+	echo "		<td>". $personData['burgelijk'] ."</td>".NL;
+	echo "	</tr>".NL;
+	echo "	<tr>".NL;
+	echo "		<td><b>Relatie</b></td>".NL;
+	echo "		<td>". $personData['relatie'] ."</td>".NL;
 	echo "	</tr>".NL;
 }
 

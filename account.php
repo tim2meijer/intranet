@@ -54,6 +54,9 @@ if(isset($_POST['data_opslaan']) AND $unique) {
 } else {
 	$text[] = "<form action='". $_SERVER['PHP_SELF'] ."' method='post'>";
 	$text[] = "<input type='hidden' name='id' value='$id'>";
+	if(isset($_REQUEST['hash'])) {
+		$text[] = "<input type='hidden' name='hash' value='". $_REQUEST['hash'] ."'>";
+	}
 	$text[] = "<table border=0 width=100%>";
 	$text[] = "<tr>";
 	$text[] = "	<td width=4%>&nbsp;</td>";
