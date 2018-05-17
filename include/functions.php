@@ -1016,4 +1016,64 @@ function getRoosterOpmerking($rooster, $dienst) {
 	}
 }
 
+function getAgendaItems($user, $tijd) {
+	global $TableAgenda, $AgendaID, $AgendaOwner, $AgendaStart;
+	
+	$db = connect_db();
+	if($user != 'all') {
+		$where[] = "$AgendaOwner = $user";
+	}
+	
+	$where[] = "$AgendaStart > $tijd";
+		
+	$sql = "SELECT * FROM $TableAgenda WHERE ". implode(' AND ', $where) ." ORDER BY $AgendaStart";
+	$result = mysqli_query($db, $sql);
+	if($row = mysqli_fetch_array($result)) {
+		do {
+			$ids[] = $row[$AgendaID];
+		} while($row = mysqli_fetch_array($result));
+	}
+	
+	return $ids;
+}
+
+function getAgendaDetails($id) {
+	global $TableAgenda, $AgendaID, $AgendaStart, $AgendaEind, $AgendaTitel, $AgendaDescr, $AgendaOwner;
+	
+	$db = connect_db();
+	$sql = "SELECT * FROM $TableAgenda WHERE $AgendaID like $id";
+	$result = mysqli_query($db, $sql);
+	$row = mysqli_fetch_array($result);
+	
+	$data['start']		= $row[$AgendaStart];
+	$data['eind']			= $row[$AgendaEind];
+	$data['titel']		= urldecode($row[$AgendaTitel]);
+	$data['descr']		= urldecode($row[$AgendaDescr]);
+	$data['eigenaar']	= $row[$AgendaOwner];
+	
+	return $data;
+}
+
+function replaceVoorganger($string) {
+	$delen = explode(',', $string);
+	
+	if(count($delen) == 2)	$string = $delen[0]. ' ('. $delen[1] .')';
+	
+	switch (trim($string)) {
+		case "Wim":
+			$voorganger = "ds. W.M. van Wijk";
+      break;
+		case "Evert":
+			$voorganger = "ds. E. Everts";
+			break;
+		case "Cor":
+			$voorganger = "br. C. Weeda";
+			break;
+		default:
+			$voorganger = lcfirst($string);
+		}
+		
+		return $voorganger;        
+}
+
 ?>

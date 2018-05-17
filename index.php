@@ -122,8 +122,6 @@ if(in_array(1, getMyGroups($_SESSION['ID']))) {
 	$adminLinks['admin/log.php'] = 'Bekijk logfiles';
 	$adminLinks['sendMail.php'] = 'Verstuur mail';
 	$adminLinks['onderhoud/cleanUpDb.php'] = 'Verwijder oude diensten';
-	$adminLinks['onderhoud/importOuderlingen.php'] = 'Importeer ouderlingen/diakenen';
-	$adminLinks['scipio/ScipioImport.php'] = 'Scipio-data inladen';
 	$adminLinks['../dumper/'] = 'Dumper';
 	
 	foreach($adminLinks as $link => $naam) {
@@ -139,6 +137,10 @@ if(in_array(1, getMyGroups($_SESSION['ID']))) {
 	
 	$koppelLinks['makeiCal.php'] = 'Persoonlijke iCals aanmaken';
 	$koppelLinks['makeiCalScipio.php'] = 'iCal voor Scipio aanmaken';
+	$koppelLinks['onderhoud/importOuderlingen.php'] = 'Importeer ouderlingen/diakenen';
+	$koppelLinks['onderhoud/importVoorgangers.php'] = 'Importeer voorgangers';
+	$koppelLinks['onderhoud/importCollecten.php'] = 'Importeer collectes';
+	$koppelLinks['scipio/ScipioImport.php'] = 'Scipio-data inladen';
 	
 	foreach($koppelLinks as $link => $naam) {
 		$koppelDeel[] = "<a href='$link' target='_blank'>$naam</a>";
@@ -150,6 +152,8 @@ if(in_array(1, getMyGroups($_SESSION['ID']))) {
 # Hyperlinks
 $links[] = "<b>Links</b>";
 $links[] = "<a href='http://draijer.org/extern/trinitas/' target='_blank'>Trinitas</a>";
+$links[] = "<a href='http://draijer.org/extern/3GK/gebedskalender/' target='_blank'>Gebedskalender</a>";
+$links[] = "<a href='http://koningskerkdeventer.nl/' target='_blank'>koningskerkdeventer.nl/</a>";
 $blockArray[] = implode("<br>".NL, $links);
 
 
