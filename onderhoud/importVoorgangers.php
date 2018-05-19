@@ -51,8 +51,8 @@ foreach ($Reader as $Row) {
 						toLog('error', '', '', 'Wijziging voorganger '. date("d-m", $start) .' ('. current($voorganger) .') ging niet goed');
 					}					
 				}
+				toLog('debug', '', '', 'Voorganger '. date("d-m", $start) ." ($dienst): ". current($voorganger));
 				next($voorganger);
-				toLog('debug', '', '', 'Voorganger '. date("d-m", $start) .' ($dienst): '. current($voorganger));
 			}
 		} else {
 			toLog('info', '', '', 'Mismatch tussen aantal diensten op '. date("d-m", $start));

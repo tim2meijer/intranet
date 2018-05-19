@@ -121,7 +121,7 @@ for($r=1 ; $r < $aantal ; $r++) {
 						}
 					} else {
 						add2Rooster(9, $dienstID, $diaken, $id);
-						if($ouderling != $vullingD[$id_old]) {
+						if($diaken != $vullingD[$id_old]) {
 							toLog('info', '', $diaken, 'Wijziging diaken '. date("d-m", $details['start']) .': '. makeName($vullingD[$id_old], 5) .' -> '. makeName($diaken, 5));
 						} else {
 							toLog('debug', '', $diaken, 'Diaken '. date("d-m", $details['start']) .': '. makeName($diaken, 5));
