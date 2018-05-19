@@ -104,6 +104,7 @@ foreach($IDs as $member) {
 $diensten = getKerkdiensten(mktime(0,0,0), mktime(date("H"),date("i"),date("s"),(date("n")+(3*$blokken))));
 $nrFields = $RoosterData['aantal'];
 
+$block_1[] = "<h2>Rooster</h2>";
 $block_1[] = "<form method='post' action='$_SERVER[PHP_SELF]'>";
 $block_1[] = "<input type='hidden' name='rooster' value='". $_REQUEST['rooster'] ."'>";
 if(isset($_REQUEST['hash'])) {
@@ -134,11 +135,12 @@ foreach($diensten as $dienst) {
 		$vulling = getRoosterVulling($_REQUEST['rooster'], $dienst);
 		$opmerking = getRoosterOpmerking($_REQUEST['rooster'], $dienst);
 		$selected = current($vulling);
-		
+				
 		$block_1[] = "<tr>";
 		$block_1[] = "	<td align='right'>". strftime("%A %d %b %H:%M", $details['start'])."</td>";
 		
 		for($n=0 ; $n < $nrFields ; $n++) {
+			if($selected != 0) $statistiek[$selected]++;
 			$block_1[] = "	<td><select name='persoon[$dienst][]'>";
 			$block_1[] = "	<option value=''>&nbsp;</option>";
 							
@@ -164,7 +166,26 @@ $block_1[] = "</tr>";
 $block_1[] = "</table>";
 $block_1[] = "</form>";
 
+$block_3[] = "<h2>Statistiek</h2>";
+$block_3[] = "Op basis van de roosterdata zoals die hierboven is opgeslagen, wordt statistiek berekend.<br>";
+$block_3[] = "Mogelijk moet het rooster dus nog worden opgeslagen om de meest recente statistiek te krijgen.<br>";
+$block_3[] = "<br>";
+$block_3[] = "<table>";
 
+asort($statistiek, SORT_STRING);
+foreach($statistiek as $lid => $aantal) {
+	$block_3[] = '<tr>';
+	$block_3[] = '	<td>'. makeName($lid, 5) .'</td>';
+	$block_3[] = '	<td>&nbsp;</td>';
+	$block_3[] = '	<td>'. $aantal .'</td>';
+	$block_3[] = '<tr>';
+}
+$block_3[] = '</table>';
+
+$block_2[] = "<h2>Remindermail</h2>";
+$block_2[] = "3 dagen voordat iemand op het rooster staat krijgt hij/zij een mail als reminder.<br>";
+$block_2[] = "Hieronder kan die mail worden vormgegeven.<br>";
+$block_2[] = "<br>";
 $block_2[] = "<form method='post' action='$_SERVER[PHP_SELF]'>";
 $block_2[] = "<input type='hidden' name='rooster' value='". $_REQUEST['rooster'] ."'>";
 $block_2[] = "<table>";
@@ -196,6 +217,8 @@ $block_2[] = "</form>";
 echo $HTMLHeader;
 echo "<h1>". $RoosterData['naam'] ."</h1>".NL;
 echo showBlock(implode(NL, $block_1), 100);
+echo "<p>";
+echo showBlock(implode(NL, $block_3), 100);
 echo "<p>";
 echo showBlock(implode(NL, $block_2), 100);
 echo $HTMLFooter;
