@@ -52,6 +52,12 @@ for($r=1 ; $r < $aantal ; $r++) {
 		$dienstID = array_search ($datum, $datumString);
 		echo '<b>'. $datum .' ('. $dienstID .')</b><br>';
 		
+		$vullingOvD	= getRoosterVulling(7, $dienstID);
+		$vullingDvD	= getRoosterVulling(10, $dienstID);
+		$vullingO		= getRoosterVulling(8, $dienstID);
+		$vullingD		= getRoosterVulling(9, $dienstID);
+		$details		= getKerkdienstDetails($dienstID);
+		
 		# Alle ouderlingen doorlopen
 		if($Oud[0] != '') {
 			$ouderlingID = array();			
@@ -73,8 +79,10 @@ for($r=1 ; $r < $aantal ; $r++) {
 			foreach($ouderlingID as $id => $ouderling) {			
 				if($id == 0) {
 					add2Rooster(7, $dienstID, $ouderling, $id);
+					if($ouderling != $vullingOvD[0])	toLog('info', '', '', 'Wijziging ouderling van dienst '. date("d-m", $details['start']) .': '. makeName($vullingOvD[0], 5) .' -> '. makeName($ouderling, 5));
 				} else {
 					add2Rooster(8, $dienstID, $ouderling, $id);
+					if($ouderling != $vullingO[$id])	toLog('info', '', '', 'Wijziging ouderling '. date("d-m", $details['start']) .': '. makeName($vullingO[$id], 5) .' -> '. makeName($ouderling, 5));
 				}
 			}			
 		}
@@ -100,8 +108,10 @@ for($r=1 ; $r < $aantal ; $r++) {
 			foreach($diakenID as $id => $diaken) {
 				if($id == 0) {
 					add2Rooster(10, $dienstID, $diaken, $id);
+					if($diaken != $vullingDvD[0])	toLog('info', '', '', 'Wijziging diaken van dienst '. date("d-m", $details['start']) .': '. makeName($vullingDvD[0], 5) .' -> '. makeName($diaken, 5));
 				} else {
 					add2Rooster(9, $dienstID, $diaken, $id);
+					if($ouderling != $vullingD[$id])	toLog('info', '', '', 'Wijziging diaken '. date("d-m", $details['start']) .': '. makeName($vullingD[$id], 5) .' -> '. makeName($diaken, 5));
 				}
 			}			
 		}		

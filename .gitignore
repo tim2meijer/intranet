@@ -52,3 +52,5 @@ admin/log.php
 admin/log.php
 *.ics
 include/config_db.php
+onderhoud/local_preekrooster.xlsx
+onderhoud/local_collecterooster.xlsx

@@ -1057,7 +1057,7 @@ function getAgendaDetails($id) {
 function replaceVoorganger($string) {
 	$delen = explode(',', $string);
 	
-	if(count($delen) == 2)	$string = $delen[0]. ' ('. $delen[1] .')';
+	if(count($delen) == 2)	$string = $delen[0]. ' ('. trim($delen[1]) .')';
 	
 	switch (trim($string)) {
 		case "Wim":

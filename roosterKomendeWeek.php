@@ -11,7 +11,7 @@ $roosters = getRoosters();
 foreach($diensten as $dienst) {	
 	$details = getKerkdienstDetails($dienst);
 	
-	if($details['bijzonderheden'] != "") { $postfix = ' - '.$details['bijzonderheden']; } else { $postfix = ''; }
+	if($details['bijzonderheden'] != "") { $postfix = $details['bijzonderheden']; } else { $postfix = ''; }
 	
 	if(date("H", $details['start']) < 12) {
 		$dagdeel = "Ochtenddienst";
@@ -24,7 +24,15 @@ foreach($diensten as $dienst) {
 	$block_1 = array();
 	$block_1[] = "<table width='100%' border=0>";
 	$block_1[] = "<tr>";
-	$block_1[] = "	<td valign='top' colspan='2'><h1>". $dagdeel .' '.$details['voorganger'].$postfix ."</h1></td>";
+	$block_1[] = "	<td valign='top' colspan='2'><h1>". $dagdeel .' '. strftime("%d %b", $details['start']).($details['bijzonderheden'] != "" ? ' ('.$details['bijzonderheden'].')' : '').'; '.$details['voorganger']."</h1></td>";
+	$block_1[] = "</tr>".NL;
+	$block_1[] = "<tr>";
+	$block_1[] = "	<td valign='top' width='250'>1ste collecte</td>";
+	$block_1[] = "	<td valign='top'>". $details['collecte_1'] ."</td>";
+	$block_1[] = "</tr>".NL;
+	$block_1[] = "<tr>";
+	$block_1[] = "	<td valign='top' width='250'>2de collecte</td>";
+	$block_1[] = "	<td valign='top'>". $details['collecte_2'] ."</td>";
 	$block_1[] = "</tr>".NL;
 	
 	foreach($roosters as $rooster) {
@@ -40,7 +48,7 @@ foreach($diensten as $dienst) {
 			}
 				
 			$block_1[] = "<tr>";
-			$block_1[] = "	<td valign='top' width='250'>". $roosterDetails['naam'] ."</td>";
+			$block_1[] = "	<td valign='top' width='250'><a href='showRooster.php?rooster=$rooster'>". $roosterDetails['naam'] ."</a></td>";
 			$block_1[] = "	<td valign='top'>". implode('<br>', $namen)."</td>";
 			$block_1[] = "</tr>".NL;
 		}
