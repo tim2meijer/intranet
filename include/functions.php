@@ -1,4 +1,5 @@
 <?php
+
 function connect_db() {
 	global $dbHostname, $dbUsername, $dbPassword, $dbName;
 	

@@ -73,6 +73,10 @@ if(in_array(1, getMyGroups($_SESSION['ID']))) {
 	echo "		<td><b>Relatie</b></td>".NL;
 	echo "		<td>". $personData['relatie'] ."</td>".NL;
 	echo "	</tr>".NL;
+	echo "	<tr>".NL;
+	echo "		<td><b>Gebruikersnaam</b></td>".NL;
+	echo "		<td><a href='account.php?id=$id'>". $personData['username'] ."</a></td>".NL;
+	echo "	</tr>".NL;
 }
 
 echo "	</table>".NL;

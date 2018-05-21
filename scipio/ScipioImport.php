@@ -92,6 +92,20 @@ foreach ($xml->persoon as $element) {
 		
 	# Ja -> updaten
 	} else {
+		$oldData = getMemberDetails($element->regnr);		
+		if($oldData['status'] != $velden[$UserStatus])						toLog('info', '', $element->regnr, 'Wijziging Scipio status: '. $oldData['status'] .' -> '. $velden[$UserStatus]);
+		if($oldData['adres'] != $velden[$UserAdres])							toLog('info', '', $element->regnr, 'Wijziging Scipio adres: '. $oldData['adres'] .' -> '. $velden[$UserAdres]);
+		if($oldData['belijdenis'] != $velden[$UserBelijdenis])		toLog('info', '', $element->regnr, 'Wijziging Scipio belijdenis: '. $oldData['belijdenis'] .' -> '. $velden[$UserBelijdenis]);
+		if($oldData['achternaam'] != $velden[$UserAchternaam])		toLog('info', '', $element->regnr, 'Wijziging Scipio achternaam: '. $oldData['achternaam'] .' -> '. $velden[$UserAchternaam]);
+		if($oldData['meisjesnaam'] != $velden[$UserMeisjesnaam])	toLog('info', '', $element->regnr, 'Wijziging Scipio meisjesnaam: '. $oldData['meisjesnaam'] .' -> '. $velden[$UserMeisjesnaam]);
+		if($oldData['straat'] != $velden[$UserStraat])						toLog('info', '', $element->regnr, 'Wijziging Scipio straat: '. $oldData['straat'] .' -> '. $velden[$UserStraat]);
+		if($oldData['huisnummer'] != $velden[$UserHuisnummer])		toLog('info', '', $element->regnr, 'Wijziging Scipio huisnummer: '. $oldData['huisnummer'] .' -> '. $velden[$UserHuisnummer]);
+		if($oldData['toevoeging'] != $velden[$UserToevoeging])		toLog('info', '', $element->regnr, 'Wijziging Scipio toevoeging: '. $oldData['toevoeging'] .' -> '. $velden[$UserToevoeging]);
+		if($oldData['burgelijk'] != $velden[$UserBurgelijk])			toLog('info', '', $element->regnr, 'Wijziging Scipio burgerlijk: '. $oldData['burgerlijk'] .' -> '. $velden[$UserBurgelijk]);
+		if($oldData['relatie'] != $velden[$UserRelatie])					toLog('info', '', $element->regnr, 'Wijziging Scipio relatie: '. $oldData['relatie'] .' -> '. $velden[$UserRelatie]);
+		if($oldData['tel'] != $velden[$UserTelefoon])							toLog('info', '', $element->regnr, 'Wijziging Scipio telefoon: '. $oldData['tel'] .' -> '. $velden[$UserTelefoon]);
+		if($oldData['mail'] != $velden[$UserMail])								toLog('info', '', $element->regnr, 'Wijziging Scipio mail: '. $oldData['mail'] .' -> '. $velden[$UserMail]);
+		
 		$update = array();
 		$update[] = "$UserLastChange = ". time();
 		foreach($velden as $veld => $waarde) {

@@ -153,7 +153,8 @@ if(in_array(1, getMyGroups($_SESSION['ID']))) {
 $links[] = "<b>Links</b>";
 $links[] = "<a href='http://draijer.org/extern/trinitas/' target='_blank'>Trinitas</a>";
 $links[] = "<a href='http://draijer.org/extern/3GK/gebedskalender/' target='_blank'>Gebedskalender</a>";
-$links[] = "<a href='http://koningskerkdeventer.nl/' target='_blank'>koningskerkdeventer.nl/</a>";
+$links[] = "<a href='http://koningskerkdeventer.nl/' target='_blank'>koningskerkdeventer.nl</a>";
+$links[] = "<a href='agenda.php' target='_blank'>Agenda voor Scipio</a>";
 $blockArray[] = implode("<br>".NL, $links);
 
 
