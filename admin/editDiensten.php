@@ -148,7 +148,7 @@ foreach($diensten as $dienst) {
 	}
 	$text[] = "	</select></td>";
 	
-	$text[] = "	<td><input type='text' name='voorganger[$dienst]' value='". $data['voorganger'] ."' size='30'></td>";
+	$text[] = "	<td><input type='text' name='voorganger[$dienst]' value=\"". $data['voorganger'] ."\" size='30'></td>";
 	
 	if(in_array(1, getMyGroups($_SESSION['ID']))) {
 		$text[] = "	<td><input type='text' name='collecte_1[$dienst]' value='". $data['collecte_1'] ."'></td>";

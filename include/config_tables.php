@@ -7,7 +7,7 @@ setlocale(LC_ALL, 'nl_NL');
 $ScriptURL				= '';
 $ScriptTitle			= '';	# Naam van het script (is naam van afzender in mails)
 $ScriptMailAdress	= '';			# Mailadres van het script (is mailadres van afzender in mails)
-$Version					= '2.2.2';		# Versie nummer
+$Version					= '2.3';		# Versie nummer
 $SubjectPrefix		= '[3GK] ';		# Voorvoegsel bij de onderwerpregel bij het versturen van mails
 
 $lengthShortHash = 16;
@@ -63,6 +63,7 @@ $RoostersFrom				= "naam_afzender";
 $RoostersFromAddr		= "mail_afzender";
 $RoostersGelijk			= "gelijke_diensten";
 $RoostersOpmerking	= "opmerking";
+$RoostersTextOnly		= "text_only";
 $RoostersLastChange	= "last_change";
 
 $TableGrpUsr				= "group_member";
@@ -83,6 +84,12 @@ $PlanningDienst			= "dienst";
 $PlanningGroup			= "commissie";
 $PlanningUser				= "lid";
 $PlanningPositie		= "positie";
+
+$TablePlanningTxt		= "planning_tekst";
+$PlanningTxTDienst	= "dienst";
+$PlanningTxTGroup		= "rooster";
+$PlanningTxTText		= "text";
+
 
 $TableAgenda				= "agenda";
 $AgendaID 					= "id";

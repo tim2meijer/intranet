@@ -5,11 +5,11 @@ include_once('../../general_include/class.phpmailer.php');
 include_once('../../general_include/class.html2text.php');
 $db = connect_db();
 
-//$startTijd = mktime(0, 0, 0, date("n"), date("j"), date("Y"));
-//$eindTijd = mktime(23, 59, 59, date("n"), (date("j")+7), date("Y")+1);
+$startTijd = mktime(0, 0, 0, date("n"), date("j"), date("Y"));
+$eindTijd = mktime(23, 59, 59, date("n"), (date("j")+7), date("Y")+1);
 
-$startTijd = mktime(0, 0, 0, date("n"), (date("j")+3), date("Y"));
-$eindTijd = mktime(23, 59, 59, date("n"), (date("j")+3), date("Y"));
+//$startTijd = mktime(0, 0, 0, date("n"), (date("j")+3), date("Y"));
+//$eindTijd = mktime(23, 59, 59, date("n"), (date("j")+3), date("Y"));
 
 $diensten = getKerkdiensten($startTijd, $eindTijd);
 $roosters = getRoosters(0);
@@ -40,7 +40,7 @@ foreach($diensten as $dienst) {
 	foreach($roosters as $rooster) {
 		$vulling = $teams[$dienst][$rooster];
 	
-		if(count($vulling) > 0) {
+		if(is_array($vulling) AND count($vulling) > 0) {
 			$roosterData			= getRoosterDetails($rooster);			
 			$HTMLMail					= $roosterData['text_mail'];
 			$onderwerp				= $roosterData['onderwerp_mail'];
@@ -62,6 +62,7 @@ foreach($diensten as $dienst) {
 					$ReplacedBericht = str_replace ('[[voornaam]]', makeName($lid, 1), $ReplacedBericht);
 					$ReplacedBericht = str_replace ('[[achternaam]]', makeName($lid, 4), $ReplacedBericht);
 					$ReplacedBericht = str_replace ('[[dag]]', strftime ("%A", $dienstData['start']), $ReplacedBericht);
+					$ReplacedBericht = str_replace ('[[voorganger]]', $dienstData['voorganger'], $ReplacedBericht);
 										
 					# Als er meer dan 1 teamlid is dan een opsommingslijst, anders gewoon een vermelding
 					if(count($team) == 1) {
@@ -93,7 +94,7 @@ foreach($diensten as $dienst) {
 					if($i==0) {
 						$memberData = getMemberDetails($lid);
 						$ReplacedBericht .= "<p>";
-						$ReplacedBericht .= "Ps 1. : je kan je persoonlijke 3GK-rooster opnemen in je digitale agenda door <a href='". $ScriptURL ."ical/".$memberData['username'].'-'. $memberData['hash'] .".ics'>deze link</a> toe te voegen.<br>";
+						$ReplacedBericht .= "Ps 1. : je kan je persoonlijke 3GK-rooster opnemen in je digitale agenda door <a href='". $ScriptURL ."ical/".$memberData['username'].'-'. $memberData['hash_short'] .".ics'>deze link</a> toe te voegen.<br>";
 						$ReplacedBericht .= "Ps 2. : mocht je onderling geruild hebben, wil je deze mail dan doorsturen naar de betreffende persoon?<br>";
 						
 						# Sommige rooster worden automatisch geimporteerd.
@@ -109,6 +110,8 @@ foreach($diensten as $dienst) {
 						$FinalSubject = $ReplacedBericht;
 					}					
 				}
+				
+				echo $FinalHTMLMail;
 
 				if(sendMail($lid, $FinalSubject, $FinalHTMLMail, $var)) {
 					toLog('debug', '', $lid, 'reminder-mail '. $roosterData['naam'] .' verstuurd');

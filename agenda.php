@@ -101,8 +101,7 @@ if(isset($_POST['remove'])) {
 		$eMin		= date("i", $details['eind']);
 		$titel	= $details['titel'];
 		$descr	= $details['descr'];		
-		$text[] = "<input type='hidden' name='id' value='". $_REQUEST['id'] ."'>";
-		$text[] = "<input type='hidden' name='eigenaar' value='". $details['eigenaar'] ."'>";
+		$text[] = "<input type='hidden' name='id' value='". $_REQUEST['id'] ."'>";		
 	} else {
 		$Dag		= getParam('Dag', date("d"));
 		$Maand	= getParam('Maand', date("m"));
@@ -118,6 +117,20 @@ if(isset($_POST['remove'])) {
 		$text = array('Toestemmingsprobleem, dit id hoort niet bij een afspraak van jou');
 	} else {	
 		$text[] = "<table>";
+		
+		if(!in_array(1, getMyGroups($_SESSION['ID'])) AND isset($_REQUEST['id'])) {
+			$text[] = "<input type='hidden' name='eigenaar' value='". $details['eigenaar'] ."'>";
+		} elseif(isset($_REQUEST['id'])) {
+			$leden = 
+			$text[] = "<tr>";
+			$text[] = "	<td>Eigenaar</td>";
+			$text[] = "	<td colspan=2><select name='eigenaar'>";			
+			$users =  getMembers('volwassen');
+			foreach($users as $userID)	$text[] = "	<option value='$userID'". ($details['eigenaar'] == $userID ? ' selected' : '') .">". makeName($userID, 8) ."</option>";
+			$text[] = "	</select></td>";
+			$text[] = "</tr>";
+		}
+		
 		$text[] = "<tr>";
 		$text[] = "	<td>Datum</td>";
 		$text[] = "	<td colspan=2><select name='Dag'>";

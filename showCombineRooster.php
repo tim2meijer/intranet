@@ -38,14 +38,18 @@ if(count($roosters) > 0) {
 				
 		foreach($roosters as $rooster) {
 			$vulling = getRoosterVulling($rooster, $dienst);
-		
-			if(count($vulling) > 0) {				
+						
+			if(is_array($vulling) AND count($vulling) > 0) {
 				$team = array();	
 				foreach($vulling as $lid) {
 					$team[] = makeName($lid, 5);
 				}
 				$cel[] = "<td valign='top'>". implode("<br>", $team) ."</td>";
 				$rij[] = implode("\n", $team);
+				$gevuldeCel = true;
+			} elseif(is_string($vulling)) {				
+				$cel[] = "<td valign='top'>". $vulling ."</td>";
+				$rij[] = $vulling;
 				$gevuldeCel = true;
 			} else {
 				$cel[] = "<td>&nbsp;</td>";

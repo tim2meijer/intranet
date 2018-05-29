@@ -29,7 +29,6 @@ $header[] = "END:VTIMEZONE";
 
 $footer[] = "END:VCALENDAR";
 
-//$sql_rooster = "SELECT $TablePlanning.$PlanningDienst FROM $TablePlanning, $TableDiensten WHERE $TablePlanning.$PlanningDienst = $TableDiensten.$DienstID AND $TableDiensten.$DienstEind > ". time() ." GROUP BY $PlanningDienst";
 $sql_dienst = "SELECT $DienstID FROM $TableDiensten WHERE $DienstEind > ". (time()-(31*24*60*60));
 $result_dienst = mysqli_query($db, $sql_dienst);
 if($row_dienst = mysqli_fetch_array($result_dienst)) {		
@@ -59,13 +58,18 @@ if($row_dienst = mysqli_fetch_array($result_dienst)) {
 			$ics[] = "SUMMARY:Avonddienst ". $data_dienst['voorganger'].$postfix;
 		}
 		
-		$DESCRIPTION = '';
-		$CollecteString = '';
-		$tmpDienst = array();
+		# Initialiseer
+		$DESCRIPTION = $CollecteString = '';
+		
+		# Collectes
 		if($data_dienst['collecte_1'] != '')	{ $CollecteString .= '1. '. $data_dienst['collecte_1']; }
 		if($data_dienst['collecte_2'] != '')	{ $CollecteString .= '\n2. '. $data_dienst['collecte_2']; }
+		
+		# Controleren op gelijke diensten
+		$tmpDienst = array();
 		foreach($diensten as $tmp) { $tmpDienst[] = "$PlanningDienst = $tmp"; }
 		
+		# Roosters (leden) opvragen
 		$sql_roosters = "SELECT * FROM $TablePlanning WHERE (". implode(' OR ', $tmpDienst) .") GROUP BY $PlanningGroup";
 		$result_roosters = mysqli_query($db, $sql_roosters);
 		if($row_roosters = mysqli_fetch_array($result_roosters)) {			
@@ -92,6 +96,30 @@ if($row_dienst = mysqli_fetch_array($result_dienst)) {
 					$RoosterString .= $data_rooster[$RoostersNaam] .'\n- '. implode('\n- ', $personen) .'\n\n';
 				}
 			} while($row_roosters = mysqli_fetch_array($result_roosters));
+			
+			
+			# Roosters (tekst) opvragen
+			# Let-op : lelijk opgelost, om te checken of er meerdere diensten op 1 zondag zijn hergebruik ik de array van het andere rooster
+			# Dit werkt bij de gratie dat ze dezelfde naam hebben... lelijk
+			$sql_txt_roosters = "SELECT * FROM $TablePlanningTxt WHERE (". implode(' OR ', $tmpDienst) .")";
+			$result_txt_roosters = mysqli_query($db, $sql_txt_roosters);
+			if($row_txt_roosters = mysqli_fetch_array($result_txt_roosters)) {
+				$rooster = $row_txt_roosters[$PlanningTxTGroup];			
+				$data_txt_rooster = getRoosterDetails($rooster);
+				
+				if($data_txt_rooster['gelijk'] == 1) {					
+					$sql_text = "SELECT * FROM $TablePlanningTxt WHERE (". implode(' OR ', $tmpDienst) .") AND $PlanningTxTGroup = $rooster";
+				} else {
+					$sql_text = "SELECT * FROM $TablePlanningTxt WHERE $PlanningTxTDienst = $dienst AND $PlanningTxTGroup = $rooster";
+				}
+				
+				$result_text = mysqli_query($db, $sql_text);				
+				if($row_text = mysqli_fetch_array($result_text)) {
+					$vulling = getRoosterVulling($rooster, $row_text[$PlanningTxTDienst]);
+					
+					$RoosterString .= $data_txt_rooster[$RoostersNaam] .'\n'. $vulling .'\n\n';
+				}
+			}
 									
 			if($CollecteString != '') {
 				$DESCRIPTION = 'COLLECTEN\n'. $CollecteString.'\n\n';

@@ -29,7 +29,7 @@ if(isset($_POST['opvragen'])) {
 		$Mail[] = "Let wel op, iemand met deze link kan zonder in te loggen bij je account komen, wees er dus zuinig op!";
 		
 		$HTMLMail = implode("\n", $Mail);
-						
+		
 		if(!sendMail($id, "Nieuw wachtwoord voor $ScriptTitle", $HTMLMail, $var)) {			
 			toLog('error', $id, '', 'problemen met wachtwoord-mail versturen');
 			$text[] = "Inloggegevens konden helaas niet verstuurd worden";			

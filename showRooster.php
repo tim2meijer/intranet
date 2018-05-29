@@ -37,27 +37,33 @@ foreach($diensten as $dienst) {
 	$details = getKerkdienstDetails($dienst);
 	$vulling = getRoosterVulling($_REQUEST['rooster'], $dienst);
 	
-	if(count($vulling) > 0) {
-		$namen = array();
-			
-		foreach($vulling as $lid) {
-			//$data = getMemberDetails($lid);
-			$string = "<a href='profiel.php?id=$lid'>". makeName($lid, 5) ."</a>";
-			
-			if(in_array($_SESSION['ID'], $IDs)) {
-				if($lid == $_SESSION['ID']) {
-					$string .= " <a href='ruilen.php?rooster=". $_REQUEST['rooster'] ."&dienst_d=$dienst&dader=$lid' title='klik om ruiling door te geven'><img src='images/wisselen.png'></a>";
-				} else {
-					$string .= " <a href='ruilen.php?rooster=". $_REQUEST['rooster'] ."&dienst_s=$dienst&slachtoffer=$lid' title='klik ruiling door te geven'><img src='images/wisselen.png'></a>";
+	# Zijn er namen of is er een tekststring
+	if(count($vulling) > 0 OR $vulling != '') {
+		if($RoosterData['text_only'] == 0) {		
+			$namen = array();
+				
+			foreach($vulling as $lid) {
+				//$data = getMemberDetails($lid);
+				$string = "<a href='profiel.php?id=$lid'>". makeName($lid, 5) ."</a>";
+				
+				if(in_array($_SESSION['ID'], $IDs)) {
+					if($lid == $_SESSION['ID']) {
+						$string .= " <a href='ruilen.php?rooster=". $_REQUEST['rooster'] ."&dienst_d=$dienst&dader=$lid' title='klik om ruiling door te geven'><img src='images/wisselen.png'></a>";
+					} else {
+						$string .= " <a href='ruilen.php?rooster=". $_REQUEST['rooster'] ."&dienst_s=$dienst&slachtoffer=$lid' title='klik ruiling door te geven'><img src='images/wisselen.png'></a>";
+					}
 				}
-			}
-			
-			$namen[] = $string;
+				
+				$namen[] = $string;
+			}			
+			$RoosterString = implode('<br>', $namen);
+		} else {
+			$RoosterString = $vulling;
 		}
 		
 		$block_1[] = "<tr>";
 		$block_1[] = "	<td valign='top'>".strftime("%a %d %b %H:%M", $details['start'])."</td>";
-		$block_1[] = "	<td valign='top'>". implode('<br>', $namen)."</td>";
+		$block_1[] = "	<td valign='top'>". $RoosterString ."</td>";
 		$block_1[] = "</tr>".NL;
 	}
 }

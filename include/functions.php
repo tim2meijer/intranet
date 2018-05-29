@@ -156,6 +156,7 @@ function getAllKerkdiensten($fromNow = false) {
 function getKerkdiensten($startTijd, $eindTijd) {
 	global $TableDiensten, $DienstID, $DienstEind;
 	$db = connect_db();
+	$id = array();
 			
 	$sql = "SELECT $DienstID FROM $TableDiensten WHERE $DienstEind BETWEEN $startTijd AND $eindTijd ORDER BY $DienstEind ASC";
 	$result = mysqli_query($db, $sql);
@@ -377,7 +378,7 @@ function getMyRoostersBeheer($id) {
 }
 
 function getRoosterDetails($id) {
-	global $TableRoosters, $RoostersID, $RoostersNaam, $RoostersGroep, $RoostersFields, $RoostersMail, $RoostersSubject, $RoostersFrom, $RoostersFromAddr, $RoostersGelijk, $RoostersOpmerking;
+	global $TableRoosters, $RoostersID, $RoostersNaam, $RoostersGroep, $RoostersFields, $RoostersMail, $RoostersSubject, $RoostersFrom, $RoostersFromAddr, $RoostersGelijk, $RoostersTextOnly, $RoostersOpmerking;
 	$db = connect_db();
 	
 	$data = array();
@@ -393,6 +394,7 @@ function getRoosterDetails($id) {
 		$data['naam_afzender']	= urldecode($row[$RoostersFrom]);
 		$data['mail_afzender']	= urldecode($row[$RoostersFromAddr]);
 		$data['gelijk']	= $row[$RoostersGelijk];
+		$data['text_only']	= $row[$RoostersTextOnly];
 		$data['opmerking']	= $row[$RoostersOpmerking];
 	}
 	return $data;	
@@ -458,11 +460,13 @@ function removeGroupLeden($commID) {
 function removeFromRooster($rooster, $dienst) {
 	global $TablePlanning, $PlanningDienst, $PlanningGroup;
 	global $TableRoosOpm, $RoosOpmDienst, $RoosOpmRoos;
+	global $TablePlanningTxt, $PlanningTxTDienst, $PlanningTxTGroup;
 	
 	$db = connect_db();
 	
 	$query[0] = false;
 	$query[1] = false;
+	$query[2] = false;
 	
 	$sql = "DELETE FROM $TablePlanning WHERE $PlanningDienst = $dienst AND $PlanningGroup = $rooster";
 	if(mysqli_query($db, $sql)) {
@@ -472,7 +476,12 @@ function removeFromRooster($rooster, $dienst) {
 	$sql = "DELETE FROM $TableRoosOpm WHERE $RoosOpmDienst = $dienst AND $RoosOpmRoos = $rooster";
 	if(mysqli_query($db, $sql)) {
 		$query[1] = true;
-	}	
+	}
+	
+	$sql = "DELETE FROM $TablePlanningTxt WHERE $PlanningTxTDienst = $dienst AND $PlanningTxTGroup = $rooster";
+	if(mysqli_query($db, $sql)) {
+		$query[2] = true;
+	}
 }
 
 function add2Rooster($rooster, $dienst, $persoon, $positie) {
@@ -489,18 +498,25 @@ function add2Rooster($rooster, $dienst, $persoon, $positie) {
 
 function getRoosterVulling($rooster, $dienst) {
 	global $TablePlanning, $PlanningDienst, $PlanningGroup, $PlanningUser, $PlanningPositie;
+	global $TablePlanningTxt, $PlanningTxTDienst, $PlanningTxTGroup, $PlanningTxTText;
 	$db = connect_db();
 	
-	$data = array();
+	$details = getRoosterDetails($rooster);
+	if($details['text_only'] == 0) {
+		$data = array();
 		
-	$sql = "SELECT $PlanningUser FROM $TablePlanning WHERE $PlanningDienst = $dienst AND $PlanningGroup = $rooster ORDER BY $PlanningPositie ASC";
-	$result = mysqli_query($db, $sql);
-	if($row = mysqli_fetch_array($result)) {
-		do {
-			//$pos = $row[$PlanningPositie];
-			//$data[$pos] = $row[$PlanningUser];
-			$data[] = $row[$PlanningUser];
-		} while($row = mysqli_fetch_array($result));		
+		$sql = "SELECT $PlanningUser FROM $TablePlanning WHERE $PlanningDienst = $dienst AND $PlanningGroup = $rooster ORDER BY $PlanningPositie ASC";
+		$result = mysqli_query($db, $sql);
+		if($row = mysqli_fetch_array($result)) {
+			do {
+				$data[] = $row[$PlanningUser];
+			} while($row = mysqli_fetch_array($result));		
+		}
+	} else {
+		$sql = "SELECT $PlanningTxTText FROM $TablePlanningTxt WHERE $PlanningTxTDienst = $dienst AND $PlanningTxTGroup = $rooster";
+		$result = mysqli_query($db, $sql);
+		$row = mysqli_fetch_array($result);
+		$data = $row[$PlanningTxTText];		
 	}
 	return $data;	
 }
@@ -1002,6 +1018,23 @@ function updateRoosterOpmerking($rooster, $dienst, $opmerking) {
 
 	return mysqli_query($db, $sql);
 }
+
+function updateRoosterText($rooster, $dienst, $invulling) {
+	global $TablePlanningTxt, $PlanningTxTDienst, $PlanningTxTGroup, $PlanningTxTText;
+	
+	$db = connect_db();	
+	$sql = "SELECT * FROM $TablePlanningTxt WHERE $PlanningTxTGroup = $rooster AND $PlanningTxTDienst = $dienst";
+	$result	= mysqli_query($db, $sql);
+	
+	if(mysqli_num_rows($result) == 0) {
+		$sql = "INSERT INTO $TablePlanningTxt ($PlanningTxTGroup, $PlanningTxTDienst, $PlanningTxTText) VALUES ($rooster, $dienst, '". urldecode($invulling) ."')";
+	} else {
+		$sql = "UPDATE $TablePlanningTxt SET $PlanningTxTText = '". urldecode($invulling) ."' WHERE $PlanningTxTGroup = $rooster AND $PlanningTxTDienst = $dienst";
+	}	
+
+	return mysqli_query($db, $sql);
+}
+
 
 function getRoosterOpmerking($rooster, $dienst) {
 	global $TableRoosOpm, $RoosOpmRoos, $RoosOpmDienst, $RoosOpmOpmerking;
