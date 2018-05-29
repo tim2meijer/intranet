@@ -104,21 +104,23 @@ if($row_dienst = mysqli_fetch_array($result_dienst)) {
 			$sql_txt_roosters = "SELECT * FROM $TablePlanningTxt WHERE (". implode(' OR ', $tmpDienst) .")";
 			$result_txt_roosters = mysqli_query($db, $sql_txt_roosters);
 			if($row_txt_roosters = mysqli_fetch_array($result_txt_roosters)) {
-				$rooster = $row_txt_roosters[$PlanningTxTGroup];			
-				$data_txt_rooster = getRoosterDetails($rooster);
-				
-				if($data_txt_rooster['gelijk'] == 1) {					
-					$sql_text = "SELECT * FROM $TablePlanningTxt WHERE (". implode(' OR ', $tmpDienst) .") AND $PlanningTxTGroup = $rooster";
-				} else {
-					$sql_text = "SELECT * FROM $TablePlanningTxt WHERE $PlanningTxTDienst = $dienst AND $PlanningTxTGroup = $rooster";
-				}
-				
-				$result_text = mysqli_query($db, $sql_text);				
-				if($row_text = mysqli_fetch_array($result_text)) {
-					$vulling = getRoosterVulling($rooster, $row_text[$PlanningTxTDienst]);
+				do {
+					$rooster = $row_txt_roosters[$PlanningTxTGroup];			
+					$data_txt_rooster = getRoosterDetails($rooster);
 					
-					$RoosterString .= $data_txt_rooster[$RoostersNaam] .'\n'. $vulling .'\n\n';
-				}
+					if($data_txt_rooster['gelijk'] == 1) {					
+						$sql_text = "SELECT * FROM $TablePlanningTxt WHERE (". implode(' OR ', $tmpDienst) .") AND $PlanningTxTGroup = $rooster";
+					} else {
+						$sql_text = "SELECT * FROM $TablePlanningTxt WHERE $PlanningTxTDienst = $dienst AND $PlanningTxTGroup = $rooster";
+					}
+					
+					$result_text = mysqli_query($db, $sql_text);				
+					if($row_text = mysqli_fetch_array($result_text)) {
+						$vulling = getRoosterVulling($rooster, $row_text[$PlanningTxTDienst]);
+						
+						$RoosterString .= $data_txt_rooster[$RoostersNaam] .'\n'. $vulling .'\n\n';
+					}
+				} while($row_txt_roosters = mysqli_fetch_array($result_txt_roosters));
 			}
 									
 			if($CollecteString != '') {
