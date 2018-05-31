@@ -3,8 +3,14 @@ include_once('include/functions.php');
 include_once('include/config.php');
 include_once('include/HTML_TopBottom.php');
 
-$start = mktime(0,0,0);
-$eind = mktime(23,59,59,date("n"), (date("j")+7+(7-date("N"))));
+if(isset($_REQUEST['id'])) {
+	$details = getKerkdienstDetails($_REQUEST['id']);
+	$start = mktime(0,0,0,date("n", $details['start']), date("j", $details['start']), date("Y", $details['start']));
+	$eind = mktime(23,59,59,date("n", $details['eind']), date("j", $details['eind']), date("Y", $details['eind']));
+} else {
+	$start = mktime(0,0,0);
+	$eind = mktime(23,59,59,date("n"), (date("j")+7+(7-date("N"))));
+}
 $diensten = getKerkdiensten($start, $eind);
 $roosters = getRoosters();
 

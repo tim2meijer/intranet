@@ -1092,7 +1092,7 @@ function replaceVoorganger($string) {
 	$delen = explode(',', $string);
 	
 	if(count($delen) == 2)	$string = $delen[0]. ' ('. trim($delen[1]) .')';
-	
+		
 	switch (trim($string)) {
 		case "Wim":
 			$voorganger = "ds. W.M. van Wijk";
@@ -1104,10 +1104,10 @@ function replaceVoorganger($string) {
 			$voorganger = "br. C. Weeda";
 			break;
 		default:
-			$voorganger = lcfirst($string);
-		}
-		
-		return $voorganger;        
+			$voorganger = str_replace('ds ', 'ds. ', lcfirst($string));
+	}
+			
+	return $voorganger;        
 }
 
 ?>
