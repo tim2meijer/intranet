@@ -61,7 +61,6 @@ foreach($diensten as $dienst) {
 		$string = '';
 		
 		if($roosterDetails['text_only'] == 1) {
-			echo 'text';
 			$string = $vulling;
 		} else {
 			if(count($vulling) > 0) {			
