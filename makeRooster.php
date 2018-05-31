@@ -153,9 +153,9 @@ foreach($diensten as $dienst) {
 		$vulling = getRoosterVulling($_REQUEST['rooster'], $dienst);
 		$opmerking = getRoosterOpmerking($_REQUEST['rooster'], $dienst);
 		
-		$block_1[] = "<tr>";		
-		$block_1[] = "	<td align='right'>". strftime("%A %d %b %H:%M", $details['start'])."</td>";
-		
+		$block_1[] = "<tr>";
+		$block_1[] = "	<td align='right'>". ($RoosterData['gelijk'] == 1 ? strftime("%A %d %b", $details['start']) : strftime("%A %d %b %H:%M", $details['start'])) ."</td>";
+				
 		if($RoosterData['text_only'] == 0) {
 			$selected = current($vulling);
 			

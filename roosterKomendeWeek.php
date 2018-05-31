@@ -58,18 +58,27 @@ foreach($diensten as $dienst) {
 		}
 				
 		$vulling = getRoosterVulling($rooster, $roosterDienst);
+		$string = '';
+		
+		if($roosterDetails['text_only'] == 1) {
+			echo 'text';
+			$string = $vulling;
+		} else {
+			if(count($vulling) > 0) {			
+				$namen = array();
 			
-		if(count($vulling) > 0) {			
-			$namen = array();
-			
-			foreach($vulling as $lid) {
-				$string = "<a href='profiel.php?id=$lid'>". makeName($lid, 5) ."</a>";
-				$namen[] = $string;
+				foreach($vulling as $lid) {
+					$string = "<a href='profiel.php?id=$lid'>". makeName($lid, 5) ."</a>";
+					$namen[] = $string;
+				}
+				$string = implode('<br>', $namen);
 			}
-				
+		}
+		
+		if($string != "") {
 			$block_1[] = "<tr>";
 			$block_1[] = "	<td valign='top' width='250'><a href='showRooster.php?rooster=$rooster'>". $roosterDetails['naam'] ."</a></td>";
-			$block_1[] = "	<td valign='top'>". implode('<br>', $namen)."</td>";
+			$block_1[] = "	<td valign='top'>". $string ."</td>";
 			$block_1[] = "</tr>".NL;
 		}
 	}
