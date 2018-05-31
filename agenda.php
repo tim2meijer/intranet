@@ -66,7 +66,7 @@ if(isset($_POST['remove'])) {
 			$mail[] = "Datum : ". strftime("%A %d %B", $startTijd);
 			$mail[] = "Tijd: ". strftime("%H:%M", $startTijd) ." tot ". strftime("%H:%M", $eindTijd);
 			$mail[] = "";
-			$mail[] = "Om deze afspraak te beheren kan je <a href='?id=". mysqli_insert_id($db) ."&hash=". $UserData['hash_long'] ."'>deze link</a> gebruiken, daarmee kom je direct weer bij deze afspraak terecht";
+			$mail[] = "Om deze afspraak te beheren kan je <a href='". $ScriptURL ."agenda.php?id=". mysqli_insert_id($db) ."&hash=". $UserData['hash_long'] ."'>deze link</a> gebruiken, daarmee kom je direct weer bij deze afspraak terecht";
 			
 			$text[] = "De afspraak '". $_POST['titel'] ."' is toegevoegd.<br>";
 			toLog('info', $_SESSION['ID'], '', "Agenda-item '". $_POST['titel'] ."' toegevoegd");

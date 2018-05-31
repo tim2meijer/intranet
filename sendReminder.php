@@ -5,11 +5,11 @@ include_once('../../general_include/class.phpmailer.php');
 include_once('../../general_include/class.html2text.php');
 $db = connect_db();
 
-$startTijd = mktime(0, 0, 0, date("n"), date("j"), date("Y"));
-$eindTijd = mktime(23, 59, 59, date("n"), (date("j")+7), date("Y")+1);
+//$startTijd = mktime(0, 0, 0, date("n"), date("j"), date("Y"));
+//$eindTijd = mktime(23, 59, 59, date("n"), (date("j")+7), date("Y")+1);
 
-//$startTijd = mktime(0, 0, 0, date("n"), (date("j")+3), date("Y"));
-//$eindTijd = mktime(23, 59, 59, date("n"), (date("j")+3), date("Y"));
+$startTijd = mktime(0, 0, 0, date("n"), (date("j")+3), date("Y"));
+$eindTijd = mktime(23, 59, 59, date("n"), (date("j")+3), date("Y"));
 
 $diensten = getKerkdiensten($startTijd, $eindTijd);
 $roosters = getRoosters(0);
