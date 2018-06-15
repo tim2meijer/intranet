@@ -28,7 +28,7 @@ for($r=1 ; $r < $aantal ; $r++) {
 	
 	$datum		= trim($velden[0]);
 		
-	for($o=12;$o>9;$o--) {
+	for($o=15;$o>12;$o--) {
 		$Oud[]		= trim($velden[($a-$o)]);
 	}
 		
@@ -61,7 +61,7 @@ for($r=1 ; $r < $aantal ; $r++) {
 				foreach($Oud as $ouderling) {
 					$id = array_search_closest($ouderling, $namenOud);
 					if($ouderling!= '' AND $id != 0) {
-						//echo $ouderling .' -> '. $namenOud[$id] .' ('. $id .')<br>';
+						echo $ouderling .' -> '. $namenOud[$id] .' ('. $id .')<br>';
 						$ouderlingID[] = $id;
 					}
 				}
@@ -99,7 +99,7 @@ for($r=1 ; $r < $aantal ; $r++) {
 				foreach($Diak as $diaken) {
 					$id = array_search_closest ($diaken, $namenDiak);
 					if($diaken != '' AND $id != 0) {
-						//echo $diaken .' -> '. $namenDiak[$id] .' ('. $id .')<br>';
+						echo $diaken .' -> '. $namenDiak[$id] .' ('. $id .')<br>';
 						$diakenID[] = $id;
 					}
 				}
