@@ -7,7 +7,8 @@ $db = connect_db();
 
 # Om een of andere reden werkt het niet als je de Excel-file extern laat staan
 # Daarom even een locale kopie maken
-$roosterURL = 'https://www.dropbox.com/s/r9f7x0rv8qjrr2d/Preekrooster.xlsx?dl=1';
+//$roosterURL = 'https://www.dropbox.com/s/r9f7x0rv8qjrr2d/Preekrooster.xlsx?dl=1';
+$roosterURL = 'https://www.dropbox.com/s/16u0uoub35sy32m/Preekrooster.xlsx?dl=1';
 $xlsFile = 'local_preekrooster.xlsx';
 $fp = fopen($xlsFile, 'w+');
 fwrite($fp, file_get_contents($roosterURL));
