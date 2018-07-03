@@ -42,7 +42,7 @@ if(isset($_POST['remove'])) {
 	
 	if(isset($_POST['id'])) {
 		$query = "UPDATE $TableAgenda SET $AgendaStart = '$startTijd', $AgendaEind = '$eindTijd', $AgendaTitel = '". urlencode($_POST['titel']) ."', $AgendaDescr = '". urlencode($_POST['omschrijving']) ."', $AgendaOwner = '". $_POST['eigenaar'] ."' WHERE $AgendaID like ". $_POST['id'];
-		
+				
 		if(mysqli_query($db, $query)) {
 			$text[] = "De afspraak '". $_POST['titel'] ."' is opgeslagen";
 			toLog('info', $_SESSION['ID'], '', "Agenda-item '". $_POST['titel'] ."' gewijzigd");
@@ -113,7 +113,7 @@ if(isset($_POST['remove'])) {
 		$eMin		= getParam('eMin', date("i"));
 	}
 	
-	if(!in_array(1, getMyGroups($_SESSION['ID'])) AND $details['eigenaar'] != $_SESSION['ID']) {
+	if(!in_array(1, getMyGroups($_SESSION['ID'])) AND $details['eigenaar'] != $_SESSION['ID'] AND !isset($_REQUEST['new'])) {
 		$text = array('Toestemmingsprobleem, dit id hoort niet bij een afspraak van jou');
 	} else {	
 		$text[] = "<table>";
