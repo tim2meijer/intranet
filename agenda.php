@@ -50,6 +50,8 @@ if(isset($_POST['remove'])) {
 			$text[] = "Het opslaan van de afspraak is niet gelukt.";
 			toLog('error', $_SESSION['ID'], '', "Kan agenda-item '". $_POST['titel'] ."' niet wijzigen");
 		}
+		$text[] = "<p>";
+		$text[] = "<a href='". $_SERVER['PHP_SELF'] ."'>Terug naar het overzicht</a>.";
 	} else {
 		$query = "INSERT INTO $TableAgenda ($AgendaStart, $AgendaEind, $AgendaTitel, $AgendaDescr, $AgendaOwner) VALUES ('$startTijd', '$eindTijd', '". urlencode($_POST['titel']) ."', '". urlencode($_POST['omschrijving']) ."', ". $_SESSION['ID'] .")";
 		
