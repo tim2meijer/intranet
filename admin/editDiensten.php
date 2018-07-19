@@ -112,43 +112,53 @@ foreach($diensten as $dienst) {
 	$eJaar	= date("Y", $data['eind']);
 	
 	$text[] = "<tr>";
-	$text[] = "	<td><select name='sDag[$dienst]'>";
-	for($d=1 ; $d<32 ; $d++) {
-		$text[] = "	<option value='$d'". ($d == $sDag ? ' selected' : '') .">$d</option>";
+	if(in_array(1, getMyGroups($_SESSION['ID']))) {
+		$text[] = "	<td><select name='sDag[$dienst]'>";
+		for($d=1 ; $d<32 ; $d++) {
+			$text[] = "	<option value='$d'". ($d == $sDag ? ' selected' : '') .">$d</option>";
+		}
+		$text[] = "	</select>";
+		$text[] = "	<select name='sMaand[$dienst]'>";
+		for($m=1 ; $m<13 ; $m++) {
+			$text[] = "	<option value='$m'". ($m == $sMaand ? ' selected' : '') .">". $maandArray[$m] ."</option>";
+		}
+		$text[] = "	</select>";
+		$text[] = "	<select name='sJaar[$dienst]'>";
+		for($j=date("Y"); $j<=(date("Y")+10) ; $j++) {
+			$text[] = "	<option value='$j'". ($j == $sJaar ? ' selected' : '') .">". substr($j, -2). "</option>";
+		}
+		$text[] = "	</select></td>";
+		$text[] = "	<td><select name='sUur[$dienst]'>";
+		for($u=0; $u<24 ; $u++) {
+			$text[] = "	<option value='$u'". ($u == $sUur ? ' selected' : '') .">$u</option>";
+		}
+		$text[] = "	</select>";
+		$text[] = "	<select name='sMin[$dienst]'>";
+		for($m=0; $m<60 ; $m=$m+15) {
+			$text[] = "	<option value='$m'". ($m == $sMin ? ' selected' : '') .">". substr('0'.$m, -2) ."</option>";
+		}
+		$text[] = "	</select></td>";
+		$text[] = "	<td><select name='eUur[$dienst]'>";
+		for($u=0; $u<24 ; $u++) {
+			$text[] = "	<option value='$u'". ($u == $eUur ? ' selected' : '') .">$u</option>";
+		}
+		$text[] = "	</select>";
+		$text[] = "	<select name='eMin[$dienst]'>";
+		for($m=0; $m<60 ; $m=$m+15) {
+			$text[] = "	<option value='$m'". ($m == $eMin ? ' selected' : '') .">". substr('0'.$m, -2) ."</option>";
+		}
+		$text[] = "	</select></td>";
+	} else {
+		$text[] = "	<td>". date('j M Y', $data['start']) ."</td>";
+		$text[] = "	<td>". date('H:i', $data['start']) ."</td>";
+		$text[] = "	<td>". date('H:i', $data['eind']) ."</td>";
 	}
-	$text[] = "	</select>";
-	$text[] = "	<select name='sMaand[$dienst]'>";
-	for($m=1 ; $m<13 ; $m++) {
-		$text[] = "	<option value='$m'". ($m == $sMaand ? ' selected' : '') .">". $maandArray[$m] ."</option>";
-	}
-	$text[] = "	</select>";
-	$text[] = "	<select name='sJaar[$dienst]'>";
-	for($j=date("Y"); $j<=(date("Y")+10) ; $j++) {
-		$text[] = "	<option value='$j'". ($j == $sJaar ? ' selected' : '') .">". substr($j, -2). "</option>";
-	}
-	$text[] = "	</select></td>";
-	$text[] = "	<td><select name='sUur[$dienst]'>";
-	for($u=0; $u<24 ; $u++) {
-		$text[] = "	<option value='$u'". ($u == $sUur ? ' selected' : '') .">$u</option>";
-	}
-	$text[] = "	</select>";
-	$text[] = "	<select name='sMin[$dienst]'>";
-	for($m=0; $m<60 ; $m=$m+15) {
-		$text[] = "	<option value='$m'". ($m == $sMin ? ' selected' : '') .">". substr('0'.$m, -2) ."</option>";
-	}
-	$text[] = "	</select></td>";
-	$text[] = "	<td><select name='eUur[$dienst]'>";
-	for($u=0; $u<24 ; $u++) {
-		$text[] = "	<option value='$u'". ($u == $eUur ? ' selected' : '') .">$u</option>";
-	}
-	$text[] = "	</select>";
-	$text[] = "	<select name='eMin[$dienst]'>";
-	for($m=0; $m<60 ; $m=$m+15) {
-		$text[] = "	<option value='$m'". ($m == $eMin ? ' selected' : '') .">". substr('0'.$m, -2) ."</option>";
-	}
-	$text[] = "	</select></td>";
 	
-	$text[] = "	<td><input type='text' name='voorganger[$dienst]' value=\"". $data['voorganger'] ."\" size='30'></td>";
+	if(in_array(1, getMyGroups($_SESSION['ID'])) OR in_array(20, getMyGroups($_SESSION['ID']))) {
+		$text[] = "	<td><input type='text' name='voorganger[$dienst]' value=\"". $data['voorganger'] ."\" size='30'></td>";
+	} else {
+		$text[] = "	<td><input type='hidden' name='voorganger[$dienst]' value=\"". $data['voorganger'] ."\">". $data['voorganger'] ."</td>";
+	}
 	
 	if(in_array(1, getMyGroups($_SESSION['ID'])) OR in_array(22, getMyGroups($_SESSION['ID']))) {
 		$text[] = "	<td><input type='text' name='collecte_1[$dienst]' value='". $data['collecte_1'] ."'></td>";
@@ -156,8 +166,13 @@ foreach($diensten as $dienst) {
 	} else {
 		$text[] = "	<td><input type='hidden' name='collecte_1[$dienst]' value='". $data['collecte_1'] ."'>". $data['collecte_1'] ."</td>";
 		$text[] = "	<td><input type='hidden' name='collecte_2[$dienst]' value='". $data['collecte_2'] ."'>". $data['collecte_2'] ."</td>";
-	}	
-	$text[] = "	<td><input type='text' name='bijz[$dienst]' value=\"". $data['bijzonderheden'] ."\" size='30'></td>";
+	}
+	
+	if(in_array(1, getMyGroups($_SESSION['ID'])) OR in_array(20, getMyGroups($_SESSION['ID']))) {
+		$text[] = "	<td><input type='text' name='bijz[$dienst]' value=\"". $data['bijzonderheden'] ."\" size='30'></td>";
+	} else {
+		$text[] = "	<td><input type='hidden' name='bijz[$dienst]' value=\"". $data['bijzonderheden'] ."\">". $data['bijzonderheden'] ."</td>";
+	}
 	$text[] = "<tr>";
 }
 
