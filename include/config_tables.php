@@ -4,10 +4,11 @@ define("NL", "\n");
 /* Set locale to Dutch */
 setlocale(LC_ALL, 'nl_NL');
 
-$ScriptURL				= '';
+$ScriptSever			= '';
+$ScriptURL				= $ScriptSever.'';
 $ScriptTitle			= '';	# Naam van het script (is naam van afzender in mails)
 $ScriptMailAdress	= '';			# Mailadres van het script (is mailadres van afzender in mails)
-$Version					= '2.3';		# Versie nummer
+$Version					= '2.4';		# Versie nummer
 $SubjectPrefix		= '[3GK] ';		# Voorvoegsel bij de onderwerpregel bij het versturen van mails
 
 $lengthShortHash = 16;
