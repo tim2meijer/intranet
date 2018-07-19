@@ -42,16 +42,25 @@ if(isset($_POST['save']) OR isset($_POST['maanden'])) {
 		$startTijd = mktime($_POST['sUur'][$dienst], $_POST['sMin'][$dienst], 0, $_POST['sMaand'][$dienst], $_POST['sDag'][$dienst], $_POST['sJaar'][$dienst]);
 		$eindTijd = mktime($_POST['eUur'][$dienst], $_POST['eMin'][$dienst], 0, $_POST['sMaand'][$dienst], $_POST['sDag'][$dienst], $_POST['sJaar'][$dienst]);
 		
-		$sql = "UPDATE $TableDiensten SET ";
-		$sql .= $DienstStart .' = '. $startTijd .', ';
-		$sql .= $DienstEind .' = '. $eindTijd .', ';
-		$sql .= $DienstVoorganger .' = \''. urlencode($_POST['voorganger'][$dienst]) .'\', ';
-		$sql .= $DienstCollecte_1 .' = \''. urlencode($_POST['collecte_1'][$dienst]) .'\', ';
-		$sql .= $DienstCollecte_2 .' = \''. urlencode($_POST['collecte_2'][$dienst]) .'\', ';
-		$sql .= $DienstOpmerking .' = \''. urlencode($_POST['bijz'][$dienst]) .'\'';
-		$sql .= " WHERE $DienstID = ". $dienst;
+		$set = array();
 		
-		mysql_query($sql);		
+		if(in_array(1, getMyGroups($_SESSION['ID']))) {
+			$set[] = $DienstStart .' = '. $startTijd;
+			$set[] = $DienstEind .' = '. $eindTijd;
+		}
+				
+		if(in_array(1, getMyGroups($_SESSION['ID'])) OR in_array(22, getMyGroups($_SESSION['ID']))) {
+			$set[] = $DienstCollecte_1 .' = \''. urlencode($_POST['collecte_1'][$dienst]) .'\'';
+			$set[] = $DienstCollecte_2 .' = \''. urlencode($_POST['collecte_2'][$dienst]) .'\'';
+		}
+		
+		if(in_array(1, getMyGroups($_SESSION['ID'])) OR in_array(20, getMyGroups($_SESSION['ID']))) {
+			$set[] = $DienstVoorganger .' = \''. urlencode($_POST['voorganger'][$dienst]) .'\'';
+			$set[] = $DienstOpmerking .' = \''. urlencode($_POST['bijz'][$dienst]) .'\'';
+		}
+		
+		$sql = "UPDATE $TableDiensten SET ". implode(', ', $set)." WHERE $DienstID = ". $dienst;		
+		mysql_query($sql);
 	}
 	toLog('info', $_SESSION['ID'], '', 'Diensten bijgewerkt');
 }
@@ -150,28 +159,39 @@ foreach($diensten as $dienst) {
 		$text[] = "	</select></td>";
 	} else {
 		$text[] = "	<td>". date('j M Y', $data['start']) ."</td>";
+		$text[] = "<input type='hidden' name='sDag[$dienst]' value='$sDag'>";
+		//$text[] = "<input type='hidden' name='sMaand[$dienst]' value='$sMaand'>";
+		//$text[] = "<input type='hidden' name='sJaar[$dienst]' value='$sJaar'>";
 		$text[] = "	<td>". date('H:i', $data['start']) ."</td>";
+		//$text[] = "<input type='hidden' name='sUur[$dienst]' value='$sUur'>";
+		//$text[] = "<input type='hidden' name='sMinuut[$dienst]' value='$sMin'>";
 		$text[] = "	<td>". date('H:i', $data['eind']) ."</td>";
+		//$text[] = "<input type='hidden' name='eUur[$dienst]' value='$eUur'>";
+		//$text[] = "<input type='hidden' name='eMinuut[$dienst]' value='$eMin'>";
 	}
 	
 	if(in_array(1, getMyGroups($_SESSION['ID'])) OR in_array(20, getMyGroups($_SESSION['ID']))) {
 		$text[] = "	<td><input type='text' name='voorganger[$dienst]' value=\"". $data['voorganger'] ."\" size='30'></td>";
 	} else {
-		$text[] = "	<td><input type='hidden' name='voorganger[$dienst]' value=\"". $data['voorganger'] ."\">". $data['voorganger'] ."</td>";
+		//$text[] = "	<td><input type='hidden' name='voorganger[$dienst]' value=\"". $data['voorganger'] ."\">". $data['voorganger'] ."</td>";
+		$text[] = "	<td>". $data['voorganger'] ."</td>";
 	}
 	
 	if(in_array(1, getMyGroups($_SESSION['ID'])) OR in_array(22, getMyGroups($_SESSION['ID']))) {
 		$text[] = "	<td><input type='text' name='collecte_1[$dienst]' value='". $data['collecte_1'] ."'></td>";
 		$text[] = "	<td><input type='text' name='collecte_2[$dienst]' value='". $data['collecte_2'] ."'></td>";
 	} else {
-		$text[] = "	<td><input type='hidden' name='collecte_1[$dienst]' value='". $data['collecte_1'] ."'>". $data['collecte_1'] ."</td>";
-		$text[] = "	<td><input type='hidden' name='collecte_2[$dienst]' value='". $data['collecte_2'] ."'>". $data['collecte_2'] ."</td>";
+		//$text[] = "	<td><input type='hidden' name='collecte_1[$dienst]' value='". $data['collecte_1'] ."'>". $data['collecte_1'] ."</td>";
+		$text[] = "	<td>". $data['collecte_1'] ."</td>";
+		//$text[] = "	<td><input type='hidden' name='collecte_2[$dienst]' value='". $data['collecte_2'] ."'>". $data['collecte_2'] ."</td>";
+		$text[] = "	<td>". $data['collecte_2'] ."</td>";
 	}
 	
 	if(in_array(1, getMyGroups($_SESSION['ID'])) OR in_array(20, getMyGroups($_SESSION['ID']))) {
 		$text[] = "	<td><input type='text' name='bijz[$dienst]' value=\"". $data['bijzonderheden'] ."\" size='30'></td>";
 	} else {
-		$text[] = "	<td><input type='hidden' name='bijz[$dienst]' value=\"". $data['bijzonderheden'] ."\">". $data['bijzonderheden'] ."</td>";
+		//$text[] = "	<td><input type='hidden' name='bijz[$dienst]' value=\"". $data['bijzonderheden'] ."\">". $data['bijzonderheden'] ."</td>";
+		$text[] = "	<td>". $data['bijzonderheden'] ."</td>";
 	}
 	$text[] = "<tr>";
 }
@@ -181,7 +201,9 @@ $text[] = "<td colspan='6' align='middle'><input type='submit' name='save' value
 $text[] = "</tr>";
 $text[] = "</table>";
 $text[] = "</form>";
-$text[] = "<a href='?new'>Extra dienst toevoegen</a>";
+if(in_array(1, getMyGroups($_SESSION['ID']))) {
+	$text[] = "<a href='?new'>Extra dienst toevoegen</a>";
+}
 $text[] = "<p>";
 
 echo $HTMLHeader;
