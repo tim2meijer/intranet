@@ -5,7 +5,7 @@ include_once('../include/HTML_TopBottom.php');
 
 $showLogin = true;
 
-$requiredUserGroups = array(1, 20);
+$requiredUserGroups = array(1, 20, 22);
 
 if(isset($_REQUEST['hash'])) {
 	$id = isValidHash($_REQUEST['hash']);
@@ -150,7 +150,7 @@ foreach($diensten as $dienst) {
 	
 	$text[] = "	<td><input type='text' name='voorganger[$dienst]' value=\"". $data['voorganger'] ."\" size='30'></td>";
 	
-	if(in_array(1, getMyGroups($_SESSION['ID']))) {
+	if(in_array(1, getMyGroups($_SESSION['ID'])) OR in_array(22, getMyGroups($_SESSION['ID']))) {
 		$text[] = "	<td><input type='text' name='collecte_1[$dienst]' value='". $data['collecte_1'] ."'></td>";
 		$text[] = "	<td><input type='text' name='collecte_2[$dienst]' value='". $data['collecte_2'] ."'></td>";
 	} else {
