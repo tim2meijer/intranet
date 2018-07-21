@@ -24,6 +24,14 @@ $_SESSION['logged'] = false;
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title><?php echo $strLoginInterface; ?></title>
+<?php
+
+if($_SERVER['HTTPS'] == '') {
+	echo "<meta http-equiv='refresh' content='0; URL=$ScriptSever".$_SERVER['REQUEST_URI']."'>";
+}
+
+?>
+
 <SCRIPT LANGUAGE="JavaScript">
 <!--
 //  ------ check form ------
