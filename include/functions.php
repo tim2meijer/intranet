@@ -1096,12 +1096,15 @@ function replaceVoorganger($string) {
 	switch (trim($string)) {
 		case "Wim":
 			$voorganger = "ds. W.M. van Wijk";
-      break;
+      			break;
 		case "Evert":
 			$voorganger = "ds. E. Everts";
 			break;
 		case "Cor":
 			$voorganger = "br. C. Weeda";
+			break;
+		case "Rien":
+			$voorganger = "ds. C. van den Berg";
 			break;
 		default:
 			$voorganger = str_replace('ds ', 'ds. ', lcfirst($string));
