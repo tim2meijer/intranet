@@ -139,7 +139,8 @@ if(in_array(1, getMyGroups($_SESSION['ID']))) {
 	$koppelLinks['makeiCalScipio.php'] = 'iCal voor Scipio aanmaken';
 	$koppelLinks['onderhoud/importOuderlingen.php'] = 'Importeer ambtsdragers';
 	$koppelLinks['onderhoud/importVoorgangers.php'] = 'Importeer voorgangers';
-	$koppelLinks['onderhoud/importCollecten.php'] = 'Importeer collectes';
+	$koppelLinks['onderhoud/importSchriftlezer.php'] = 'Importeer schriftlezers';
+	//$koppelLinks['onderhoud/importCollecten.php'] = 'Importeer collectes';
 	$koppelLinks['scipio/ScipioImport.php'] = 'Scipio-data inladen';
 	
 	foreach($koppelLinks as $link => $naam) {
