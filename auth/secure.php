@@ -15,6 +15,8 @@
 /*      There are no user-configurable items on this page     */
 /**************************************************************/
 
+error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
+
 // Create a constant that can be checked inside the files to be included.
 // This gives an indication if secure.php has been loaded correctly.
 define('LOADED_PROPERLY', true);

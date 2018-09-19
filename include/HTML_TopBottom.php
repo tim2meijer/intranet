@@ -7,13 +7,13 @@ $HTMLHead	.= '<head>'.NL;
 $HTMLHead	.= "	<title>$ScriptTitle $Version</title>\n";
 $HTMLHead	.= "	<link rel='stylesheet' type='text/css' href='". $ScriptURL ."include/style.css'>\n";
 
-if($_SERVER['HTTPS'] == '') {
-	$HTMLHead .= "<meta http-equiv='refresh' content='0; URL=$ScriptSever".$_SERVER['REQUEST_URI']."'>";
-}
+//if($_SERVER['HTTPS'] == '') {
+	//$HTMLHead .= "<meta http-equiv='refresh' content='0; URL=$ScriptSever".$_SERVER['REQUEST_URI']."'>";
+//}
 
 $HTMLHead	.= '</head>'.NL;
 
-$HTMLBody	.= '<body>'.NL;
+$HTMLBody	= '<body>'.NL;
 $HTMLBody	.= '<table width="95%" cellpadding="0" cellspacing="0" align="center" bgcolor="ffffff" border=0>'.NL;
 $HTMLBody	.= '<tr>'.NL;
 $HTMLBody	.= '	<td height="20" bgcolor="#8C1974">&nbsp;</td>'.NL;

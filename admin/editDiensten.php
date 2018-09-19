@@ -193,7 +193,7 @@ foreach($diensten as $dienst) {
 		//$text[] = "	<td><input type='hidden' name='bijz[$dienst]' value=\"". $data['bijzonderheden'] ."\">". $data['bijzonderheden'] ."</td>";
 		$text[] = "	<td>". $data['bijzonderheden'] ."</td>";
 	}
-	$text[] = "<tr>";
+	$text[] = "</tr>";
 }
 
 $text[] = "<tr>";

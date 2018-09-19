@@ -115,7 +115,6 @@ if(in_array(1, getMyGroups($_SESSION['ID']))) {
 	
 	$adminLinks['admin/generateUsernames.php'] = 'Gebruikersnamen aanmaken';
 	$adminLinks['admin/generateDiensten.php'] = 'Kerkdiensten aanmaken';
-	$adminLinks['admin/editDiensten.php'] = 'Kerkdiensten wijzigen';	
 	$adminLinks['admin/editGroepen.php'] = 'Groepen wijzigen';	
 	$adminLinks['admin/editRoosters.php'] = 'Roosters wijzigen';	
 	$adminLinks['admin/crossCheck.php'] = 'Check databases';
@@ -123,7 +122,21 @@ if(in_array(1, getMyGroups($_SESSION['ID']))) {
 	$adminLinks['sendMail.php'] = 'Verstuur mail';
 	$adminLinks['onderhoud/cleanUpDb.php'] = 'Verwijder oude diensten';
 	$adminLinks['../dumper/'] = 'Dumper';
+}
+
+if(in_array(20, getMyGroups($_SESSION['ID']))) {
+	$adminDeel[] = "<b>Gegevens invoeren</b>";
+		
+	$adminLinks['admin/editDiensten.php'] = 'Voorgangers wijzigen';	
+}
+
+if(in_array(22, getMyGroups($_SESSION['ID']))) {
+	$adminDeel[] = "<b>Gegevens invoeren</b>";
 	
+	$adminLinks['admin/editDiensten.php'] = 'Collectes wijzigen';	
+}
+
+if(is_array($adminLinks)) {	
 	foreach($adminLinks as $link => $naam) {
 		$adminDeel[] = "<a href='$link' target='_blank'>$naam</a>";
 	}
@@ -166,7 +179,9 @@ $site[] = "<a href='account.php' target='_blank'>Account</a>";
 $site[] = "<a href='profiel.php' target='_blank'>Profiel</a>";
 //$site[] = "<a href='gegevens.php' target='_blank'>Gegevens wijzigen</a>";
 $site[] = "<a href='ledenlijst.php' target='_blank'>Ledenlijst</a>";
-$site[] = "<a href='search.php' target='_blank'>Zoeken</a>";
+if(in_array(1, getMyGroups($_SESSION['ID']))) {
+	$site[] = "<a href='search.php' target='_blank'>Zoeken</a>";
+}
 $site[] = "<a href='auth/objects/logout.php' target='_blank'>Log-out</a>";
 $blockArray[] = implode("<br>".NL, $site);
 

@@ -26,9 +26,9 @@ $_SESSION['logged'] = false;
 <title><?php echo $strLoginInterface; ?></title>
 <?php
 
-if($_SERVER['HTTPS'] == '') {
-	echo "<meta http-equiv='refresh' content='0; URL=$ScriptSever".$_SERVER['REQUEST_URI']."'>";
-}
+//if($_SERVER['HTTPS'] == '') {
+//	echo "<meta http-equiv='refresh' content='0; URL=$ScriptSever".$_SERVER['REQUEST_URI']."'>";
+//}
 
 ?>
 
