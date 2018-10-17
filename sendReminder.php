@@ -59,9 +59,18 @@ foreach($diensten as $dienst) {
 						$ReplacedBericht = $onderwerp;
 					}
 					
+					if(date("H", $data_dienst['start']) < 12) {
+						$dagdeel = 'ochtend';
+					} elseif(date("H", $data_dienst['start']) < 18) {
+						$dagdeel = 'middag';
+					} else {
+						$dagdeel = 'avond';
+					}
+					
 					$ReplacedBericht = str_replace ('[[voornaam]]', makeName($lid, 1), $ReplacedBericht);
 					$ReplacedBericht = str_replace ('[[achternaam]]', makeName($lid, 4), $ReplacedBericht);
 					$ReplacedBericht = str_replace ('[[dag]]', strftime ("%A", $dienstData['start']), $ReplacedBericht);
+					$ReplacedBericht = str_replace ('[[dagdeel]]', $dagdeel, $ReplacedBericht);
 					$ReplacedBericht = str_replace ('[[voorganger]]', $dienstData['voorganger'], $ReplacedBericht);
 										
 					# Als er meer dan 1 teamlid is dan een opsommingslijst, anders gewoon een vermelding
@@ -69,7 +78,6 @@ foreach($diensten as $dienst) {
 						$ReplacedBericht = str_replace ('[[team]]', current($team), $ReplacedBericht);
 					} elseif(count($team) > 1) {
 						$ReplacedBericht = str_replace ('[[team]]', makeOpsomming($team), $ReplacedBericht);
-						# str_replace ("[[team]]", "<ul>\n<li>".implode("</li>\n<li>", $team)."</li>\n</ul>", $ReplacedBericht);
 					} else {
 						$ReplacedBericht = str_replace ('[[team]]', 'onbekend', $ReplacedBericht);
 					}
