@@ -228,10 +228,12 @@ if($RoosterData['text_only'] == 0) {
 	$block_2[] = "<tr>";
 	$block_2[] = "	<td valign='top'>Mailtekst</td>";
 	$block_2[] = "	<td valign='top'><textarea name='text_mail' rows=20 cols=60>". $RoosterData['text_mail'] ."</textarea></td>";
-	$block_2[] = "	<td valign='top'>[[voornaam]] = voornaam van de ontvanger<br>";
-	$block_2[] = "	[[team]] = namen van iedereen die voor die dag op het rooster staat<br>";
-	$block_2[] = "	[[voorganger]] = namen van iedereen die voor die dag op het rooster staat<br>";
-	$block_2[] = "	[[dag]] = naam van de dag. Meestal zondag, bij feestdagen meestal andere dag.</td>";
+	$block_2[] = "	<td valign='top'>[[voornaam]] = voornaam van de ontvanger.<br>";
+	$block_2[] = "	[[achternaam]] = achternaam van de ontvanger.<br>";
+	$block_2[] = "	[[team]] = namen van iedereen die voor die dag op het rooster staat (uitgezonderd de ontvanger).<br>";
+	$block_2[] = "	[[voorganger]] = naam van de voorganger die dienst.<br>";
+	$block_2[] = "	[[dag]] = naam van de dag. Meestal zondag, bij feestdagen meestal andere dag.<br>";
+	$block_2[] = "	[[dagdeel]] = naam van het dagdeel (ochtend, middag, avond).</td>";
 	$block_2[] = "</tr>";
 	$block_2[] = "<tr>";
 	$block_2[] = "	<td valign='top'>&nbsp;</td><td valign='top' colspan='2'><input type='submit' name='save_mail' value='Mail-gegevens opslaan'></td>";

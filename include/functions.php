@@ -1113,4 +1113,45 @@ function replaceVoorganger($string) {
 	return $voorganger;        
 }
 
+function getVoorgangers() {
+	global $TableVoorganger, $VoorgangerID;
+	
+	$db = connect_db();
+	$sql = "SELECT * FROM $TableVoorganger";
+	$result = mysqli_query($db, $sql);
+	if($row = mysqli_fetch_array($result)) {
+		do {
+			$ids[] = $row[$VoorgangerID];
+		} while($row = mysqli_fetch_array($result));
+	}
+	
+	return $ids;
+}
+
+function getVoorgangerData($id) {
+	global $TableVoorganger, $VoorgangerID, $VoorgangerTitel, $VoorgangerVoor, $VoorgangerInit, $VoorgangerTussen, $VoorgangerAchter, $VoorgangerTel, $VoorgangerTel2, $VoorgangerPVNaam, $VoorgangerPVTel, $VoorgangerMail, $VoorgangerPlaats, $VoorgangerDenom, $VoorgangerOpmerking;
+	
+	$db = connect_db();
+	$sql = "SELECT * FROM $TableVoorganger WHERE $VoorgangerID = $id";
+	$result = mysqli_query($db, $sql);
+	$row = mysqli_fetch_array($result);
+	
+	$data['titel'] = $row[$VoorgangerTitel];		
+	$data['init'] = $row[$VoorgangerInit];
+	$data['voor'] = $row[$VoorgangerVoor];	
+	$data['tussen'] = $row[$VoorgangerTussen];
+	$data['achter'] = $row[$VoorgangerAchter];
+	$data['tel'] = $row[$VoorgangerTel];
+	$data['mail'] = $row[$VoorgangerMail];	
+	$data['plaats'] = $row[$VoorgangerPlaats];
+	$data['denom'] = $row[$VoorgangerDenom];
+	$data['tel2'] = $row[$VoorgangerTel2];
+	$data['pv_naam'] = $row[$VoorgangerPVNaam];
+	$data['pv_tel'] = $row[$VoorgangerPVTel];		
+	$data['opm'] = $row[$VoorgangerOpmerking];
+	
+	return $data;
+}
+
+
 ?>

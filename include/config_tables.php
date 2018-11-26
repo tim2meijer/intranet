@@ -114,6 +114,22 @@ $RoosOpmRoos				= "rooster";
 $RoosOpmDienst			= "dienst";
 $RoosOpmOpmerking		= "opmerking";
 
+$TableVoorganger 		= "predikanten";
+$VoorgangerID 			= "id";
+$VoorgangerTitel 		= "titel";
+$VoorgangerVoor			= "voornaam";
+$VoorgangerInit 		= "initialen";
+$VoorgangerTussen 	= "tussen";
+$VoorgangerAchter 	= "achternaam";
+$VoorgangerTel 			= "telefoon";
+$VoorgangerTel2 		= "mobiel";
+$VoorgangerPVNaam 	= "naam_pv";
+$VoorgangerPVTel 		= "tel_pv";
+$VoorgangerMail 		= "mail";
+$VoorgangerPlaats 	= "plaats";
+$VoorgangerDenom		= "kerk";
+$VoorgangerOpmerking= "opmerking";
+
 $wijkArray			= array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J');
 $statusArray		= array('actief', 'afgemeld', 'afgevoerd', 'onttrokken', 'overleden', 'vertrokken');
 $burgelijkArray	= array('gehuwd', 'gereg. partner', 'gescheiden', 'ongehuwd', 'weduwe', 'weduwnaar');
