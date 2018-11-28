@@ -3,50 +3,26 @@ include_once('include/functions.php');
 include_once('include/config.php');
 include_once('include/HTML_TopBottom.php');
 
+# ALTER TABLE `kerkdiensten` CHANGE `voorganger` `voorganger` INT NOT NULL;
+
 $requiredUserGroups = array(1, 20);
 $cfgProgDir = 'auth/';
 include($cfgProgDir. "secure.php");
 
 # Als er op een knop gedrukt is, het rooster wegschrijven
 if(isset($_POST['save']) OR isset($_POST['maanden'])) {	
-	foreach($_POST['sDag'] as $dienst => $dummy) {
-		$startTijd = mktime($_POST['sUur'][$dienst], $_POST['sMin'][$dienst], 0, $_POST['sMaand'][$dienst], $_POST['sDag'][$dienst], $_POST['sJaar'][$dienst]);
-		$eindTijd = mktime($_POST['eUur'][$dienst], $_POST['eMin'][$dienst], 0, $_POST['sMaand'][$dienst], $_POST['sDag'][$dienst], $_POST['sJaar'][$dienst]);
-		
-		$set = array();
-		
-		if(in_array(1, getMyGroups($_SESSION['ID']))) {
-			$set[] = $DienstStart .' = '. $startTijd;
-			$set[] = $DienstEind .' = '. $eindTijd;
+	foreach($_POST['voorganger'] as $dienst => $voorgangerID) {
+		if($voorgangerID > 1) {
+			$sql = "UPDATE $TableDiensten SET $DienstVoorganger = $voorgangerID WHERE $DienstID = ". $dienst;		
+			
+			if(!mysql_query($sql)) {
+				$text[] = "Ging iets niet goed met geegevens opslaan";
+				//toLog('error', $_SESSION['ID'], '', 'Gegevens voorganger ('. $_REQUEST['voorgangerID'] .') konden niet worden opgeslagen');
+			}
 		}
-				
-		if(in_array(1, getMyGroups($_SESSION['ID'])) OR in_array(22, getMyGroups($_SESSION['ID']))) {
-			$set[] = $DienstCollecte_1 .' = \''. urlencode($_POST['collecte_1'][$dienst]) .'\'';
-			$set[] = $DienstCollecte_2 .' = \''. urlencode($_POST['collecte_2'][$dienst]) .'\'';
-		}
-		
-		if(in_array(1, getMyGroups($_SESSION['ID'])) OR in_array(20, getMyGroups($_SESSION['ID']))) {
-			$set[] = $DienstVoorganger .' = \''. urlencode($_POST['voorganger'][$dienst]) .'\'';
-			$set[] = $DienstOpmerking .' = \''. urlencode($_POST['bijz'][$dienst]) .'\'';
-		}
-		
-		$sql = "UPDATE $TableDiensten SET ". implode(', ', $set)." WHERE $DienstID = ". $dienst;		
-		mysql_query($sql);
 	}
 	toLog('info', $_SESSION['ID'], '', 'Diensten bijgewerkt');
 }
-
-if(isset($_REQUEST['new'])) {
-	$start	= mktime(10,0,0,date("n"),date("j"), date("Y"));
-	$eind		= mktime(11,30,0,date("n"),date("j"), date("Y"));		
-	$query	= "INSERT INTO $TableDiensten ($DienstStart, $DienstEind) VALUES ('$start', '$eind')";
-	$result = mysqli_query($db, $query);
-		
-	$id		= mysqli_insert_id($db);
-	
-	toLog('info', $_SESSION['ID'], '', 'Dienst van '. date("d-m-Y", $start) .' toegevoegd');
-}
-
 
 # Als er op de knop van 3 maanden extra geklikt is, 3 maanden bij de eindtijd toevoegen
 # Eerst initeren, event. later ophogen
@@ -88,14 +64,15 @@ foreach($diensten as $dienst) {
 	$data = getKerkdienstDetails($dienst);
 	
 	$text[] = "<tr>";
-	$text[] = "	<td align='right'>". strftime("%a %e %b", $data['start']) ."</td>";
+	//$text[] = "	<td align='right'>". strftime("%a %e %b", $data['start']) ."</td>";
+	$text[] = "	<td align='right'>". date("d-m-Y", $data['start']) ."</td>";
 	$text[] = "	<td>". date('H:i', $data['start']) ."</td>";
 	$text[] = "	<td>";
 	$text[] = "<select name='voorganger[$dienst]'>";
 	$text[] = "	<option value=''></option>";
 	
 	foreach($voorgangersNamen as $voorgangerID => $naam) {
-		$text[] = "	<option value='$voorgangerID'>$naam</option>";
+		$text[] = "	<option value='$voorgangerID'". ($data['voorganger'] == $voorgangerID ? ' selected' : '') .">$naam</option>";
 	}
 		
 	$text[] = "</select>";

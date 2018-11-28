@@ -180,7 +180,7 @@ function getKerkdienstDetails($id) {
 	if($row = mysqli_fetch_array($result)) {
 		$data['start']	= $row[$DienstStart];
 		$data['eind']		= $row[$DienstEind];
-		$data['voorganger']		= urldecode($row[$DienstVoorganger]);
+		$data['voorganger']		= $row[$DienstVoorganger];
 		$data['collecte_1']		= urldecode($row[$DienstCollecte_1]);
 		$data['collecte_2']		= urldecode($row[$DienstCollecte_2]);
 		$data['bijzonderheden']		= urldecode($row[$DienstOpmerking]);

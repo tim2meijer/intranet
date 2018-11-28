@@ -34,7 +34,7 @@ if(count($allRoosters) > 0) {
 $allGroups = getAllGroups();	
 $myGroups = getMyGroups($_SESSION['ID']);
 if(count($allGroups) > 0) {
-	$txtGroepen[] = "<b>Groepen</b>";
+	$txtGroepen[] = "<b>Pagina's van teams</b>";
 	foreach($allGroups as $groep) {
 		$tonen = false;
 		$data = getGroupDetails($groep);
@@ -62,7 +62,7 @@ if(count($allGroups) > 0) {
 # Groepen-beheer
 $myGroepBeheer = getMyGroupsBeheer($_SESSION['ID']);
 if(count($myGroepBeheer) > 0) {
-	$txtGroepBeheer[] = "<b>Groepen die ik beheer</b>";
+	$txtGroepBeheer[] = "<b>Teams die ik beheer</b>";
 	foreach($myGroepBeheer as $groep) {
 		$data = getGroupDetails($groep);
 		$txtGroepBeheer[] = "<a href='editGroup.php?groep=$groep' target='_blank'>".$data['naam']."</a>";
@@ -86,7 +86,7 @@ if(count($myRoosterBeheer) > 0) {
 	
 # Admin-groepen
 if(in_array(1, getMyGroups($_SESSION['ID']))) {	
-	$txtGroepAdmin[] = "<b>Beheer groepen</b> (Admin)";
+	$txtGroepAdmin[] = "<b>Beheer teams</b> (Admin)";
 	foreach($allGroups as $groep) {
 		$data = getGroupDetails($groep);
 		$txtGroepAdmin[] = "<a href='editGroup.php?groep=$groep' target='_blank'>".$data['naam']."</a>";
@@ -109,12 +109,36 @@ if(in_array(1, getMyGroups($_SESSION['ID']))) {
 	$blockArray[] = implode("<br>".NL, $adminRoosters);
 }
 
+
+# Gegevens wijzigen-deel
+if(in_array(1, getMyGroups($_SESSION['ID'])) OR in_array(20, getMyGroups($_SESSION['ID'])) OR in_array(22, getMyGroups($_SESSION['ID']))) {
+	$wijzigLinks[] = "<b>Wijzig gegevens</b>";
+}
+
+if(in_array(1, getMyGroups($_SESSION['ID'])) OR in_array(20, getMyGroups($_SESSION['ID']))) {
+	$wijzigLinks['editVoorganger.php'] = 'Gegevens van voorgangers wijzigen';	
+	$wijzigLinks['voorgangerRooster.php'] = 'Preekrooster invoeren';	
+}
+
+if(in_array(1, getMyGroups($_SESSION['ID'])) OR in_array(22, getMyGroups($_SESSION['ID']))) {
+	$wijzigLinks['editCollectes.php'] = 'Collecte-doelen invoeren';	
+}
+
+if(is_array($wijzigLinks)) {	
+	foreach($wijzigLinks as $link => $naam) {
+		$wijzigDeel[] = "<a href='$link' target='_blank'>$naam</a>";
+	}
+	
+	$blockArray[] = implode("<br>".NL, $wijzigDeel);
+}
+
 # Admin-deel
 if(in_array(1, getMyGroups($_SESSION['ID']))) {
 	$adminDeel[] = "<b>Admin</b>";
 	
 	$adminLinks['admin/generateUsernames.php'] = 'Gebruikersnamen aanmaken';
 	$adminLinks['admin/generateDiensten.php'] = 'Kerkdiensten aanmaken';
+	$adminLinks['admin/editDiensten.php'] = 'Kerkdiensten wijzigen';	
 	$adminLinks['admin/editGroepen.php'] = 'Groepen wijzigen';	
 	$adminLinks['admin/editRoosters.php'] = 'Roosters wijzigen';	
 	$adminLinks['admin/crossCheck.php'] = 'Check databases';
@@ -122,27 +146,14 @@ if(in_array(1, getMyGroups($_SESSION['ID']))) {
 	$adminLinks['sendMail.php'] = 'Verstuur mail';
 	$adminLinks['onderhoud/cleanUpDb.php'] = 'Verwijder oude diensten';
 	$adminLinks['../dumper/'] = 'Dumper';
-}
-
-if(in_array(20, getMyGroups($_SESSION['ID']))) {
-	$adminDeel[] = "<b>Gegevens invoeren</b>";
-		
-	$adminLinks['admin/editDiensten.php'] = 'Voorgangers wijzigen';	
-}
-
-if(in_array(22, getMyGroups($_SESSION['ID']))) {
-	$adminDeel[] = "<b>Gegevens invoeren</b>";
 	
-	$adminLinks['admin/editDiensten.php'] = 'Collectes wijzigen';	
-}
-
-if(is_array($adminLinks)) {	
 	foreach($adminLinks as $link => $naam) {
 		$adminDeel[] = "<a href='$link' target='_blank'>$naam</a>";
 	}
 	
 	$blockArray[] = implode("<br>".NL, $adminDeel);
 }
+
 
 # Koppelingen-deel
 if(in_array(1, getMyGroups($_SESSION['ID']))) {
