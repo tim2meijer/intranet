@@ -8,6 +8,12 @@ $cfgProgDir = 'auth/';
 $requiredUserGroups = array(1, 20);
 include($cfgProgDir. "secure.php");
 
+if(isset($_REQUEST['new'])) {
+	$sql = "INSERT INTO $TableVoorganger ($VoorgangerVoor, $VoorgangerAchter) VALUES ('nieuwe', 'voorganger')";
+	mysqli_query($db, $sql);
+	$_REQUEST['voorgangerID'] = mysqli_insert_id($db);
+}
+
 if(isset($_REQUEST['voorgangerID'])) {
 	if(isset($_REQUEST['save'])) {
 		$sql = "UPDATE $TableVoorganger SET ";
@@ -26,7 +32,7 @@ if(isset($_REQUEST['voorgangerID'])) {
 		$sql .= "$VoorgangerOpmerking = '". $_REQUEST['opm'] ."' ";
 		$sql .= "WHERE $VoorgangerID = '". $_REQUEST['voorgangerID'] ."'";
 		
-		if(mysql_query($sql)) {
+		if(mysqli_query($db, $sql)) {
 			$dienstBlocken[] = "Gegevens opgeslagen";
 			toLog('info', $_SESSION['ID'], '', 'Gegevens voorganger ('. $_REQUEST['voorgangerID'] .') bijgewerkt');
 		} else {
@@ -101,8 +107,7 @@ if(isset($_REQUEST['voorgangerID'])) {
 		$dienstBlocken[] = implode("\n", $text);
 	}	
 } else {
-	$dienstBlocken[] = "Selecteer de voorganger waar u de gegevens van wilt wijzigen :";
-	
+	$deel[] = "Selecteer de voorganger waar u de gegevens van wilt wijzigen :";
 	$voorgangers = getVoorgangers();
 	foreach($voorgangers as $voorgangerID) {
 		$voorgangerData = getVoorgangerData($voorgangerID);
@@ -110,6 +115,9 @@ if(isset($_REQUEST['voorgangerID'])) {
 		$naam = $voor.' '.($voorgangerData['tussen'] == '' ? '' : $voorgangerData['tussen']. ' ').$voorgangerData['achter'];
 		$deel[] = "<a href='?voorgangerID=$voorgangerID'>$naam</a>";
 	}
+	
+	$deel[] = "";
+	$deel[] = "<a href='?new=true'>Voeg nieuwe voorganger toe</a>";
 	
 	$dienstBlocken[] = implode("<br>", $deel);
 }

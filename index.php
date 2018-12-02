@@ -111,8 +111,8 @@ if(in_array(1, getMyGroups($_SESSION['ID']))) {
 
 
 # Gegevens wijzigen-deel
-if(in_array(1, getMyGroups($_SESSION['ID'])) OR in_array(20, getMyGroups($_SESSION['ID'])) OR in_array(22, getMyGroups($_SESSION['ID']))) {
-	$wijzigLinks[] = "<b>Wijzig gegevens</b>";
+if(in_array(1, getMyGroups($_SESSION['ID'])) OR in_array(20, getMyGroups($_SESSION['ID'])) OR in_array(20, getMyGroups($_SESSION['ID'])) OR in_array(28, getMyGroups($_SESSION['ID']))) {
+	$wijzigLinks[] = "<b>Diensten wijzigen</b>";
 }
 
 if(in_array(1, getMyGroups($_SESSION['ID'])) OR in_array(20, getMyGroups($_SESSION['ID']))) {
@@ -122,6 +122,10 @@ if(in_array(1, getMyGroups($_SESSION['ID'])) OR in_array(20, getMyGroups($_SESSI
 
 if(in_array(1, getMyGroups($_SESSION['ID'])) OR in_array(22, getMyGroups($_SESSION['ID']))) {
 	$wijzigLinks['editCollectes.php'] = 'Collecte-doelen invoeren';	
+}
+
+if(in_array(1, getMyGroups($_SESSION['ID'])) OR in_array(28, getMyGroups($_SESSION['ID']))) {
+	$wijzigLinks['editDiensten.php'] = 'Kerkdiensten wijzigen';	
 }
 
 if(is_array($wijzigLinks)) {	

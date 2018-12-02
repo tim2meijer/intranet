@@ -275,12 +275,12 @@ function getMemberDetails($id) {
 }
 
 function getAllGroups() {
-	global $TableGroups, $GroupID;	
+	global $TableGroups, $GroupID, $GroupNaam;	
 	$db = connect_db();
 	
 	$data = array();
 	
-	$sql = "SELECT $GroupID FROM $TableGroups";
+	$sql = "SELECT $GroupID FROM $TableGroups ORDER BY $GroupNaam";
 		
 	$result = mysqli_query($db, $sql);
 	if($row = mysqli_fetch_array($result)) {
@@ -292,7 +292,7 @@ function getAllGroups() {
 }
 
 function getMyGroups($id) {
-	global $TableGrpUsr, $GrpUsrGroup, $GrpUsrUser;	
+	global $TableGrpUsr, $GrpUsrGroup, $GrpUsrUser, $GroupNaam;	
 	$db = connect_db();
 	
 	$data = array();
@@ -309,11 +309,11 @@ function getMyGroups($id) {
 }
 
 function getMyGroupsBeheer($id) {
-	global $TableGroups, $TableGrpUsr, $GroupBeheer, $GrpUsrGroup, $GrpUsrUser, $GroupID;
+	global $TableGroups, $TableGrpUsr, $GroupBeheer, $GrpUsrGroup, $GrpUsrUser, $GroupID, $GroupNaam;
 	$db = connect_db();
 	$data = array();
 	
-	$sql = "SELECT $TableGroups.$GroupID FROM $TableGroups, $TableGrpUsr WHERE $TableGroups.$GroupBeheer = $TableGrpUsr.$GrpUsrGroup AND $TableGrpUsr.$GrpUsrUser = $id";
+	$sql = "SELECT $TableGroups.$GroupID FROM $TableGroups, $TableGrpUsr WHERE $TableGroups.$GroupBeheer = $TableGrpUsr.$GrpUsrGroup AND $TableGrpUsr.$GrpUsrUser = $id ORDER BY $TableGroups.$GroupNaam";
 	$result = mysqli_query($db, $sql);
 	if($row = mysqli_fetch_array($result)) {
 		do {
@@ -1114,10 +1114,10 @@ function replaceVoorganger($string) {
 }
 
 function getVoorgangers() {
-	global $TableVoorganger, $VoorgangerID;
+	global $TableVoorganger, $VoorgangerID, $VoorgangerAchter;
 	
 	$db = connect_db();
-	$sql = "SELECT * FROM $TableVoorganger";
+	$sql = "SELECT * FROM $TableVoorganger ORDER BY $VoorgangerAchter";
 	$result = mysqli_query($db, $sql);
 	if($row = mysqli_fetch_array($result)) {
 		do {
