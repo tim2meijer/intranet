@@ -72,6 +72,8 @@ foreach($diensten as $dienst) {
 					$ReplacedBericht = str_replace ('[[dag]]', strftime ("%A", $dienstData['start']), $ReplacedBericht);
 					$ReplacedBericht = str_replace ('[[dagdeel]]', $dagdeel, $ReplacedBericht);
 					$ReplacedBericht = str_replace ('[[voorganger]]', $dienstData['voorganger'], $ReplacedBericht);
+					$ReplacedBericht = str_replace ('[[collecte1]]', $dienstData['collecte_1'], $ReplacedBericht);
+					$ReplacedBericht = str_replace ('[[collecte2]]', $dienstData['collecte_2'], $ReplacedBericht);
 										
 					# Als er meer dan 1 teamlid is dan een opsommingslijst, anders gewoon een vermelding
 					if(count($team) == 1) {

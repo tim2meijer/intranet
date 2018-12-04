@@ -37,10 +37,16 @@ if(isset($_REQUEST['new'])) {
 	$eind		= mktime(11,30,0,date("n"),date("j"), date("Y"));		
 	$query	= "INSERT INTO $TableDiensten ($DienstStart, $DienstEind) VALUES ('$start', '$eind')";
 	$result = mysqli_query($db, $query);
-		
-	$id		= mysqli_insert_id($db);
-	
+			
 	toLog('info', $_SESSION['ID'], '', 'Dienst van '. date("d-m-Y", $start) .' toegevoegd');
+}
+
+if(isset($_REQUEST['delete'])) {
+	$details	= getKerkdienstDetails($_REQUEST['id']);
+	$query	= "DELETE FROM $TableDiensten WHERE $DienstID = ". $_REQUEST['id'];
+	$result = mysqli_query($db, $query);
+			
+	toLog('info', $_SESSION['ID'], '', 'Dienst van '. date("d-m-Y", $details['start']) .' verwijderd');
 }
 
 
@@ -67,6 +73,9 @@ $text[] = "	<td>Datum</td>";
 $text[] = "	<td>Start</td>";
 $text[] = "	<td>Eind</td>";
 $text[] = "	<td>Bijzonderheid</td>";
+if(in_array(1, getMyGroups($_SESSION['ID']))) {
+	$text[] = "	<td>&nbsp;</td>";
+}
 $text[] = "</tr>";
 
 foreach($diensten as $dienst) {
@@ -80,6 +89,7 @@ foreach($diensten as $dienst) {
 	
 	$text[] = "<tr>";
 	$text[] = "	<td align='right'>". strftime("%a %e %b", $data['start']) ."</td>";
+	//$text[] = "	<td align='right'>". date("d m Y", $data['start']) ."</td>";
 	$text[] = "	<td><select name='sUur[$dienst]'>";
 	for($u=0; $u<24 ; $u++) {
 		$text[] = "	<option value='$u'". ($u == $sUur ? ' selected' : '') .">$u</option>";
@@ -101,6 +111,9 @@ foreach($diensten as $dienst) {
 	}
 	$text[] = "	</select></td>";	
 	$text[] = "	<td><input type='text' name='bijz[$dienst]' value=\"". $data['bijzonderheden'] ."\" size='30'></td>";	
+	if(in_array(1, getMyGroups($_SESSION['ID']))) {
+		$text[] = "	<td align='right'><a href='?delete=ja&id=$dienst'>-</a></td>";
+	}
 	$text[] = "</tr>";
 }
 

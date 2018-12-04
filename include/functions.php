@@ -178,12 +178,16 @@ function getKerkdienstDetails($id) {
 	$sql = "SELECT * FROM $TableDiensten WHERE $DienstID = $id";
 	$result = mysqli_query($db, $sql);
 	if($row = mysqli_fetch_array($result)) {
+		$voorgangerData = getVoorgangerData($row[$DienstVoorganger]);
+		
 		$data['start']	= $row[$DienstStart];
 		$data['eind']		= $row[$DienstEind];
-		$data['voorganger']		= $row[$DienstVoorganger];
 		$data['collecte_1']		= urldecode($row[$DienstCollecte_1]);
 		$data['collecte_2']		= urldecode($row[$DienstCollecte_2]);
 		$data['bijzonderheden']		= urldecode($row[$DienstOpmerking]);
+		
+		$data['voorganger'] = strtolower($voorgangerData['titel']).' '.$voorgangerData['init'].' '.($voorgangerData['tussen'] == '' ? '' : $voorgangerData['tussen'].' ').$voorgangerData['achter'];
+		if(strtolower($voorgangerData['plaats']) != 'deventer' AND $voorgangerData['plaats'] != '')	$data['voorganger'] .= ' ('.$voorgangerData['plaats'].')';
 	}
 	return $data;
 }
