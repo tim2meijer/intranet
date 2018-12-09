@@ -180,13 +180,13 @@ function getKerkdienstDetails($id) {
 	if($row = mysqli_fetch_array($result)) {
 		$voorgangerData = getVoorgangerData($row[$DienstVoorganger]);
 		
-		$data['start']	= $row[$DienstStart];
-		$data['eind']		= $row[$DienstEind];
-		$data['collecte_1']		= urldecode($row[$DienstCollecte_1]);
-		$data['collecte_2']		= urldecode($row[$DienstCollecte_2]);
-		$data['bijzonderheden']		= urldecode($row[$DienstOpmerking]);
-		
-		$data['voorganger'] = strtolower($voorgangerData['titel']).' '.$voorgangerData['init'].' '.($voorgangerData['tussen'] == '' ? '' : $voorgangerData['tussen'].' ').$voorgangerData['achter'];
+		$data['start']					= $row[$DienstStart];
+		$data['eind']						= $row[$DienstEind];
+		$data['collecte_1']			= urldecode($row[$DienstCollecte_1]);
+		$data['collecte_2']			= urldecode($row[$DienstCollecte_2]);
+		$data['bijzonderheden']	= urldecode($row[$DienstOpmerking]);
+		$data['voorganger_id']	= $row[$DienstVoorganger];
+		$data['voorganger']			= strtolower($voorgangerData['titel']).' '.$voorgangerData['init'].' '.($voorgangerData['tussen'] == '' ? '' : $voorgangerData['tussen'].' ').$voorgangerData['achter'];
 		if(strtolower($voorgangerData['plaats']) != 'deventer' AND $voorgangerData['plaats'] != '')	$data['voorganger'] .= ' ('.$voorgangerData['plaats'].')';
 	}
 	return $data;
@@ -784,6 +784,11 @@ function sendMail($ontvanger, $subject, $bericht, $var) {
 			$mail->addAttachment($var['file']);
 		}
 	}
+	
+	if(isset($var['BCC']) AND $var['BCC_mail'] != "") {
+		$mail->AddBCC($var['BCC_mail']);
+	}
+	
 	
 	if(!$mail->Send()) {
 		return false;

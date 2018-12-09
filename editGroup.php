@@ -87,10 +87,16 @@ $block_2[] = "</table>";
 $block_2[] = "</form>";
 
 echo $HTMLHead;
-echo "	<link rel='stylesheet' type='text/css' href='http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css'>".NL;
-echo "	<script src=\"http://code.jquery.com/jquery-1.9.1.js\"></script>".NL;
-echo "	<script src=\"http://code.jquery.com/ui/1.10.2/jquery-ui.js\"></script>".NL;
-echo "	<link rel=\"stylesheet\" href=\"/resources/demos/style.css\" />".NL;
+echo "	<link rel=\"stylesheet\" href=\"//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css\">".NL;
+echo "	<link rel=\"stylesheet\" href=\"/resources/demos/style.css\">".NL;
+echo "	<script src=\"https://code.jquery.com/jquery-1.12.4.js\"></script>".NL;
+echo "	<script src=\"https://code.jquery.com/ui/1.12.1/jquery-ui.js\"></script>".NL;
+
+//echo "	<link rel='stylesheet' type='text/css' href='http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css'>".NL;
+//echo "	<script src=\"http://code.jquery.com/jquery-1.9.1.js\"></script>".NL;
+//echo "	<script src=\"http://code.jquery.com/ui/1.10.2/jquery-ui.js\"></script>".NL;
+//echo "	<link rel=\"stylesheet\" href=\"/resources/demos/style.css\" />".NL;
+
 echo "		<script>".NL;
 echo "		$(function() {".NL;
 echo '		var availableTags = ["'. implode('", "', $namen) ."\"];\n";

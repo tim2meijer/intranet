@@ -56,7 +56,7 @@ $text[] = "<table>";
 $text[] = "<tr>";
 $text[] = "	<td>Datum</td>";
 $text[] = "	<td>Start</td>";
-$text[] = "	<td>Voorganger</td>";
+$text[] = "	<td colspan='2'>Voorganger</td>";
 $text[] = "	<td>Bijzonderheid</td>";
 $text[] = "</tr>";
 
@@ -72,17 +72,22 @@ foreach($diensten as $dienst) {
 	$text[] = "	<option value=''></option>";
 	
 	foreach($voorgangersNamen as $voorgangerID => $naam) {
-		$text[] = "	<option value='$voorgangerID'". ($data['voorganger'] == $voorgangerID ? ' selected' : '') .">$naam</option>";
+		$text[] = "	<option value='$voorgangerID'". ($data['voorganger_id'] == $voorgangerID ? ' selected' : '') .">$naam</option>";
 	}
 		
 	$text[] = "</select>";
 	$text[] = "	</td>";
+	if($data['voorganger_id'] > 0) {
+		$text[] = "	<td>&nbsp;</td>";
+	} else {
+		$text[] = "	<td align='right'><a href='editVoorganger.php?new=ja' target='_blank'><img src='images/invite.gif' title='Open een nieuw scherm om missende voorganger toe te voegen'></a></td>";
+	}
 	$text[] = "	<td>". $data['bijzonderheden'] ."</td>";
 	$text[] = "</tr>";
 }
 
 $text[] = "<tr>";
-$text[] = "	<td colspan='4' align='middle'><input type='submit' name='save' value='Diensten opslaan'>&nbsp;<input type='submit' name='maanden' value='Volgende 3 maanden'></td>";
+$text[] = "	<td colspan='5' align='middle'><input type='submit' name='save' value='Diensten opslaan'>&nbsp;<input type='submit' name='maanden' value='Volgende 3 maanden'></td>";
 $text[] = "</tr>";
 $text[] = "</table>";
 $text[] = "</form>";

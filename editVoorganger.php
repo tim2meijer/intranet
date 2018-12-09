@@ -12,6 +12,9 @@ if(isset($_REQUEST['new'])) {
 	$sql = "INSERT INTO $TableVoorganger ($VoorgangerVoor, $VoorgangerAchter) VALUES ('nieuwe', 'voorganger')";
 	mysqli_query($db, $sql);
 	$_REQUEST['voorgangerID'] = mysqli_insert_id($db);
+	$nieuweVoorganger = true;
+} else {
+	$nieuweVoorganger = false;
 }
 
 if(isset($_REQUEST['voorgangerID'])) {
@@ -45,6 +48,11 @@ if(isset($_REQUEST['voorgangerID'])) {
 		$text[] = "<form method='post' action='$_SERVER[PHP_SELF]'>";
 		$text[] = "<input type='hidden' name='voorgangerID' value='". $_REQUEST['voorgangerID'] ."'>";
 		$text[] = "<table>";
+		if($nieuweVoorganger) {
+			$text[] = "<tr>";
+			$text[] = "	<td colspan='2'><b>Deze voorganger verschijnt niet direct<br>in het selectie-lijstje op het rooster.<br>Daarvoor moet het rooster eerst ververst worden.</b></td>";
+			$text[] = "</tr>";
+		}
 		$text[] = "<tr>";
 		$text[] = "	<td>Titel</td>";
 		$text[] = "	<td><input type='text' name='titel' value='". $voorgangerData['titel'] ."'></td>";

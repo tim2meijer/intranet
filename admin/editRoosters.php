@@ -9,8 +9,10 @@ $db = connect_db();
 
 if(isset($_POST['save'])) {
 	if($_POST['text_only'] == 1) {
-		$_POST['groep'] = 0;
-		$_POST['aantal'] = 0;
+		$_POST['groep'] = $_POST['aantal'] = 0;
+	} else {
+		$_POST['text_only'] = 0;
+		$_POST['groep'] = $_POST['aantal'] = 1;
 	}
 	
 	if(isset($_REQUEST['new'])) {		
@@ -20,7 +22,7 @@ if(isset($_POST['save'])) {
 		$sql = "UPDATE $TableRoosters SET $RoostersNaam = '". $_POST['naam'] ."', $RoostersGroep = ". $_POST['groep'] .", $RoostersFields = ". $_POST['aantal'] .", $RoostersTextOnly = ". $_POST['text_only'] ." WHERE $GroupID = ". $_POST['id'];
 		toLog('info', $_SESSION['ID'], '', 'Roostergegevens '. $_POST['naam'] .' gewijzigd');
 	}
-	
+		
 	mysqli_query($db, $sql);
 	
 	$text[] = "Groep opgeslagen";	
