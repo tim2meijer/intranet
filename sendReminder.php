@@ -59,9 +59,9 @@ foreach($diensten as $dienst) {
 						$ReplacedBericht = $onderwerp;
 					}
 					
-					if(date("H", $data_dienst['start']) < 12) {
+					if(date("H", $dienstData['start']) < 12) {
 						$dagdeel = 'ochtend';
-					} elseif(date("H", $data_dienst['start']) < 18) {
+					} elseif(date("H", $dienstData['start']) < 18) {
 						$dagdeel = 'middag';
 					} else {
 						$dagdeel = 'avond';
