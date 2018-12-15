@@ -669,65 +669,11 @@ function makeName($id, $type) {
 
 
 function sendMail($ontvanger, $subject, $bericht, $var) {
-	global $ScriptURL, $ScriptMailAdress, $ScriptTitle, $SubjectPrefix;
+	global $ScriptURL, $ScriptMailAdress, $ScriptTitle, $SubjectPrefix, $MailHeader, $MailFooter;
 	
 	$UserData = getMemberDetails($ontvanger);
-		
-	$HTMLHeader	= '<html>'.NL;
-	$HTMLHeader	.= '<head>'.NL;
-	$HTMLHeader	.= '<style type="text/css">'.NL;
-	$HTMLHeader	.= 'body		{ background-color:#F2F2F2; font-family:Arial; color:#34383D; }'.NL;
-	$HTMLHeader	.= 'p { margin-top: 30px;}'.NL;
-	$HTMLHeader	.= '.seperator	{ border-bottom:1px solid #34383D; }'.NL;
-	$HTMLHeader	.= '.onderwerp	{ color:#34383D; font-size:24px; font-weight:bold;}'.NL;
-	$HTMLHeader	.= '</style>'.NL;
-	$HTMLHeader	.= '</head>'.NL;
-	$HTMLHeader	.= '<body>'.NL;
-	$HTMLHeader	.= '<table width="700" cellpadding="0" cellspacing="0" align="center" bgcolor="ffffff">'.NL;
-	$HTMLHeader	.= '	<tr>'.NL;
-	$HTMLHeader	.= '		<td colspan="2" height="20" bgcolor="#8C1974">&nbsp;</td>'.NL;
-	$HTMLHeader	.= '	</tr>'.NL;
-	$HTMLHeader	.= '	<tr>'.NL;
-	$HTMLHeader	.= '		<td colspan="2" height="10">&nbsp;</td>'.NL;
-	$HTMLHeader	.= '	</tr>'.NL;
-	$HTMLHeader	.= '    <tr>'.NL;
-	$HTMLHeader	.= '		<td>'.NL;
-	$HTMLHeader	.= '		<table width="630" cellpadding="0" cellspacing="0" align="center" bgcolor="#ffffff">'.NL;
-	$HTMLHeader	.= '		<tr>'.NL;
-	$HTMLHeader	.= '			<td class="onderwerp" align="left" height="80" valign="bottom"><img src="'. $ScriptURL .'images/logoKoningsKerk.png" height=125 alt="Koningskerk Deventer"></td>'.NL;
-	$HTMLHeader	.= '		</tr>'.NL;
-	$HTMLHeader	.= '    </table>'.NL;
-	$HTMLHeader	.= '    <table width="630" align="center">'.NL;
-	$HTMLHeader	.= '			<tr>'.NL;
-	$HTMLHeader	.= '				<td colspan="2" class="seperator">&nbsp;</td>'.NL;
-	$HTMLHeader	.= '			</tr>'.NL;
-	$HTMLHeader	.= '			<tr>'.NL;
-	$HTMLHeader	.= '				<td colspan="2">&nbsp;</td>'.NL;
-	$HTMLHeader	.= '			</tr>'.NL;
-	$HTMLHeader	.= '			<tr>'.NL;
-	$HTMLHeader	.= '				<td colspan="2">'.NL;
-	
-	$HTMLFooter	= '</td>'.NL;
-	$HTMLFooter	.= '</tr>'.NL;
-	$HTMLFooter	.= '		<tr>'.NL;
-	$HTMLFooter	.= '			<td colspan="2" class="seperator">&nbsp;</td>'.NL;
-	$HTMLFooter	.= '		</tr>'.NL;
-	$HTMLFooter	.= '		<tr>'.NL;
-	$HTMLFooter	.= '			<td colspan="2">&nbsp;</td>'.NL;
-	$HTMLFooter	.= '		</tr>'.NL;
-	$HTMLFooter	.= '    </table>'.NL;
-	$HTMLFooter	.= '		</td>'.NL;
-	$HTMLFooter	.= '	</tr>'.NL;
-	$HTMLFooter	.= '	<tr>'.NL;
-	$HTMLFooter	.= '		<td colspan="2" height="20" bgcolor="#8C1974">&nbsp;</td>'.NL;
-	$HTMLFooter	.= '	</tr>'.NL;
-	$HTMLFooter	.= '</table>'.NL;
-	$HTMLFooter	.= '</table>'.NL;
-	$HTMLFooter	.= '<br /><br /><br /><br /><br /><br />'.NL;
-	$HTMLFooter	.= '</body>'.NL;
-	$HTMLFooter	.= '</html>'.NL;
-					
-	$HTMLMail = $HTMLHeader.$bericht.$HTMLFooter;
+						
+	$HTMLMail = $MailHeader.$bericht.$MailFooter;
 	
 	$html =& new html2text($HTMLMail);
 	$html->set_base_url($ScriptURL);
@@ -1142,6 +1088,7 @@ function getVoorgangerData($id) {
 	
 	$db = connect_db();
 	$sql = "SELECT * FROM $TableVoorganger WHERE $VoorgangerID = $id";
+
 	$result = mysqli_query($db, $sql);
 	$row = mysqli_fetch_array($result);
 	

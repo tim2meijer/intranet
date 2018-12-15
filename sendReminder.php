@@ -1,6 +1,7 @@
 <?php
 include_once('include/functions.php');
 include_once('include/config.php');
+include_once('include/HTML_HeaderFooter.php');
 include_once('../../general_include/class.phpmailer.php');
 include_once('../../general_include/class.html2text.php');
 $db = connect_db();
@@ -16,7 +17,7 @@ $roosters = getRoosters(0);
 
 # Sommige roosters worden geimporteerd.
 # Deze moeten een iets andere Ps krijgen
-$importRoosters = array(7, 8, 9, 10);
+$importRoosters = array(7, 8, 9, 10, 13);
 
 # Mochten er diensten zijn, dan even alle teams opvragen
 # Van deze teamID's een naam-array maken ($teamVulling).
