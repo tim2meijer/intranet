@@ -188,6 +188,7 @@ function getKerkdienstDetails($id) {
 		$data['voorganger_id']	= $row[$DienstVoorganger];
 		$data['voorganger']			= strtolower($voorgangerData['titel']).' '.$voorgangerData['init'].' '.($voorgangerData['tussen'] == '' ? '' : $voorgangerData['tussen'].' ').$voorgangerData['achter'];
 		if(strtolower($voorgangerData['plaats']) != 'deventer' AND $voorgangerData['plaats'] != '')	$data['voorganger'] .= ' ('.$voorgangerData['plaats'].')';
+		$data['voorganger']			= trim($data['voorganger']);
 	}
 	return $data;
 }

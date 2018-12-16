@@ -3,8 +3,6 @@ include_once('include/functions.php');
 include_once('include/config.php');
 include_once('include/HTML_TopBottom.php');
 
-# ALTER TABLE `kerkdiensten` CHANGE `voorganger` `voorganger` INT NOT NULL;
-
 $requiredUserGroups = array(1, 20);
 $cfgProgDir = 'auth/';
 include($cfgProgDir. "secure.php");
@@ -12,13 +10,11 @@ include($cfgProgDir. "secure.php");
 # Als er op een knop gedrukt is, het rooster wegschrijven
 if(isset($_POST['save']) OR isset($_POST['maanden'])) {	
 	foreach($_POST['voorganger'] as $dienst => $voorgangerID) {
-		if($voorgangerID > 1) {
-			$sql = "UPDATE $TableDiensten SET $DienstVoorganger = $voorgangerID WHERE $DienstID = ". $dienst;		
+		$sql = "UPDATE $TableDiensten SET $DienstVoorganger = $voorgangerID WHERE $DienstID = ". $dienst;		
 			
-			if(!mysql_query($sql)) {
-				$text[] = "Ging iets niet goed met geegevens opslaan";
-				//toLog('error', $_SESSION['ID'], '', 'Gegevens voorganger ('. $_REQUEST['voorgangerID'] .') konden niet worden opgeslagen');
-			}
+		if(!mysql_query($sql)) {
+			$text[] = "Ging iets niet goed met geegevens opslaan";
+			toLog('error', $_SESSION['ID'], '', 'Gegevens voorganger ('. $_REQUEST['voorgangerID'] .") konden niet worden gekoppeld aan dienst $dienst");
 		}
 	}
 	toLog('info', $_SESSION['ID'], '', 'Diensten bijgewerkt');
@@ -69,7 +65,7 @@ foreach($diensten as $dienst) {
 	$text[] = "	<td>". date('H:i', $data['start']) ."</td>";
 	$text[] = "	<td>";
 	$text[] = "<select name='voorganger[$dienst]'>";
-	$text[] = "	<option value=''></option>";
+	$text[] = "	<option value='0'></option>";
 	
 	foreach($voorgangersNamen as $voorgangerID => $naam) {
 		$text[] = "	<option value='$voorgangerID'". ($data['voorganger_id'] == $voorgangerID ? ' selected' : '') .">$naam</option>";

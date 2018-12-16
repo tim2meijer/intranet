@@ -76,14 +76,22 @@ foreach($diensten as $dienst) {
 	$mail = new PHPMailer;
 	$mail->FromName	= "Jenny van der Vegt-Huzen";
 	$mail->From			= "jenny@overbrugger.nl";
+	
+	/*
 	$mail->AddAddress($voorgangerData['mail'], $mailNaam);
 	$mail->AddCC($bandData['mail'], makeName($bandleider, 5));
 	$mail->AddCC($schriftData['mail'], makeName($schriftlezer, 5));
 	$mail->AddCC("Beamteam 3GK", "beamteam3gk@gmail.com");
 	$mail->AddCC("Mededelingen 3GK", "mededelingen@3gk-deventer.nl");
-	$mail->AddCC("Jenny van der Vegt-Huzen", "jenny@overbrugger.nl");
+	$mail->AddBCC("Jenny van der Vegt-Huzen", "jenny@overbrugger.nl");
+	*/
+	
 	$mail->AddBCC('internet@draijer.org');
-		
+	$mail->AddAttachment('download/aandachtspunten.pdf', 'Aandachtspunten Liturgie Deventer (dd 11-6-2018).pdf');
+	$mail->AddAttachment('download/declaratieformulier.xlsx', date('ymd', $dienstData['start'])."_declaratieformulier_". str_replace(' ', '', str_replace('.', '', $mailNaam)) .".xlsx");
+	
+	$mail->AddAddress('matthijs@draijer.org', $mailNaam);
+	
 	$mail->Subject	= trim($Subject);
 	$mail->IsHTML(true);
 	$mail->Body			= $HTMLMail;
