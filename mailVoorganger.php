@@ -51,11 +51,12 @@ foreach($diensten as $dienst) {
 	/*
 	# Alle geadresseerden toevoegen
 	$mail->AddAddress($voorgangerData['mail'], $mailNaam);
-	$mail->AddCC($bandData['mail'], makeName($bandleider, 5));
-	$mail->AddCC($schriftData['mail'], makeName($schriftlezer, 5));
-	$mail->AddCC("Beamteam 3GK", "beamteam3gk@gmail.com");
-	$mail->AddCC("Mededelingen 3GK", "mededelingen@3gk-deventer.nl");
-	$mail->AddBCC("Jenny van der Vegt-Huzen", "jenny@overbrugger.nl");
+	$mail->AddCC($bandData['mail'], makeName($bandleider, 6));
+	$mail->AddCC($schriftData['mail'], makeName($schriftlezer, 6));
+	$mail->AddCC('Beamteam 3GK', 'beamteam3gk@gmail.com');
+	$mail->AddCC('Mededelingen 3GK', 'mededelingen@3gk-deventer.nl');
+	$mail->AddCC('Webmaster 3GK', 'nieuwesite@3gk-deventer.nl');
+	$mail->AddBCC('Jenny van der Vegt-Huzen', 'jenny@overbrugger.nl');
 	$mail->AddBCC('internet@draijer.org');
 	*/
 	$mail->AddAddress('matthijs@draijer.org', $mailNaam);
@@ -108,15 +109,9 @@ foreach($diensten as $dienst) {
 	
 	if(!$mail->Send()) {
 		toLog('error', '', '', "Problemen met voorgangersmail versturen naar $mailNaam voor dienst $dienst.");
+		echo "Problemen met mail versturen<br>\n";
 	} else {
 		toLog('info', '', '', "Voorgangersmail verstuurd naar $mailNaam voor dienst $dienst.");
+		echo "Mail verstuurd naar $mailNaam<br>\n";
 	}
-	
-	/*
-	echo $voorgangerData['mail'] .' - > '. $mailNaam .'<br>';
-	echo $bandData['mail'] .' - > '. makeName($bandleider, 5) .'<br>';
-	echo $schriftData['mail'] .' - > '. makeName($schriftlezer, 5) .'<br>';
-
-	echo $HTMLMail;
-	*/
 }
