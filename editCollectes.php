@@ -40,7 +40,7 @@ $text[] = "<input type='hidden' name='blokken' value='$blokken'>";
 $text[] = "<table>";
 $text[] = "<tr>";
 $text[] = "	<td>Datum</td>";
-$text[] = "	<td>Datum</td>";
+//$text[] = "	<td>Datum</td>";
 $text[] = "	<td>Start</td>";
 $text[] = "	<td>Collecte 1</td>";
 $text[] = "	<td>Collecte 2</td>";
