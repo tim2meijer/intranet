@@ -32,7 +32,7 @@ foreach($diensten as $dienst) {
 	
 	# Achternaam
 	$voorgangerAchterNaam = '';
-	if($voorgangerData['tussen'] == '')	$voorgangerAchterNaam = $voorgangerData['tussen'].' ';	
+	if($voorgangerData['tussen'] == '')	$voorgangerAchterNaam = lcfirst($voorgangerData['tussen']).' ';	
 	$voorgangerAchterNaam .= $voorgangerData['achter'];
 	
 	if($voorgangerData['voor'] != "") {
@@ -84,11 +84,11 @@ foreach($diensten as $dienst) {
 	$mail->AddCC("Beamteam 3GK", "beamteam3gk@gmail.com");
 	$mail->AddCC("Mededelingen 3GK", "mededelingen@3gk-deventer.nl");
 	$mail->AddBCC("Jenny van der Vegt-Huzen", "jenny@overbrugger.nl");
-	*/
-	
 	$mail->AddBCC('internet@draijer.org');
+	*/
+		
 	$mail->AddAttachment('download/aandachtspunten.pdf', 'Aandachtspunten Liturgie Deventer (dd 11-6-2018).pdf');
-	$mail->AddAttachment('download/declaratieformulier.xlsx', date('ymd', $dienstData['start'])."_declaratieformulier_". str_replace(' ', '', str_replace('.', '', $mailNaam)) .".xlsx");
+	$mail->AddAttachment('download/declaratieformulier.xlsx', date('ymd', $dienstData['start'])."_declaratieformulier_". str_replace(' ', '', $voorgangerAchterNaam) .".xlsx");
 	
 	$mail->AddAddress('matthijs@draijer.org', $mailNaam);
 	
