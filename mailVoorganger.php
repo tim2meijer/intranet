@@ -45,10 +45,10 @@ foreach($diensten as $dienst) {
 	
 	# Nieuw mail-object aanmaken
 	$mail = new PHPMailer;
-	$mail->FromName	= "Jenny van der Vegt-Huzen";
-	$mail->From	= "jenny@overbrugger.nl";
+	$mail->FromName	= 'Preekvoorziening Koningskerk Deventer';
+	$mail->From			= $ScriptMailAdress;
+	$mail->AddReplyTo('jenny@overbrugger.nl', 'Jenny van der Vegt-Huzen');
 	
-	/*
 	# Alle geadresseerden toevoegen
 	$mail->AddAddress($voorgangerData['mail'], $mailNaam);
 	$mail->AddCC($bandData['mail'], makeName($bandleider, 6));
@@ -56,10 +56,11 @@ foreach($diensten as $dienst) {
 	$mail->AddCC('Beamteam 3GK', 'beamteam3gk@gmail.com');
 	$mail->AddCC('Mededelingen 3GK', 'mededelingen@3gk-deventer.nl');
 	$mail->AddCC('Webmaster 3GK', 'nieuwesite@3gk-deventer.nl');
-	$mail->AddBCC('Jenny van der Vegt-Huzen', 'jenny@overbrugger.nl');
+	$mail->AddBCC('jenny@overbrugger.nl');
 	$mail->AddBCC('internet@draijer.org');
-	*/
-	$mail->AddAddress('matthijs@draijer.org', $mailNaam);
+	$mail->AddBCC('matthijs.draijer@koningskerkdeventer.nl');
+	
+	//$mail->AddAddress('matthijs@draijer.org', $mailNaam);
 	
 	# Mail opstellen
 	$mailText = array(); 
@@ -81,7 +82,7 @@ foreach($diensten as $dienst) {
 		$mailText[] = "In de bijlage treft u de aandachtspunten van de dienst en het declaratieformulier aan.";
 				
 		$mail->AddAttachment('download/aandachtspunten.pdf', 'Aandachtspunten Liturgie Deventer (dd 11-6-2018).pdf');
-		$mail->AddAttachment('download/declaratieformulier.xlsx', date('ymd', $dienstData['start'])."_declaratieformulier_". str_replace(' ', '', $voorgangerAchterNaam) .".xlsx");	
+		$mail->AddAttachment('download/declaratieformulier.xlsx', date('ymd', $dienstData['start'])."_Declaratieformulier_". str_replace(' ', '', $voorgangerAchterNaam) .".xlsx");	
 	}
 	
 	$mailText[] = "";
@@ -108,10 +109,11 @@ foreach($diensten as $dienst) {
 	$mail->AltBody	= $PlainMail;
 	
 	if(!$mail->Send()) {
-		toLog('error', '', '', "Problemen met voorgangersmail versturen naar $mailNaam voor dienst $dienst.");
+		toLog('error', '', '', "Problemen met voorgangersmail versturen naar $mailNaam voor ". date('j-n-Y', $dienstData['start']));
 		echo "Problemen met mail versturen<br>\n";
 	} else {
-		toLog('info', '', '', "Voorgangersmail verstuurd naar $mailNaam voor dienst $dienst.");
+		toLog('info', '', '', "Voorgangersmail verstuurd naar $mailNaam voor ". date('j-n-Y', $dienstData['start']));
 		echo "Mail verstuurd naar $mailNaam<br>\n";
 	}
 }
+?>
