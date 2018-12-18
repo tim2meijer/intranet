@@ -46,7 +46,7 @@ foreach($diensten as $dienst) {
 				//$data = getMemberDetails($lid);
 				$string = "<a href='profiel.php?id=$lid'>". makeName($lid, 5) ."</a>";
 				
-				if(in_array($_SESSION['ID'], $IDs)) {
+				if(in_array($_SESSION['ID'], $IDs) OR in_array($_SESSION['ID'], $vulling)) {
 					if($lid == $_SESSION['ID']) {
 						$string .= " <a href='ruilen.php?rooster=". $_REQUEST['rooster'] ."&dienst_d=$dienst&dader=$lid' title='klik om ruiling door te geven'><img src='images/wisselen.png'></a>";
 					} else {
