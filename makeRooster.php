@@ -232,10 +232,20 @@ if($RoosterData['text_only'] == 0) {
 	$block_2[] = "		<table border=0>";
 	$block_2[] = "		<tr><td valign='top'>[[voornaam]]</td><td valign='top'>voornaam van de ontvanger.</td></tr>";
 	$block_2[] = "		<tr><td valign='top'>[[achternaam]]</td><td valign='top'>achternaam van de ontvanger.</td></tr>";
-	$block_2[] = "		<tr><td valign='top'>[[team]]</td><td valign='top'>namen van iedereen die voor die dag op het rooster staat (uitgezonderd de ontvanger).</td></tr>";
-	$block_2[] = "		<tr><td valign='top'>[[voorganger]]</td><td valign='top'>naam van de voorganger die dienst.</td></tr>";
+	$block_2[] = "		<tr><td valign='top'>[[team]]</td><td valign='top'>alle namen (uitgezonderd de ontvanger) van wie op het rooster staan.</td></tr>";
+	$block_2[] = "		<tr><td valign='top'>[[voorganger]]</td><td valign='top'>naam van de voorganger.</td></tr>";
 	$block_2[] = "		<tr><td valign='top'>[[dag]]</td><td valign='top'>naam van de dag. Meestal zondag, bij feestdagen meestal andere dag.</td></tr>";
 	$block_2[] = "		<tr><td valign='top'>[[dagdeel]]</td><td valign='top'>naam van het dagdeel (ochtend, middag, avond).</td></tr>";
+	$block_2[] = "		<tr><td valign='top'>[[team|xx]]</td><td valign='top'>Om namen die voor deze dienst op een ander roosters in te voeren, vervang je XX door het id van dat rooster.</td></tr>";
+	
+	/*
+	$roosters = getRoosters(0);	
+	foreach($roosters as $r) {
+		$data = getRoosterDetails($r);
+		$block_2[] = "		<tr><td valign='top'>[[team|$r]]</td><td valign='top'>alle namen voor ". $data['naam'] .".</td></tr>";
+	}
+	*/
+	
 	$block_2[] = "		</table>";
 	$block_2[] = "	</td>";
 	$block_2[] = "</tr>";

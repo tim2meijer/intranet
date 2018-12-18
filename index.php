@@ -168,9 +168,7 @@ if(in_array(1, getMyGroups($_SESSION['ID']))) {
 	$koppelLinks['makeiCal.php'] = 'Persoonlijke iCals aanmaken';
 	$koppelLinks['makeiCalScipio.php'] = 'iCal voor Scipio aanmaken';
 	$koppelLinks['onderhoud/importOuderlingen.php'] = 'Importeer ambtsdragers';
-	//$koppelLinks['onderhoud/importVoorgangers.php'] = 'Importeer voorgangers';
 	$koppelLinks['onderhoud/importSchriftlezer.php'] = 'Importeer schriftlezers';
-	//$koppelLinks['onderhoud/importCollecten.php'] = 'Importeer collectes';
 	$koppelLinks['scipio/ScipioImport.php'] = 'Scipio-data inladen';
 	
 	foreach($koppelLinks as $link => $naam) {
@@ -195,7 +193,6 @@ $blockArray[] = implode("<br>".NL, $links);
 $site[] = "<b>Ingelogd als ". makeName($_SESSION['ID'], 5)."</b>";
 $site[] = "<a href='account.php' target='_blank'>Account</a>";
 $site[] = "<a href='profiel.php' target='_blank'>Profiel</a>";
-//$site[] = "<a href='gegevens.php' target='_blank'>Gegevens wijzigen</a>";
 $site[] = "<a href='ledenlijst.php' target='_blank'>Ledenlijst</a>";
 if(in_array(1, getMyGroups($_SESSION['ID']))) {
 	$site[] = "<a href='search.php' target='_blank'>Zoeken</a>";

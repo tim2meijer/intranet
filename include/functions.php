@@ -682,25 +682,15 @@ function sendMail($ontvanger, $subject, $bericht, $var) {
 		
 	$mail = new PHPMailer;
 	
-	if($var['from'] != "") {
-		$mail->From     = $var['from'];
-	} else {
-		$mail->From     = $ScriptMailAdress;
-	}
-	
-	if($var['FromName'] != "") {
-		$mail->FromName = $var['FromName'];
-	} else {
-		$mail->FromName = $ScriptTitle;
-	}
-	
+	$mail->From     = $ScriptMailAdress;
+	$mail->FromName = $ScriptTitle;
+		
 	if($var['ReplyTo'] != "") {
 		$mail->AddReplyTo($var['ReplyTo']);
 	}
 	
 	if($UserData['mail'] != '') {
 		$mail->AddAddress($UserData['mail'], makeName($ontvanger, 5));
-		//echo '|'. $UserData['mail'] .'|'. makeName($ontvanger, 5) .'<br>';
 	} else {
 		$hoofd = getParents($ontvanger, true);
 		$HoofdData = getMemberDetails($hoofd[0]);

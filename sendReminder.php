@@ -45,8 +45,8 @@ foreach($diensten as $dienst) {
 			$roosterData			= getRoosterDetails($rooster);			
 			$HTMLMail					= $roosterData['text_mail'];
 			$onderwerp				= $roosterData['onderwerp_mail'];
-			$var['FromName']	= $roosterData['naam_afzender'];
-			$var['from']			= $roosterData['mail_afzender'];
+			$var['ReplyToName']	= $roosterData['naam_afzender'];
+			$var['ReplyTo']			= $roosterData['mail_afzender'];
 			# Stuur bij 'tieners' een CC naar de ouders
 			$var['ouderCC']		= 1;
 															
