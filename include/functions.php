@@ -686,7 +686,11 @@ function sendMail($ontvanger, $subject, $bericht, $var) {
 	$mail->FromName = $ScriptTitle;
 		
 	if($var['ReplyTo'] != "") {
-		$mail->AddReplyTo($var['ReplyTo']);
+		if($var['ReplyToName'] != "") {
+			$mail->AddReplyTo($var['ReplyTo'], $var['ReplyToName']);
+		} else {
+			$mail->AddReplyTo($var['ReplyTo']);
+		}
 	}
 	
 	if($UserData['mail'] != '') {
