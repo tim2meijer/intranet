@@ -53,9 +53,9 @@ foreach($diensten as $dienst) {
 	$mail->AddAddress($voorgangerData['mail'], $mailNaam);
 	$mail->AddCC($bandData['mail'], makeName($bandleider, 6));
 	$mail->AddCC($schriftData['mail'], makeName($schriftlezer, 6));
-	$mail->AddCC('Beamteam 3GK', 'beamteam3gk@gmail.com');
-	$mail->AddCC('Mededelingen 3GK', 'mededelingen@3gk-deventer.nl');
-	$mail->AddCC('Webmaster 3GK', 'nieuwesite@3gk-deventer.nl');
+	$mail->AddCC('beamteam3gk@gmail.com', 'Beamteam 3GK');
+	$mail->AddCC('mededelingen@3gk-deventer.nl', 'Mededelingen 3GK');
+	$mail->AddCC('nieuwesite@3gk-deventer.nl','Webmaster 3GK');
 	$mail->AddBCC('jenny@overbrugger.nl');
 	$mail->AddBCC('internet@draijer.org');
 	$mail->AddBCC('matthijs.draijer@koningskerkdeventer.nl');
