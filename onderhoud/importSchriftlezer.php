@@ -1,12 +1,27 @@
 <?php
 include_once('../include/config.php');
 include_once('../include/functions.php');
+require('../include/excel/SpreadsheetReader.php');
 
 # Rooster inlezen
 $roosterURL = 'https://docs.google.com/spreadsheets/d/1W9-kw0go7QLY2GxFyeue8KR7JEWfbogXgiMRxbhfm6M/export?gid=0&format=csv';
 $contents = file_get_contents($roosterURL);
 $regels = explode("\n", $contents);
 $aantal = count($regels);
+
+
+# Om een of andere reden werkt het niet als je de Excel-file extern laat staan
+# Daarom even een locale kopie maken
+$roosterURL = 'https://www.dropbox.com/s/0iczm9cczgjqq7a/Collecterooster%202018.xlsx?dl=1';
+$xlsFile = 'local_collecterooster.xlsx';
+$fp = fopen($xlsFile, 'w+');
+fwrite($fp, file_get_contents($roosterURL));
+fclose($fp);
+# PHP-Class voor het uitlezen van XLS-files aanroepem
+$Reader = new SpreadsheetReader($xlsFile);
+$Reader -> ChangeSheet(0);
+
+
 
 # Schriftlezers inlezen
 $schriftlezer = getGroupMembers(13);

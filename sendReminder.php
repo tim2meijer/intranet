@@ -133,6 +133,8 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP)) {
 			}
 		}
 	}
+} else {
+	toLog('error', '', 'Poging handmatige run remindermail, IP:'.$_SERVER['REMOTE_ADDR']);
 }
 
 ?>

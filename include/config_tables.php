@@ -4,13 +4,6 @@ define("NL", "\n");
 /* Set locale to Dutch */
 setlocale(LC_ALL, 'nl_NL');
 
-$ScriptSever			= '';
-$ScriptURL				= $ScriptSever.'';
-$ScriptTitle			= '';	# Naam van het script (is naam van afzender in mails)
-$ScriptMailAdress	= '';			# Mailadres van het script (is mailadres van afzender in mails)
-$Version					= '2.4';		# Versie nummer
-$SubjectPrefix		= '[3GK] ';		# Voorvoegsel bij de onderwerpregel bij het versturen van mails
-
 $lengthShortHash = 16;
 $lengthLongHash = 64;
 
@@ -138,5 +131,7 @@ $kerkelijkArray	= array('belijdend lid', 'betrokkene', 'dooplid', 'gast', 'gedoo
 $maandArray			= array(1 => 'jan', 2 => 'feb', 3 => 'mrt', 4 => 'apr', 5 => 'mei', 6 => 'jun', 7 => 'jul', 8 => 'aug', 9 => 'sep', 10 => 'okt', 11 => 'nov', 12 => 'dec');
 $maandArrayEng	= array(1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April', 5 => 'May', 6 => 'June', 7 => 'July', 8 => 'August', 9 => 'September', 10 => 'October', 11 => 'November', 12 => 'December');
 $letterArray		= array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+
+
 
 ?>

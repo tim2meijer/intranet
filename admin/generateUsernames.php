@@ -50,6 +50,8 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP)) {
 			
 		} while($row = mysqli_fetch_array($result));
 	}
+} else {
+	toLog('error', '', 'Poging handmatige run gebruikersnamen, IP:'.$_SERVER['REMOTE_ADDR']);
 }
 
 ?>
