@@ -9,10 +9,9 @@ $db = connect_db();
 
 if(isset($_POST['save'])) {
 	if($_POST['text_only'] == 1) {
-		$_POST['groep'] = $_POST['aantal'] = 0;
+		$_POST['aantal'] = 0;
 	} else {
 		$_POST['text_only'] = 0;
-		$_POST['groep'] = $_POST['aantal'] = 1;
 	}
 	
 	if(isset($_REQUEST['new'])) {		
@@ -48,18 +47,23 @@ if(isset($_POST['save'])) {
 	$text[] = "	<td>Naam</td>";
 	$text[] = "	<td><input type='text' name='naam' value='". $roosterData['naam'] ."'></td>";
 	$text[] = "</tr>";
+	$text[] = "<tr>";
 	
 	if($roosterData['text_only'] == 0) {
-		$text[] = "<tr>";
 		$text[] = "	<td>Groep</td>";
-		$text[] = "	<td><select name='groep'>";
-		$groepen = getAllGroups();	
-		foreach($groepen as $groep) {
-			$data = getGroupDetails($groep);
-			$text[] = "	<option value='$groep'". ($groep == $roosterData['groep'] ? ' selected' : '') .">". $data['naam'] ."</option>";
-		}
-		$text[] = "	</select></td>";
-		$text[] = "</tr>";
+	} else {
+		$text[] = "	<td>Beheerder</td>";
+	}
+	$text[] = "	<td><select name='groep'>";
+	$groepen = getAllGroups();	
+	foreach($groepen as $groep) {
+		$data = getGroupDetails($groep);
+		$text[] = "	<option value='$groep'". ($groep == $roosterData['groep'] ? ' selected' : '') .">". $data['naam'] ."</option>";
+	}
+	$text[] = "	</select></td>";
+	$text[] = "</tr>";
+	
+	if($roosterData['text_only'] == 0) {
 		$text[] = "<tr>";
 		$text[] = "	<td>Aantal personen</td>";
 		$text[] = "	<td><select name='aantal'>";		

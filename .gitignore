@@ -56,3 +56,4 @@ onderhoud/local_preekrooster.xlsx
 onderhoud/local_collecterooster.xlsx
 onderhoud/ambtsdragers.csv
 scipio/dump.txt
+include/config_db.php

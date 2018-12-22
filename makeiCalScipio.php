@@ -70,7 +70,7 @@ if($row_dienst = mysqli_fetch_array($result_dienst)) {
 		foreach($diensten as $tmp) { $tmpDienst[] = "$PlanningDienst = $tmp"; }
 		
 		# Roosters (leden) opvragen
-		$sql_roosters = "SELECT * FROM $TablePlanning WHERE (". implode(' OR ', $tmpDienst) .") GROUP BY $PlanningGroup";
+		$sql_roosters = "SELECT * FROM $TableRoosters, $TablePlanning WHERE (". implode(' OR ', $tmpDienst) .") AND $TablePlanning.$PlanningGroup = $TableRoosters.$RoostersID GROUP BY $TablePlanning.$PlanningGroup ORDER BY $TableRoosters.$RoostersNaam";	
 		$result_roosters = mysqli_query($db, $sql_roosters);
 		if($row_roosters = mysqli_fetch_array($result_roosters)) {			
 			$RoosterString = '';

@@ -124,5 +124,7 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP) OR $test) {
 	}
 	
 	toLog('info', '', '', 'Scipio data ingeladen');
+} else {
+	toLog('error', '', 'Poging handmatige run Scipio-import, IP:'.$_SERVER['REMOTE_ADDR']);
 }
 ?>
