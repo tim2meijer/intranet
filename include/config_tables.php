@@ -122,6 +122,8 @@ $VoorgangerMail 		= "mail";
 $VoorgangerPlaats 	= "plaats";
 $VoorgangerDenom		= "kerk";
 $VoorgangerOpmerking= "opmerking";
+$VoorgangerAandacht	= "aandachtspunten";
+$VoorgangerDecl     = "declaratie";
 
 $wijkArray			= array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J');
 $statusArray		= array('actief', 'afgemeld', 'afgevoerd', 'onttrokken', 'overleden', 'vertrokken');
