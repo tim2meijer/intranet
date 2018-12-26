@@ -73,7 +73,7 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP)) {
 		$mailText[] = "Ik geef u de nodige informatie door.";
 		$mailText[] = "";
 		$mailText[] = "De band wordt geleid door ". makeName($bandleider, 5) .".";
-		$mailText[] = "Schriftlezing door ". makeName($schriftlezer, 5) .".";
+		$mailText[] = "Schriftlezing wordt gedaan door ". makeName($schriftlezer, 5) .".";
 		$mailText[] = "";
 		$mailText[] = "U kunt de liturgie afstemmen met ". makeName($bandleider, 1) ." voor de muziek. ". ($bandData['geslacht'] == 'M' ? 'Hij' : 'Zij') ." kan dan aangeven of liederen bekend en of geschikt zijn in onze gemeente en eventuele suggesties voor een vervangend lied.";
 		$mailText[] = "Wilt u de liturgie een week van te voren doorgeven zodat de band kan oefenen.";
@@ -82,6 +82,7 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP)) {
 		if($voorgangerData['aandacht'] == 1) {
 			$bijlageText[] = "de aandachtspunten van de dienst";
 			$mail->AddAttachment('download/aandachtspunten.pdf', 'Aandachtspunten Liturgie Deventer (dd 11-6-2018).pdf');
+			setLastAandachtspunten($dienstData['voorganger_id']);
 		}
 		
 		if($voorgangerData['declaratie'] == 1) {
