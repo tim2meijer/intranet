@@ -110,7 +110,7 @@ if(isset($_REQUEST['voorgangerID'])) {
 		$text[] = "<tr>";
 		$text[] = "	<td>&nbsp;</td>";
 		$text[] = "	<td>Als bijlage meesturen :<br>";
-		$text[] = "	<input type='checkbox' name='aandachtspunten' value='ja'". ($voorgangerData['aandachtspunten'] == 1 ? ' checked' : '') ."> Aandachtspunten voor de dienst<br>";
+		$text[] = "	<input type='checkbox' name='aandachtspunten' value='ja'". ($voorgangerData['aandacht'] == 1 ? ' checked' : '') ."> Aandachtspunten voor de dienst<br>";
 		$text[] = "	<input type='checkbox' name='declaratie' value='ja'". ($voorgangerData['declaratie'] == 1 ? ' checked' : '') ."> Declaratie-formulieroor de dienst</td>";
 		$text[] = "</tr>";		
 		$text[] = "<tr>";
