@@ -1106,5 +1106,18 @@ function getVoorgangerData($id) {
 	return $data;
 }
 
+function setLastAandachtspunten($id) {
+	global $db, $TableVoorganger, $VoorgangerLastAandacht, $VoorgangerID;
+	
+	$sql = "UPDATE $TableVoorganger SET $VoorgangerLastAandacht = ". time() ." WHERE $VoorgangerID = $id";
+	mysqli_query($db, $sql);
+}
+
+function setVoorgangerLastSeen($id) {
+	global $db, $TableVoorganger, $VoorgangerLastSeen, $VoorgangerID;
+	
+	$sql = "UPDATE $TableVoorganger SET $VoorgangerLastSeen = ". time() ." WHERE $VoorgangerID = $id";
+	mysqli_query($db, $sql);
+}
 
 ?>
