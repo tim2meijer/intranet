@@ -41,7 +41,7 @@ if(isset($_REQUEST['voorgangerID'])) {
 			$dienstBlocken[] = "Gegevens opgeslagen";
 			toLog('info', $_SESSION['ID'], '', 'Gegevens voorganger ('. $_REQUEST['voorgangerID'] .') bijgewerkt');
 		} else {
-			$dienstBlocken[] = "Ging iets niet goed met geegevens opslaan";
+			$dienstBlocken[] = "Ging iets niet goed met gegevens opslaan";
 			toLog('error', $_SESSION['ID'], '', 'Gegevens voorganger ('. $_REQUEST['voorgangerID'] .') konden niet worden opgeslagen');
 		}
 	} else {	
@@ -111,7 +111,7 @@ if(isset($_REQUEST['voorgangerID'])) {
 		$text[] = "	<td>&nbsp;</td>";
 		$text[] = "	<td>Als bijlage meesturen :<br>";
 		$text[] = "	<input type='checkbox' name='aandachtspunten' value='ja'". ($voorgangerData['aandacht'] == 1 ? ' checked' : '') ."> Aandachtspunten voor de dienst<br>";
-		$text[] = "	<input type='checkbox' name='declaratie' value='ja'". ($voorgangerData['declaratie'] == 1 ? ' checked' : '') ."> Declaratie-formulieroor de dienst</td>";
+		$text[] = "	<input type='checkbox' name='declaratie' value='ja'". ($voorgangerData['declaratie'] == 1 ? ' checked' : '') ."> Declaratie-formulier</td>";
 		$text[] = "</tr>";		
 		$text[] = "<tr>";
 		$text[] = "	<td>&nbsp;</td>";
