@@ -33,6 +33,8 @@ if(isset($_REQUEST['voorgangerID'])) {
 		$sql .= "$VoorgangerPlaats = '". $_REQUEST['plaats'] ."', "; 
 		$sql .= "$VoorgangerDenom = '". $_REQUEST['denom'] ."', "; 
 		$sql .= "$VoorgangerOpmerking = '". $_REQUEST['opm'] ."' ";
+		$sql .= "$VoorgangerAandacht = '". ($_REQUEST['aandachtspunten'] == 'ja' ? '1' : '0') ."' ";
+		$sql .= "$VoorgangerDeclaratie = '". ($_REQUEST['declaratie'] == 'ja' ? '1' : '0') ."' ";
 		$sql .= "WHERE $VoorgangerID = '". $_REQUEST['voorgangerID'] ."'";
 		
 		if(mysqli_query($db, $sql)) {
