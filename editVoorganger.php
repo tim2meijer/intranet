@@ -107,6 +107,12 @@ if(isset($_REQUEST['voorgangerID'])) {
 		$text[] = "</tr>";
 		$text[] = "<tr>";
 		$text[] = "	<td>&nbsp;</td>";
+		$text[] = "	<td>Als bijlage meesturen :<br>";
+		$text[] = "	<input type='checkbox' name='aandachtspunten' value='ja'". ($voorgangerData['aandachtspunten'] == 1 ? ' checked' : '') ."> Aandachtspunten voor de dienst<br>";
+		$text[] = "	<input type='checkbox' name='declaratie' value='ja'". ($voorgangerData['declaratie'] == 1 ? ' checked' : '') ."> Declaratie-formulieroor de dienst</td>";
+		$text[] = "</tr>";		
+		$text[] = "<tr>";
+		$text[] = "	<td>&nbsp;</td>";
 		$text[] = "	<td><input type='submit' name='save' value='Opslaan'></td>";
 		$text[] = "</tr>";
 		$text[] = "</table>";
@@ -124,8 +130,8 @@ if(isset($_REQUEST['voorgangerID'])) {
 		$deel[] = "<a href='?voorgangerID=$voorgangerID'>$naam</a>";
 	}
 	
-	$deel[] = "";
-	$deel[] = "<a href='?new=true'>Voeg nieuwe voorganger toe</a>";
+	//$deel[] = "";
+	$dienstBlocken[] = "<a href='?new=true'>Voeg nieuwe voorganger toe</a>";
 	
 	$dienstBlocken[] = implode("<br>", $deel);
 }
