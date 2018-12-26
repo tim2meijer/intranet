@@ -72,7 +72,7 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP)) {
 		$mailText[] = "Fijn dat u komt preken in de $dagdeel van ". strftime ('%e %B', $dienstData['start'])." om ". date('H:i', $dienstData['start'])." uur, in de Koningskerk te Deventer.";
 		$mailText[] = "Ik geef u de nodige informatie door.";
 		$mailText[] = "";
-		$mailText[] = "De band wordt verzorgd door ". makeName($bandleider, 5) .".";
+		$mailText[] = "De band wordt geleid door ". makeName($bandleider, 5) .".";
 		$mailText[] = "Schriftlezing door ". makeName($schriftlezer, 5) .".";
 		$mailText[] = "";
 		$mailText[] = "U kunt de liturgie afstemmen met ". makeName($bandleider, 1) ." voor de muziek. ". ($bandData['geslacht'] == 'M' ? 'Hij' : 'Zij') ." kan dan aangeven of liederen bekend en of geschikt zijn in onze gemeente en eventuele suggesties voor een vervangend lied.";
