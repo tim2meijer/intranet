@@ -66,7 +66,7 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP)) {
 		//$mail->AddAddress('matthijs@draijer.org', $mailNaam);
 		
 		# Mail opstellen
-		$mailText = array(); 
+		$mailText = $bijlageText = array(); 
 		$mailText[] = "Beste $aanspeekNaam,";
 		$mailText[] = "";
 		$mailText[] = "Fijn dat u komt preken in de $dagdeel van ". strftime ('%e %B', $dienstData['start'])." om ". date('H:i', $dienstData['start'])." uur, in de Koningskerk te Deventer.";
@@ -79,13 +79,19 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP)) {
 		$mailText[] = "Wilt u de liturgie een week van te voren doorgeven zodat de band kan oefenen.";
 		$mailText[] = "Als u deze mail beantwoordt met \"allen\" dan is iedereen op tijd op de hoogte.";
 		
-		# Bij gast-predikanten (niet zijnde Evert en Wim) moeten er bijlages bij
-		if($dienstData['voorganger_id'] != 15 AND $dienstData['voorganger_id'] != 52) {
-			$mailText[] = "";
-			$mailText[] = "In de bijlage treft u de aandachtspunten van de dienst en het declaratieformulier aan.";
-					
+		if($voorgangerData['aandacht'] == 1) {
+			$bijlageText[] = "de aandachtspunten van de dienst";
 			$mail->AddAttachment('download/aandachtspunten.pdf', 'Aandachtspunten Liturgie Deventer (dd 11-6-2018).pdf');
-			$mail->AddAttachment('download/declaratieformulier.xlsx', date('ymd', $dienstData['start'])."_Declaratieformulier_". str_replace(' ', '', $voorgangerAchterNaam) .".xlsx");	
+		}
+		
+		if($voorgangerData['declaratie'] == 1) {
+			$bijlageText[] = "het declaratieformulier";
+			$mail->AddAttachment('download/declaratieformulier.xlsx', date('ymd', $dienstData['start'])."_Declaratieformulier_". str_replace(' ', '', $voorgangerAchterNaam) .".xlsx");
+		}
+		
+		if(count($bijlageText) > 0) {
+			$mailText[] = "";
+			$mailText[] = "In de bijlage treft u ". implode(' en ', $bijlageText) ." aan.";				
 		}
 		
 		$mailText[] = "";
