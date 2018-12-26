@@ -1079,7 +1079,7 @@ function getVoorgangers() {
 }
 
 function getVoorgangerData($id) {
-	global $TableVoorganger, $VoorgangerID, $VoorgangerTitel, $VoorgangerVoor, $VoorgangerInit, $VoorgangerTussen, $VoorgangerAchter, $VoorgangerTel, $VoorgangerTel2, $VoorgangerPVNaam, $VoorgangerPVTel, $VoorgangerMail, $VoorgangerPlaats, $VoorgangerDenom, $VoorgangerOpmerking;
+	global $TableVoorganger, $VoorgangerID, $VoorgangerTitel, $VoorgangerVoor, $VoorgangerInit, $VoorgangerTussen, $VoorgangerAchter, $VoorgangerTel, $VoorgangerTel2, $VoorgangerPVNaam, $VoorgangerPVTel, $VoorgangerMail, $VoorgangerPlaats, $VoorgangerDenom, $VoorgangerOpmerking, $VoorgangerAandacht, $VoorgangerDeclaratie;
 	
 	$db = connect_db();
 	$sql = "SELECT * FROM $TableVoorganger WHERE $VoorgangerID = $id";
@@ -1100,6 +1100,8 @@ function getVoorgangerData($id) {
 	$data['pv_naam'] = $row[$VoorgangerPVNaam];
 	$data['pv_tel'] = $row[$VoorgangerPVTel];		
 	$data['opm'] = $row[$VoorgangerOpmerking];
+	$data['aandacht'] = $row[$VoorgangerAandacht];
+	$data['declaratie'] = $row[$VoorgangerDeclaratie];
 	
 	return $data;
 }
