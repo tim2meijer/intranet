@@ -123,7 +123,9 @@ $VoorgangerPlaats 	= "plaats";
 $VoorgangerDenom		= "kerk";
 $VoorgangerOpmerking= "opmerking";
 $VoorgangerAandacht	= "aandachtspunten";
-$VoorgangerDecl     = "declaratie";
+$VoorgangerDeclaratie   = "declaratie";
+$VoorgangerLastSeen     = "laatst_voorgaan";
+$VoorgangerLastAandacht = "laatst_aandacht";
 
 $wijkArray			= array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J');
 $statusArray		= array('actief', 'afgemeld', 'afgevoerd', 'onttrokken', 'overleden', 'vertrokken');
