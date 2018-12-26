@@ -35,7 +35,7 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP)) {
 		
 		# Achternaam
 		$voorgangerAchterNaam = '';
-		if($voorgangerData['tussen'] == '')	$voorgangerAchterNaam = lcfirst($voorgangerData['tussen']).' ';	
+		if($voorgangerData['tussen'] != '')	$voorgangerAchterNaam = lcfirst($voorgangerData['tussen']).' ';	
 		$voorgangerAchterNaam .= $voorgangerData['achter'];
 		
 		if($voorgangerData['voor'] != "") {
