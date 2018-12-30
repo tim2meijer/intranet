@@ -3,6 +3,7 @@ include_once('include/functions.php');
 include_once('include/config.php');
 include_once('include/HTML_TopBottom.php');
 
+$db = connect_db();
 $requiredUserGroups = array(1, 20);
 $cfgProgDir = 'auth/';
 include($cfgProgDir. "secure.php");
@@ -12,7 +13,7 @@ if(isset($_POST['save']) OR isset($_POST['maanden'])) {
 	foreach($_POST['voorganger'] as $dienst => $voorgangerID) {
 		$sql = "UPDATE $TableDiensten SET $DienstVoorganger = $voorgangerID WHERE $DienstID = ". $dienst;		
 			
-		if(!mysql_query($sql)) {
+		if(!mysqli_query($db, $sql)) {
 			$text[] = "Ging iets niet goed met geegevens opslaan";
 			toLog('error', $_SESSION['ID'], '', 'Gegevens voorganger ('. $_REQUEST['voorgangerID'] .") konden niet worden gekoppeld aan dienst $dienst");
 		}
@@ -45,6 +46,17 @@ foreach($voorgangers as $voorgangerID) {
 	$voorgangersNamen[$voorgangerID] = $voorgangerData['achter'].', '.$voor.($voorgangerData['tussen'] == '' ? '' : '; '.$voorgangerData['tussen']);
 }
 
+# Zoek voorgangers die vaker dan 3 keer in de database staan
+$frequent = array();
+$sql = "SELECT $DienstVoorganger, count(*) as aantal FROM $TableDiensten GROUP BY $DienstVoorganger HAVING aantal > 2 AND $DienstVoorganger != 0 ORDER BY aantal DESC";
+$result = mysqli_query($db, $sql);
+if($row = mysqli_fetch_array($result)) {
+	do {
+		$voorgangerID = $row[$DienstVoorganger];
+		$frequent[] = $voorgangerID;
+	} while($row = mysqli_fetch_array($result));
+}
+
 # Bouw formulier op
 $text[] = "<form method='post' action='$_SERVER[PHP_SELF]'>";
 $text[] = "<input type='hidden' name='blokken' value='$blokken'>";
@@ -67,10 +79,19 @@ foreach($diensten as $dienst) {
 	$text[] = "<select name='voorganger[$dienst]'>";
 	$text[] = "	<option value='0'></option>";
 	
-	foreach($voorgangersNamen as $voorgangerID => $naam) {
+	$text[] = "	<optgroup label=\"Frequent\">";
+	foreach($frequent as $voorgangerID) {
+		$naam = $voorgangersNamen[$voorgangerID];
 		$text[] = "	<option value='$voorgangerID'". ($data['voorganger_id'] == $voorgangerID ? ' selected' : '') .">$naam</option>";
 	}
-		
+	$text[] = "</optgroup>";
+	
+	# En de overige voorgangers
+	$text[] = "	<optgroup label=\"Minder frequent\">";	
+	foreach($voorgangersNamen as $voorgangerID => $naam) {
+		if(!in_array($voorgangerID, $frequent))	$text[] = "	<option value='$voorgangerID'". ($data['voorganger_id'] == $voorgangerID ? ' selected' : '') .">$naam</option>";
+	}
+	$text[] = "</optgroup>";	
 	$text[] = "</select>";
 	$text[] = "	</td>";
 	if($data['voorganger_id'] > 0) {

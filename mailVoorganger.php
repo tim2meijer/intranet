@@ -10,7 +10,7 @@ $db = connect_db();
 # van naam+wachtwoord maar op basis van IP-adres
 if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP)) {
 	$startTijd	= mktime(0, 0, 0, date("n"), (date("j")+18), date("Y"));
-	$eindTijd		= mktime(23, 59, 59, date("n"), (date("j")+18), date("Y"));
+	$eindTijd		= mktime(23, 59, 59, date("n"), (date("j")+18), date("Y"));	
 	$diensten		= getKerkdiensten($startTijd, $eindTijd);
 	
 	foreach($diensten as $dienst) {
@@ -38,6 +38,7 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP)) {
 		if($voorgangerData['tussen'] != '')	$voorgangerAchterNaam = lcfirst($voorgangerData['tussen']).' ';	
 		$voorgangerAchterNaam .= $voorgangerData['achter'];
 		
+		# Naam voor voorganger in de mail
 		if($voorgangerData['voor'] != "") {
 			$aanspeekNaam = $voorgangerData['voor'];
 			$mailNaam = $voorgangerData['voor'].' '.$voorgangerAchterNaam;
@@ -60,10 +61,7 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP)) {
 		$mail->AddCC('mededelingen@3gk-deventer.nl', 'Mededelingen 3GK');
 		$mail->AddCC('nieuwesite@3gk-deventer.nl','Webmaster 3GK');
 		$mail->AddBCC('jenny@overbrugger.nl');
-		$mail->AddBCC('internet@draijer.org');
 		$mail->AddBCC('matthijs.draijer@koningskerkdeventer.nl');
-		
-		//$mail->AddAddress('matthijs@draijer.org', $mailNaam);
 		
 		# Mail opstellen
 		$mailText = $bijlageText = array(); 
@@ -79,7 +77,10 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP)) {
 		$mailText[] = "Wilt u de liturgie een week van te voren doorgeven zodat de band kan oefenen.";
 		$mailText[] = "Als u deze mail beantwoordt met \"allen\" dan is iedereen op tijd op de hoogte.";
 		
-		if($voorgangerData['aandacht'] == 1) {
+		# Elke keer mailen is wat overdreven. Eens in de 6 weken lijkt mij mooi
+		$aandachtPeriode = mktime(23,59,59,date("n")-(6*7));
+		
+		if($voorgangerData['aandacht'] == 1 AND $voorgangerData['last_aandacht'] < $aandachtPeriode) {
 			$bijlageText[] = "de aandachtspunten van de dienst";
 			$mail->AddAttachment('download/aandachtspunten.pdf', 'Aandachtspunten Liturgie Deventer (dd 11-6-2018).pdf');
 			setLastAandachtspunten($dienstData['voorganger_id']);
@@ -125,8 +126,10 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP)) {
 			toLog('info', '', '', "Voorgangersmail verstuurd naar $mailNaam voor ". date('j-n-Y', $dienstData['start']));
 			echo "Mail verstuurd naar $mailNaam<br>\n";
 		}
+		
+		setVoorgangerLastSeen($dienstData['voorganger_id'], $dienstData['start']);
 	}
 } else {
-	toLog('error', '', 'Poging handmatige run vorgangermail, IP:'.$_SERVER['REMOTE_ADDR']);
+	toLog('error', '', '', 'Poging handmatige run vorgangermail, IP:'.$_SERVER['REMOTE_ADDR']);
 }
 ?>

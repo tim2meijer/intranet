@@ -1079,7 +1079,7 @@ function getVoorgangers() {
 }
 
 function getVoorgangerData($id) {
-	global $TableVoorganger, $VoorgangerID, $VoorgangerTitel, $VoorgangerVoor, $VoorgangerInit, $VoorgangerTussen, $VoorgangerAchter, $VoorgangerTel, $VoorgangerTel2, $VoorgangerPVNaam, $VoorgangerPVTel, $VoorgangerMail, $VoorgangerPlaats, $VoorgangerDenom, $VoorgangerOpmerking, $VoorgangerAandacht, $VoorgangerDeclaratie;
+	global $TableVoorganger, $VoorgangerID, $VoorgangerTitel, $VoorgangerVoor, $VoorgangerInit, $VoorgangerTussen, $VoorgangerAchter, $VoorgangerTel, $VoorgangerTel2, $VoorgangerPVNaam, $VoorgangerPVTel, $VoorgangerMail, $VoorgangerPlaats, $VoorgangerDenom, $VoorgangerOpmerking, $VoorgangerAandacht, $VoorgangerDeclaratie, $VoorgangerLastAandacht;
 	
 	$db = connect_db();
 	$sql = "SELECT * FROM $TableVoorganger WHERE $VoorgangerID = $id";
@@ -1102,21 +1102,24 @@ function getVoorgangerData($id) {
 	$data['opm'] = $row[$VoorgangerOpmerking];
 	$data['aandacht'] = $row[$VoorgangerAandacht];
 	$data['declaratie'] = $row[$VoorgangerDeclaratie];
+	$data['last_aandacht'] = $row[$VoorgangerLastAandacht];
 	
 	return $data;
 }
 
 function setLastAandachtspunten($id) {
-	global $db, $TableVoorganger, $VoorgangerLastAandacht, $VoorgangerID;
+	global $TableVoorganger, $VoorgangerLastAandacht, $VoorgangerID;
 	
+	$db = connect_db();
 	$sql = "UPDATE $TableVoorganger SET $VoorgangerLastAandacht = ". time() ." WHERE $VoorgangerID = $id";
 	mysqli_query($db, $sql);
 }
 
-function setVoorgangerLastSeen($id) {
-	global $db, $TableVoorganger, $VoorgangerLastSeen, $VoorgangerID;
+function setVoorgangerLastSeen($id, $tijd) {
+	global $TableVoorganger, $VoorgangerLastSeen, $VoorgangerID;
 	
-	$sql = "UPDATE $TableVoorganger SET $VoorgangerLastSeen = ". time() ." WHERE $VoorgangerID = $id";
+	$db = connect_db();
+	$sql = "UPDATE $TableVoorganger SET $VoorgangerLastSeen = $tijd WHERE $VoorgangerID = $id";
 	mysqli_query($db, $sql);
 }
 
