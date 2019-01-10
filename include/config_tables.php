@@ -121,6 +121,7 @@ $VoorgangerPVTel 		= "tel_pv";
 $VoorgangerMail 		= "mail";
 $VoorgangerPlaats 	= "plaats";
 $VoorgangerDenom		= "kerk";
+$VoorgangerStijl		= "stijl";
 $VoorgangerOpmerking= "opmerking";
 $VoorgangerAandacht	= "aandachtspunten";
 $VoorgangerDeclaratie   = "declaratie";
