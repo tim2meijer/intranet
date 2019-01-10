@@ -55,8 +55,25 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP)) {
 		
 		# Alle geadresseerden toevoegen
 		$mail->AddAddress($voorgangerData['mail'], $mailNaam);
-		$mail->AddCC($bandData['mail'], makeName($bandleider, 6));
-		$mail->AddCC($schriftData['mail'], makeName($schriftlezer, 6));
+		
+		# Controleer of het mail-adres bestaat
+		# Zo niet, voeg dan het adres van de ouders toe
+		if($bandData['mail'] != '') {
+			$mail->AddCC($bandData['mail'], makeName($bandleider, 6));
+		} else {
+			$hoofd = getParents($bandleider, true);
+			$HoofdData = getMemberDetails($hoofd[0]);
+			$mail->AddAddress($HoofdData['mail'], makeName($bandleider, 6));
+		}
+		
+		if($schriftData['mail'] != '') {
+			$mail->AddCC($schriftData['mail'], makeName($schriftlezer, 6));
+		} else {
+			$hoofd = getParents($schriftlezer, true);
+			$HoofdData = getMemberDetails($hoofd[0]);
+			$mail->AddAddress($HoofdData['mail'], makeName($schriftlezer, 6));
+		}
+		
 		$mail->AddCC('beamteam3gk@gmail.com', 'Beamteam 3GK');
 		$mail->AddCC('mededelingen@3gk-deventer.nl', 'Mededelingen 3GK');
 		$mail->AddCC('nieuwesite@3gk-deventer.nl','Webmaster 3GK');
