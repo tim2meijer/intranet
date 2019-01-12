@@ -9,7 +9,7 @@ $db = connect_db();
 # Omdat de server deze dagelijks moet draaien wordt toegang niet gedaan op basis
 # van naam+wachtwoord maar op basis van IP-adres
 if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP)) {
-	$startTijd	= mktime(0, 0, 0, date("n"), (date("j")+18), date("Y"));
+	$startTijd	= mktime(0, 0, 0, date("n"), (date("j")+18(, date("Y"));
 	$eindTijd		= mktime(23, 59, 59, date("n"), (date("j")+18), date("Y"));	
 	$diensten		= getKerkdiensten($startTijd, $eindTijd);
 	
@@ -19,12 +19,12 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP)) {
 		
 		$aBandleider		= getRoosterVulling(22, $dienst);
 		$bandleider			= $aBandleider[0];
-		$bandData				= getMemberDetails($bandleider);
-		
+		$adresBand			= getMailAdres($bandleider);
+				
 		$aSchriftlezer	= getRoosterVulling(12, $dienst);
 		$schriftlezer		= $aSchriftlezer[0];
-		$schriftData		= getMemberDetails($schriftlezer);
-		
+		$adresSchrift		= getMailAdres($schriftlezer);
+				
 		if(date("H", $dienstData['start']) < 12) {
 			$dagdeel = 'morgendienst';
 		} elseif(date("H", $dienstData['start']) < 18) {
@@ -54,45 +54,28 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP)) {
 		$mail->AddReplyTo('jenny@overbrugger.nl', 'Jenny van der Vegt-Huzen');
 		
 		# Alle geadresseerden toevoegen
-		$mail->AddAddress($voorgangerData['mail'], $mailNaam);
-		
-		# Controleer of het mail-adres bestaat
-		# Zo niet, voeg dan het adres van de ouders toe
-		if($bandData['mail'] != '') {
-			$mail->AddCC($bandData['mail'], makeName($bandleider, 6));
-		} else {
-			$hoofd = getParents($bandleider, true);
-			$HoofdData = getMemberDetails($hoofd[0]);
-			$mail->AddAddress($HoofdData['mail'], makeName($bandleider, 6));
-		}
-		
-		if($schriftData['mail'] != '') {
-			$mail->AddCC($schriftData['mail'], makeName($schriftlezer, 6));
-		} else {
-			$hoofd = getParents($schriftlezer, true);
-			$HoofdData = getMemberDetails($hoofd[0]);
-			$mail->AddAddress($HoofdData['mail'], makeName($schriftlezer, 6));
-		}
-		
+		$mail->AddAddress($voorgangerData['mail'], $mailNaam);		
+		$mail->AddCC($adresBand, makeName($bandleider, 6));
+		$mail->AddCC($adresSchrift, makeName($schriftlezer, 6));		
 		$mail->AddCC('beamteam3gk@gmail.com', 'Beamteam 3GK');
 		$mail->AddCC('mededelingen@3gk-deventer.nl', 'Mededelingen 3GK');
 		$mail->AddCC('nieuwesite@3gk-deventer.nl','Webmaster 3GK');
 		$mail->AddBCC('jenny@overbrugger.nl');
 		$mail->AddBCC('matthijs.draijer@koningskerkdeventer.nl');
-		
+				
 		# Mail opstellen
 		$mailText = $bijlageText = array(); 
 		$mailText[] = "Beste $aanspeekNaam,";
 		$mailText[] = "";
-		$mailText[] = "Fijn dat u komt preken in de $dagdeel van ". strftime ('%e %B', $dienstData['start'])." om ". date('H:i', $dienstData['start'])." uur, in de Koningskerk te Deventer.";
-		$mailText[] = "Ik geef u de nodige informatie door.";
+		$mailText[] = "Fijn dat ".($voorgangerData['stijl'] == 0 ? 'u' : 'je')." komt preken in de $dagdeel van ". strftime ('%e %B', $dienstData['start'])." om ". date('H:i', $dienstData['start'])." uur, in de Koningskerk te Deventer.";
+		$mailText[] = "Ik geef ".($voorgangerData['stijl'] == 0 ? 'u' : 'je')." de nodige informatie door.";
 		$mailText[] = "";
 		$mailText[] = "De band wordt geleid door ". makeName($bandleider, 5) .".";
 		$mailText[] = "Schriftlezing wordt gedaan door ". makeName($schriftlezer, 5) .".";
 		$mailText[] = "";
-		$mailText[] = "U kunt de liturgie afstemmen met ". makeName($bandleider, 1) ." voor de muziek. ". ($bandData['geslacht'] == 'M' ? 'Hij' : 'Zij') ." kan dan aangeven of liederen bekend en of geschikt zijn in onze gemeente en eventuele suggesties voor een vervangend lied.";
-		$mailText[] = "Wilt u de liturgie een week van te voren doorgeven zodat de band kan oefenen.";
-		$mailText[] = "Als u deze mail beantwoordt met \"allen\" dan is iedereen op tijd op de hoogte.";
+		$mailText[] = ($voorgangerData['stijl'] == 0 ? 'U kunt' : 'Je mag')." de liturgie afstemmen met ". makeName($bandleider, 1) ." voor de muziek. ". ($bandData['geslacht'] == 'M' ? 'Hij' : 'Zij') ." kan dan aangeven of liederen bekend en of geschikt zijn in onze gemeente en eventuele suggesties voor een vervangend lied.";
+		$mailText[] = ($voorgangerData['stijl'] == 0 ? 'Wilt u' : 'Wil jij')." de liturgie een week van te voren doorgeven zodat de band kan oefenen.";
+		$mailText[] = "Als ".($voorgangerData['stijl'] == 0 ? 'u' : 'je')." deze mail beantwoordt met \"allen\" dan is iedereen op tijd op de hoogte.";
 		
 		# Elke keer mailen is wat overdreven. Eens in de 6 weken lijkt mij mooi
 		$aandachtPeriode = mktime(23,59,59,date("n")-(6*7));
@@ -110,7 +93,7 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP)) {
 		
 		if(count($bijlageText) > 0) {
 			$mailText[] = "";
-			$mailText[] = "In de bijlage treft u ". implode(' en ', $bijlageText) ." aan.";				
+			$mailText[] = "In de bijlage ".($voorgangerData['stijl'] == 0 ? 'treft u' : 'tref je')." ". implode(' en ', $bijlageText) ." aan.";				
 		}
 		
 		$mailText[] = "";
@@ -135,7 +118,7 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP)) {
 		$mail->IsHTML(true);
 		$mail->Body	= $HTMLMail;
 		$mail->AltBody	= $PlainMail;
-		
+
 		if(!$mail->Send()) {
 			toLog('error', '', '', "Problemen met voorgangersmail versturen naar $mailNaam voor ". date('j-n-Y', $dienstData['start']));
 			echo "Problemen met mail versturen<br>\n";
@@ -143,7 +126,7 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP)) {
 			toLog('info', '', '', "Voorgangersmail verstuurd naar $mailNaam voor ". date('j-n-Y', $dienstData['start']));
 			echo "Mail verstuurd naar $mailNaam<br>\n";
 		}
-		
+	
 		setVoorgangerLastSeen($dienstData['voorganger_id'], $dienstData['start']);
 	}
 } else {

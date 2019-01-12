@@ -673,6 +673,7 @@ function sendMail($ontvanger, $subject, $bericht, $var) {
 	global $ScriptURL, $ScriptMailAdress, $ScriptTitle, $SubjectPrefix, $MailHeader, $MailFooter;
 	
 	$UserData = getMemberDetails($ontvanger);
+	$UserMail	= getMailAdres($ontvanger);
 						
 	$HTMLMail = $MailHeader.$bericht.$MailFooter;
 	
@@ -693,13 +694,8 @@ function sendMail($ontvanger, $subject, $bericht, $var) {
 		}
 	}
 	
-	if($UserData['mail'] != '') {
-		$mail->AddAddress($UserData['mail'], makeName($ontvanger, 5));
-	} else {
-		$hoofd = getParents($ontvanger, true);
-		$HoofdData = getMemberDetails($hoofd[0]);
-		$mail->AddAddress($HoofdData['mail'], makeName($ontvanger, 5));
-	}
+	$mail->AddAddress($UserMail, makeName($ontvanger, 5));
+	
 	$mail->Subject	= $SubjectPrefix . trim($subject);
 	$mail->IsHTML(true);
 	$mail->Body			= $HTMLMail;
@@ -711,7 +707,7 @@ function sendMail($ontvanger, $subject, $bericht, $var) {
 		$ouders = getParents($ontvanger);
 		foreach($ouders as $ouder){
 			$OuderData = getMemberDetails($ouder);
-			if($OuderData['mail'] != $UserData['mail']) {
+			if($OuderData['mail'] != $UserMail) {
 				$mail->AddCC($OuderData['mail']);
 				toLog('debug', '', $ontvanger, makeName($ouder, 5) .' ('. $OuderData['mail'] .') als ouder in CC opgenomen');
 			}
@@ -1122,6 +1118,45 @@ function setVoorgangerLastSeen($id, $tijd) {
 	$db = connect_db();
 	$sql = "UPDATE $TableVoorganger SET $VoorgangerLastSeen = $tijd WHERE $VoorgangerID = $id";
 	mysqli_query($db, $sql);
+}
+
+function getMailAdres($user) {
+	$gebruikersData = getMemberDetails($user);
+	
+	if($gebruikersData['mail'] == ''){
+		$ouders = getParents($user);
+		
+		foreach($ouders as $ouder) {
+			$ouderData = getMemberDetails($ouder);			
+			if($ouderData['mail'] != '' AND $returnAdres == '')	$returnAdres = $ouderData['mail'];
+		}
+	} else {
+		$returnAdres = $gebruikersData['mail'];
+	}
+	
+	return $returnAdres;
+}
+
+function getLogMembers($start, $end) {
+	global $db, $TableLog, $LogTime, $LogUser, $LogSubject;
+	
+	$sql = "SELECT $LogUser, $LogSubject FROM $TableLog WHERE $LogTime BETWEEN $start AND $end";
+	$result = mysqli_query($db, $sql);
+	$row = mysqli_fetch_array($result);
+	$export = array();
+	
+	do {
+		$dader = $row[$LogUser];
+		$slachtoffer = $row[$LogSubject];
+		
+		if(!array_key_exists($dader, $export) AND $dader != 0)							$export[$dader] = makeName($dader, 8);		
+		if(!array_key_exists($slachtoffer, $export) AND $slachtoffer != 0)	$export[$slachtoffer] = makeName($slachtoffer, 8);
+		
+	} while($row = mysqli_fetch_array($result));
+	
+	asort($export);
+	
+	return array_keys($export);
 }
 
 ?>

@@ -62,7 +62,7 @@ $zoekScherm[] = "	<td>&nbsp;</td>";
 $zoekScherm[] = "	<td><select name='dader'>";
 $zoekScherm[] = "	<option value=''>Alle</option>";
 
-$users =  getMembers();
+$users =  getLogMembers($start, $end);
 foreach($users as $userID) {
 	$zoekScherm[] = "	<option value='$userID'". ($dader == $userID ? ' selected' : '') .">". makeName($userID, 5) ."</option>";
 }
