@@ -19,6 +19,7 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP)) {
 		
 		$aBandleider		= getRoosterVulling(22, $dienst);
 		$bandleider			= $aBandleider[0];
+		$bandData		= getMemberDetails($bandleider);
 		$adresBand			= getMailAdres($bandleider);
 				
 		$aSchriftlezer	= getRoosterVulling(12, $dienst);
