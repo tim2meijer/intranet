@@ -128,6 +128,12 @@ $VoorgangerDeclaratie   = "declaratie";
 $VoorgangerLastSeen     = "laatst_voorgaan";
 $VoorgangerLastAandacht = "laatst_aandacht";
 
+$TableWijkteam			= "wijkteams";
+$WijkteamID					= "id";
+$WijkteamWijk				= "wijk";
+$WijkteamLid				= "lid";
+$WijkteamRol				= "rol";
+
 $wijkArray			= array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J');
 $statusArray		= array('actief', 'afgemeld', 'afgevoerd', 'onttrokken', 'overleden', 'vertrokken');
 $burgelijkArray	= array('gehuwd', 'gereg. partner', 'gescheiden', 'ongehuwd', 'weduwe', 'weduwnaar');
@@ -136,7 +142,6 @@ $kerkelijkArray	= array('belijdend lid', 'betrokkene', 'dooplid', 'gast', 'gedoo
 $maandArray			= array(1 => 'jan', 2 => 'feb', 3 => 'mrt', 4 => 'apr', 5 => 'mei', 6 => 'jun', 7 => 'jul', 8 => 'aug', 9 => 'sep', 10 => 'okt', 11 => 'nov', 12 => 'dec');
 $maandArrayEng	= array(1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April', 5 => 'May', 6 => 'June', 7 => 'July', 8 => 'August', 9 => 'September', 10 => 'October', 11 => 'November', 12 => 'December');
 $letterArray		= array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
-
-
+$teamRollen			= array(1 => 'Ouderling', 2 => 'Diaken', 3 => 'Wijkco&ouml;rdinator', 4 => 'Bezoekbroeder', 5 => 'Bezoekzuster', 6 => 'Ge&iuml;ntereseerde');
 
 ?>

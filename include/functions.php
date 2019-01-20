@@ -1159,4 +1159,21 @@ function getLogMembers($start, $end) {
 	return array_keys($export);
 }
 
+function getWijkteamLeden($wijk) {
+	global $TableWijkteam, $WijkteamWijk, $WijkteamLid, $WijkteamRol, $db;
+	
+	$leden = array();
+	
+	$sql = "SELECT * FROM $TableWijkteam WHERE $WijkteamWijk like '$wijk' ORDER BY $WijkteamRol";
+	$result = mysqli_query($db, $sql);
+	if($row = mysqli_fetch_array($result)){
+		do {
+			$lid = $row[$WijkteamLid];
+			$leden[$lid] = $row[$WijkteamRol];
+		} while($row = mysqli_fetch_array($result));
+	}
+	
+	return $leden;	
+}
+
 ?>
