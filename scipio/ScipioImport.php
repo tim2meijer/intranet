@@ -233,13 +233,13 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP) OR $test) {
 			if(isset($mailBlockNew[$wijk])) {
 				$mailBericht[] = "<h3>Nieuwe wijk". (count($mailBlockNew[$wijk]) > 1 ? 'genoten' : 'genoot') ."</h3>";
 				$mailBericht[] = implode("<br>\n", $mailBlockNew[$wijk]);
-				$subject[] = 'Nieuwe wijk'. (count($mailBlockNew[$wijk]) > 1 ? 'genoten' : 'genoot');
+				$subject[] = 'nieuwe wijk'. (count($mailBlockNew[$wijk]) > 1 ? 'genoten' : 'genoot');
 			}
 			
 			if(isset($mailBlockChange[$wijk])) {
 				$mailBericht[] = "<h3>Gewijzigde gegevens</h3>";
 				$mailBericht[] = implode("<br>\n", $mailBlockChange[$wijk]);
-				$subject[] = 'gewijzigde gegevens wijleden'
+				$subject[] = 'gewijzigde gegevens wijk'. (count($mailBlockChange[$wijk]) > 1 ? 'genoten' : 'genoot');
 			}
 									
 			$mail = new PHPMailer;
