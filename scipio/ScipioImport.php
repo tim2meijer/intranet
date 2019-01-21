@@ -2,6 +2,7 @@
 include_once('../include/functions.php');
 include_once('../include/config.php');
 include_once('../include/HTML_HeaderFooter.php');
+include_once('../../../general_include/class.phpmailer.php');
 
 $test = false;
 $debug = false;
@@ -241,23 +242,27 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP) OR $test) {
 				$mailBericht[] = implode("<br>\n", $mailBlockChange[$wijk]);
 				$subject[] = 'gewijzigde gegevens wijk'. (count($mailBlockChange[$wijk]) > 1 ? 'genoten' : 'genoot');
 			}
+			
+			$HTMLBericht = $MailHeader.implode("\n", $mailBericht).$MailFooter;
 									
 			$mail = new PHPMailer;
 			$mail->FromName	= 'Koningskerk Deventer';
 			$mail->From			= $ScriptMailAdress;
 			$mail->Subject	= trim(ucfirst(implode(' en ', $subject)));
 			$mail->IsHTML(true);
-			$mail->Body	= $MailHeader.implode("\n", $mailBericht).$MailFooter;
+			$mail->Body	= $HTMLBericht;
 			
 			foreach($wijkTeam as $lid => $rol)	$mail->AddAddress(getMailAdres($lid), makeName($lid, 1));	
-						
+			
+			# echo $HTMLBericht;
+			
 			if(!$mail->Send()) {
 				toLog('error', '', '', "Problemen met wijzigingsmail wijkteam wijk $wijk");
 				echo "Problemen met mail versturen<br>\n";
 			} else {
 				toLog('info', '', '', "Wijzigingsmail wijkteam wijk $wijk verstuurd");
 				echo "Mail verstuurd naar $mailNaam<br>\n";
-			}			
+			}
 		}		
 	}
 
