@@ -2,11 +2,28 @@
 include_once('include/functions.php');
 include_once('include/config.php');
 include_once('include/HTML_TopBottom.php');
-$cfgProgDir = 'auth/';
-include($cfgProgDir. "secure.php");
 $db = connect_db();
+$showLogin = true;
 
 $id = getParam('id', $_SESSION['ID']);
+
+if(isset($_REQUEST['hash'])) {
+	$dader = isValidHash($_REQUEST['hash']);
+	
+	if(!is_numeric($dader)) {
+		toLog('error', '', '', 'ongeldige hash (profiel)');
+		$showLogin = true;
+	} else {
+		$showLogin = false;
+		$_SESSION['ID'] = $dader;
+		toLog('info', $dader, $id, 'profiel mbv hash');
+	}
+}
+
+if($showLogin) {
+	$cfgProgDir = 'auth/';
+	include($cfgProgDir. "secure.php");
+}
 
 $personData = getMemberDetails($id);
 # Als je als admin bent ingelogd zie je alle leden, anders alleen de actieve 
