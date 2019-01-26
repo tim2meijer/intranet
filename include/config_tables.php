@@ -51,6 +51,7 @@ $RoostersID					= "id";
 $RoostersNaam				= "naam";
 $RoostersGroep			= "groep";
 $RoostersFields			= "aantal";
+$RoostersReminder		= "reminder";
 $RoostersMail				= "mail";
 $RoostersSubject		= "onderwerp";
 $RoostersFrom				= "naam_afzender";
