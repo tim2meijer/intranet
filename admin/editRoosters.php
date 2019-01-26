@@ -13,12 +13,12 @@ if(isset($_POST['save'])) {
 	} else {
 		$_POST['text_only'] = 0;
 	}
-		
+	
 	if(isset($_REQUEST['new'])) {		
-		$sql = "INSERT INTO $TableRoosters ($RoostersNaam, $RoostersGroep, $RoostersFields, $RoostersTextOnly, $RoostersReminder) VALUES ('". $_POST['naam'] ."', ". $_POST['groep'] .", ". $_POST['aantal'] .", ". $_POST['text_only'] .", '". $_POST['reminder'] ."')";
+		$sql = "INSERT INTO $TableRoosters ($RoostersNaam, $RoostersGroep, $RoostersFields, $RoostersTextOnly) VALUES ('". $_POST['naam'] ."', ". $_POST['groep'] .", ". $_POST['aantal'] .", ". $_POST['text_only'] .")";
 		toLog('info', $_SESSION['ID'], '', 'Roostergegevens '. $_POST['naam'] .' toegevoegd');
 	} else {
-		$sql = "UPDATE $TableRoosters SET $RoostersNaam = '". $_POST['naam'] ."', $RoostersGroep = ". $_POST['groep'] .", $RoostersFields = ". $_POST['aantal'] .", $RoostersTextOnly = ". $_POST['text_only'] .", $RoostersReminder = '". $_POST['reminder'] ."' WHERE $GroupID = ". $_POST['id'];
+		$sql = "UPDATE $TableRoosters SET $RoostersNaam = '". $_POST['naam'] ."', $RoostersGroep = ". $_POST['groep'] .", $RoostersFields = ". $_POST['aantal'] .", $RoostersTextOnly = ". $_POST['text_only'] ." WHERE $GroupID = ". $_POST['id'];
 		toLog('info', $_SESSION['ID'], '', 'Roostergegevens '. $_POST['naam'] .' gewijzigd');
 	}
 		
@@ -68,13 +68,6 @@ if(isset($_POST['save'])) {
 		$text[] = "	<td>Aantal personen</td>";
 		$text[] = "	<td><select name='aantal'>";		
 		for($a=1 ; $a<=10 ; $a++)	{	$text[] = "<option value='$a'". ($a == $roosterData['aantal'] ? ' selected' : '') .">$a</option>";	}	
-		$text[] = "	</select></td>";
-		$text[] = "</tr>";
-		$text[] = "<tr>";
-		$text[] = "	<td>Remindermails</td>";
-		$text[] = "	<td><select name='reminder'>";		
-		$text[] = "<option value='1'". ($roosterData['reminder'] == 1 ? ' selected' : '') .">Ja</option>";
-		$text[] = "<option value='0'". ($roosterData['reminder'] == 0 ? ' selected' : '') .">Nee</option>";
 		$text[] = "	</select></td>";
 		$text[] = "</tr>";
 	}
