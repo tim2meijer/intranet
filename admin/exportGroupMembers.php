@@ -64,6 +64,12 @@ if(isset($_REQUEST['type']) AND $_REQUEST['type'] == 'google') {
 		//$veld[] = $data['geslacht'];
 		$veld[] = $categorie;
 		
+		$veld[] = 'Home';
+		$veld[] = $data['mail'];
+		$veld[] = '';
+		$veld[] = '';
+			
+		/*
 		if($data['prive_mail'] == '') {
 			$veld[] = 'Home';
 			$veld[] = $data['fam_mail'];
@@ -75,7 +81,24 @@ if(isset($_REQUEST['type']) AND $_REQUEST['type'] == 'google') {
 			$veld[] = 'Home';
 			$veld[] = $data['fam_mail'];
 		}
+		*/
 		
+		if($data['tel'] != '') {
+			if(substr($data['tel'], 0, 2) == '06') {
+				$veld[] = 'Mobile';
+			} else {
+				$veld[] = 'Home';
+			}
+			$veld[] = '+31'.str_replace('-','', substr($data['tel'], 1));
+		} else {
+			$veld[] = '';
+			$veld[] = '';
+		}
+		
+		$veld[] = '';
+		$veld[] = '';
+		
+		/*		
 		if($data['prive_tel'] == '') {
 			$veld[] = 'Home';
 			$veld[] = '+31'.str_replace('-','', substr($data['fam_tel'], 1));
@@ -91,6 +114,7 @@ if(isset($_REQUEST['type']) AND $_REQUEST['type'] == 'google') {
 			$veld[] = 'Home';
 			$veld[] = '+31'.str_replace('-','', substr($data['fam_tel'], 1));
 		}
+		*/
 		
 		$veld[] = 'Home';
 		$veld[] = $data['straat']	.' '.	$data['huisnummer'];
