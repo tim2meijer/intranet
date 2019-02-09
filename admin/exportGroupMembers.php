@@ -60,7 +60,7 @@ if(isset($_REQUEST['type']) AND $_REQUEST['type'] == 'google') {
 		$veld[] = $data['tussenvoegsel'];
 		$veld[] = $data['voorletters'];
 		$veld[] = $data['meisjesnaam'];
-		$veld[] = $data['geboorte'];
+		$veld[] = substr($data['geboorte'], 8, 2).'-'.substr($data['geboorte'], 5, 2).'-'.substr($data['geboorte'], 0, 4);	
 		//$veld[] = $data['geslacht'];
 		$veld[] = $categorie;
 		
