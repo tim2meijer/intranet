@@ -43,7 +43,7 @@ echo "	<td width=44% valign='top'>";
 echo "	<table>".NL;
 echo "	<tr>".NL;
 echo "		<td><b>Adres</b></td>".NL;
-echo "		<td><a href='https://www.google.nl/maps/place/". urlencode($personData['straat'] .' '. $personData['huisnummer'] .', '. $personData['PC'] .' '. $personData['plaats']) ."' target='_blank'>". $personData['straat'] .' '. $personData['huisnummer'] ."</a>";
+echo "		<td><a href='https://www.google.nl/maps/place/". urlencode($personData['straat'] .' '. $personData['huisnummer'] .', '. $personData['PC'] .' '. $personData['plaats']) ."' target='_blank'>". $personData['straat'] .' '. $personData['huisnummer'].$personData['toevoeging']."</a>";
 if(!in_array($_SESSION['ID'], $familie)) {
 	$ownData = getMemberDetails($_SESSION['ID']);
 	echo " <a href='https://www.google.nl/maps/dir/". urlencode($ownData['straat'] .' '. $ownData['huisnummer'] .', '. $ownData['PC'] .' '. $ownData['plaats']) ."/". urlencode($personData['straat'] .' '. $personData['huisnummer'] .', '. $personData['PC'] .' '. $personData['plaats']) ."' title='klik hier om de route te tonen' target='_blank'><img src='images/GoogleMaps.png'></a>";

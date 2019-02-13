@@ -117,7 +117,7 @@ if(isset($_REQUEST['type']) AND $_REQUEST['type'] == 'google') {
 		*/
 		
 		$veld[] = 'Home';
-		$veld[] = $data['straat']	.' '.	$data['huisnummer'];
+		$veld[] = $data['straat']	.' '.	$data['huisnummer'].$data['toevoeging'];
 		$veld[] = ucfirst($data['plaats']);
 		$veld[] = $data['PC'];
 		

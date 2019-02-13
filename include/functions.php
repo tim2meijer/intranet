@@ -677,10 +677,10 @@ function sendMail($ontvanger, $subject, $bericht, $var) {
 	$UserMail	= getMailAdres($ontvanger);
 						
 	$HTMLMail = $MailHeader.$bericht.$MailFooter;
-	
-	$html =& new html2text($HTMLMail);
-	$html->set_base_url($ScriptURL);
-	$PlainMail = $html->get_text();
+			
+	//$html =& new html2text($HTMLMail);
+	//$html->set_base_url($ScriptURL);
+	//$PlainMail = $html->get_text();
 		
 	$mail = new PHPMailer;
 	
@@ -700,7 +700,7 @@ function sendMail($ontvanger, $subject, $bericht, $var) {
 	$mail->Subject	= $SubjectPrefix . trim($subject);
 	$mail->IsHTML(true);
 	$mail->Body			= $HTMLMail;
-	$mail->AltBody	= $PlainMail;
+	//$mail->AltBody	= $PlainMail;
 		
 	# Als de ouders ook een CC moeten
 	# Alleen bij mensen die als relatie 'zoon' of 'dochter' hebben
@@ -726,8 +726,7 @@ function sendMail($ontvanger, $subject, $bericht, $var) {
 	if(isset($var['BCC']) AND $var['BCC_mail'] != "") {
 		$mail->AddBCC($var['BCC_mail']);
 	}
-	
-	
+			
 	if(!$mail->Send()) {
 		return false;
 	} else {

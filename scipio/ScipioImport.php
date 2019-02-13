@@ -4,8 +4,6 @@ include_once('../include/config.php');
 include_once('../include/HTML_HeaderFooter.php');
 include_once('../../../general_include/class.phpmailer.php');
 
-set_time_limit(60);
-
 $test = false;
 $debug = false;
 
@@ -13,8 +11,8 @@ $db = connect_db();
 
 # Omdat de server deze dagelijks moet draaien wordt toegang niet gedaan op basis
 # van naam+wachtwoord maar op basis van IP-adres
-//if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP) OR $test) {
-if(true) {
+if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP) OR $test) {
+//if(true) {
 	$client = new SoapClient("ScipioConnect.wsdl");
 	
 	if(!$test) {
@@ -33,6 +31,8 @@ if(true) {
 	$xml = new SimpleXMLElement($xmlfile);
 	
 	foreach ($xml->persoon as $element) {
+		set_time_limit(10);
+		
 		$namen = explode(' - ', $element->aanschrijfnaam);
 		
 		if(count($namen) == 2) {
@@ -224,11 +224,25 @@ if(true) {
 		}
 	}
 	
-	if(count($mailBlockNew) > 0 OR count($mailBlockChange) > 0) {		
-		foreach($wijkArray as $wijk) {
+	if(count($mailBlockNew) > 0 OR count($mailBlockChange) > 0) {
+	    toLog('debug', '', '', 'mails versturen');
+	    
+	    foreach($wijkArray as $wijk) {
+	        if(isset($mailBlockNew[$wijk]) OR isset($mailBlockChange[$wijk])) {
+	            if($wijk == 'E' OR $wijk == 'F') {
+	                $wijkVersturen[] = $wijk;
+	            }
+	        }
+	    }
+	 
+		foreach($wijkVersturen as $wijk) {
 			$mailBericht = $subject = array();
 			$wijkTeam = getWijkteamLeden($wijk);
-						
+			
+			foreach($wijkTeam as $lid => $dummy) {
+				$namenWijkteam[$lid] = makeName($lid, 1);
+			}
+			
 			if(isset($mailBlockNew[$wijk]) OR isset($mailBlockChange[$wijk])) {
 				$mailBericht[] = "Beste [[voornaam]],<br>\n";
 				$mailBericht[] = "<br>\n";
@@ -247,37 +261,29 @@ if(true) {
 				$mailBericht[] = implode("<br>\n", $mailBlockChange[$wijk]);
 				$subject[] = 'gewijzigde gegevens wijk'. (count($mailBlockChange[$wijk]) > 1 ? 'genoten' : 'genoot');
 			}
-			
-			if(count($mailBericht) > 0) {				
-				if($wijk == 'E' OR $wijk == 'F') {
-					foreach($wijkTeam as $lid => $dummy) {
-						$namenWijkteam[$lid] = makeName($lid, 1);
-					}
-							
-					foreach($wijkTeam as $lid => $rol) {
-						$data = getMemberDetails($lid);					
-						$andereOntvangers = excludeID($namenWijkteam, $lid);
-																
-						$HTMLBericht = $MailHeader.implode("\n", $mailBericht)."<br>Deze mail is ook gestuurd naar : ". makeOpsomming($andereOntvangers).$MailFooter;
-						
-						$replacedBericht = $HTMLBericht;
-						$replacedBericht = str_replace('[[hash]]', $data['hash_long'], $replacedBericht);
-						$replacedBericht = str_replace('[[voornaam]]', $data['voornaam'], $replacedBericht);
-											
-						if(!sendMail($lid, trim(ucfirst(implode(' en ', $subject))), $replacedBericht, $var)) {
-							toLog('error', '', $lid, "Problemen met wijzigingsmail ". makeName($lid, 1) ." (wijkteam wijk $wijk)");
-							echo "Problemen met mail versturen<br>\n";
-						} else {
-							toLog('info', '', $lid, "Wijzigingsmail wijkteam wijk $wijk verstuurd");
-							echo "Mail verstuurd naar ". makeName($lid, 1) ." (wijkteam wijk $wijk)<br>\n";
-						}				
-						//echo $replacedBericht;
-					}
+
+			foreach($wijkTeam as $lid => $rol) {
+			  //echo '['. $wijk. '|'. $lid .']';
+				$data = getMemberDetails($lid);					
+				$andereOntvangers = excludeID($namenWijkteam, $lid);
+														
+				$HTMLBericht = implode("\n", $mailBericht)."<br>Deze mail is ook gestuurd naar : ". makeOpsomming($andereOntvangers);
+				
+				$replacedBericht = $HTMLBericht;
+				$replacedBericht = str_replace('[[hash]]', $data['hash_long'], $replacedBericht);
+				$replacedBericht = str_replace('[[voornaam]]', $data['voornaam'], $replacedBericht);
+												
+				if(sendMail($lid, implode(' en ', $subject), $replacedBericht, array())) {					
+					toLog('info', '', $lid, "Wijzigingsmail wijkteam wijk $wijk verstuurd");
+					echo "Mail verstuurd naar ". makeName($lid, 1) ." (wijkteam wijk $wijk)<br>\n";
 				} else {
-					toLog('info', '', $lid, "Wijzigingsmail wijkteam wijk $wijk zou verstuurd zijn");
+					toLog('error', '', $lid, "Problemen met wijzigingsmail ". makeName($lid, 1) ." (wijkteam wijk $wijk)");
+					echo "Problemen met mail versturen<br>\n";
 				}
+				
+				//echo $replacedBericht;
 			}
-		}		
+		}
 	}
 
 	toLog('info', '', '', 'Scipio data ingeladen');
