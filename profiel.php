@@ -5,8 +5,6 @@ include_once('include/HTML_TopBottom.php');
 $db = connect_db();
 $showLogin = true;
 
-$id = getParam('id', $_SESSION['ID']);
-
 if(isset($_REQUEST['hash'])) {
 	$dader = isValidHash($_REQUEST['hash']);
 	
@@ -25,6 +23,7 @@ if($showLogin) {
 	include($cfgProgDir. "secure.php");
 }
 
+$id = getParam('id', $_SESSION['ID']);
 $personData = getMemberDetails($id);
 # Als je als admin bent ingelogd zie je alle leden, anders alleen de actieve 
 $familie = getFamilieleden($id, in_array(1, getMyGroups($_SESSION['ID'])));

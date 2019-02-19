@@ -225,63 +225,52 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP) OR $test) {
 	}
 	
 	if(count($mailBlockNew) > 0 OR count($mailBlockChange) > 0) {
-	    toLog('debug', '', '', 'mails versturen');
-	    
-	    foreach($wijkArray as $wijk) {
-	        if(isset($mailBlockNew[$wijk]) OR isset($mailBlockChange[$wijk])) {
-	            if($wijk == 'E' OR $wijk == 'F') {
-	                $wijkVersturen[] = $wijk;
-	            }
-	        }
-	    }
-	 
-		foreach($wijkVersturen as $wijk) {
+		foreach($wijkArray as $wijk) {
 			$mailBericht = $subject = array();
-			$wijkTeam = getWijkteamLeden($wijk);
 			
-			foreach($wijkTeam as $lid => $dummy) {
-				$namenWijkteam[$lid] = makeName($lid, 1);
-			}
-			
+			# Alleen als er een nieuw of gewijzigd iets is						
 			if(isset($mailBlockNew[$wijk]) OR isset($mailBlockChange[$wijk])) {
+				if($wijk == 'E' OR $wijk == 'F') {
+					$wijkTeam = getWijkteamLeden($wijk);
+				} else {
+					$wijkTeam = array(984285 => 1);
+				}
+				foreach($wijkTeam as $lid => $dummy)	$namenWijkteam[$lid] = makeName($lid, 1);
+				
 				$mailBericht[] = "Beste [[voornaam]],<br>\n";
 				$mailBericht[] = "<br>\n";
 				$mailBericht[] = "In de ledenadministratie zijn zaken veranderd voor wijk $wijk<br>\n";
-				//$mailBericht[] = "";
-			}
-			
-			if(isset($mailBlockNew[$wijk])) {
-				$mailBericht[] = "<h3>Nieuwe wijk". (count($mailBlockNew[$wijk]) > 1 ? 'genoten' : 'genoot') ."</h3>";
-				$mailBericht[] = implode("<br>\n", $mailBlockNew[$wijk]);
-				$subject[] = 'nieuwe wijk'. (count($mailBlockNew[$wijk]) > 1 ? 'genoten' : 'genoot');
-			}
-			
-			if(isset($mailBlockChange[$wijk])) {
-				$mailBericht[] = "<h3>Gewijzigde gegevens</h3>";
-				$mailBericht[] = implode("<br>\n", $mailBlockChange[$wijk]);
-				$subject[] = 'gewijzigde gegevens wijk'. (count($mailBlockChange[$wijk]) > 1 ? 'genoten' : 'genoot');
-			}
-
-			foreach($wijkTeam as $lid => $rol) {
-			  //echo '['. $wijk. '|'. $lid .']';
-				$data = getMemberDetails($lid);					
-				$andereOntvangers = excludeID($namenWijkteam, $lid);
-														
-				$HTMLBericht = implode("\n", $mailBericht)."<br>Deze mail is ook gestuurd naar : ". makeOpsomming($andereOntvangers);
 				
-				$replacedBericht = $HTMLBericht;
-				$replacedBericht = str_replace('[[hash]]', $data['hash_long'], $replacedBericht);
-				$replacedBericht = str_replace('[[voornaam]]', $data['voornaam'], $replacedBericht);
-												
-				if(sendMail($lid, implode(' en ', $subject), $replacedBericht, array())) {					
-					toLog('info', '', $lid, "Wijzigingsmail wijkteam wijk $wijk verstuurd");
-					echo "Mail verstuurd naar ". makeName($lid, 1) ." (wijkteam wijk $wijk)<br>\n";
-				} else {
-					toLog('error', '', $lid, "Problemen met wijzigingsmail ". makeName($lid, 1) ." (wijkteam wijk $wijk)");
-					echo "Problemen met mail versturen<br>\n";
+				if(isset($mailBlockNew[$wijk])) {
+					$mailBericht[] = "<h3>Nieuwe wijk". (count($mailBlockNew[$wijk]) > 1 ? 'genoten' : 'genoot') ."</h3>";
+					$mailBericht[] = implode("<br>\n", $mailBlockNew[$wijk]);
+					$subject[] = 'nieuwe wijk'. (count($mailBlockNew[$wijk]) > 1 ? 'genoten' : 'genoot');
 				}
-				
-				//echo $replacedBericht;
+			
+				if(isset($mailBlockChange[$wijk])) {
+					$mailBericht[] = "<h3>Gewijzigde gegevens</h3>";
+					$mailBericht[] = implode("<br>\n", $mailBlockChange[$wijk]);
+					$subject[] = 'gewijzigde gegevens wijk'. (count($mailBlockChange[$wijk]) > 1 ? 'genoten' : 'genoot');
+				}
+
+				foreach($wijkTeam as $lid => $rol) {
+					$data = getMemberDetails($lid);					
+					$andereOntvangers = excludeID($namenWijkteam, $lid);
+															
+					$HTMLBericht = implode("\n", $mailBericht)."<br>Deze mail is ook gestuurd naar : ". makeOpsomming($andereOntvangers);
+					
+					$replacedBericht = $HTMLBericht;
+					$replacedBericht = str_replace('[[hash]]', $data['hash_long'], $replacedBericht);
+					$replacedBericht = str_replace('[[voornaam]]', $data['voornaam'], $replacedBericht);
+													
+					if(sendMail($lid, implode(' en ', $subject), $replacedBericht, array())) {					
+						toLog('info', '', $lid, "Wijzigingsmail wijkteam wijk $wijk verstuurd");
+						echo "Mail verstuurd naar ". makeName($lid, 1) ." (wijkteam wijk $wijk)<br>\n";
+					} else {
+						toLog('error', '', $lid, "Problemen met wijzigingsmail ". makeName($lid, 1) ." (wijkteam wijk $wijk)");
+						echo "Problemen met mail versturen<br>\n";
+					}
+				}
 			}
 		}
 	}
