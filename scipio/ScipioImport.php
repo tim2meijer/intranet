@@ -256,8 +256,8 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP) OR $test) {
 				foreach($wijkTeam as $lid => $rol) {
 					$data = getMemberDetails($lid);					
 					$andereOntvangers = excludeID($namenWijkteam, $lid);
-															
-					$HTMLBericht = implode("\n", $mailBericht)."<br>Deze mail is ook gestuurd naar : ". makeOpsomming($andereOntvangers);
+					
+					$HTMLBericht = implode("\n", $mailBericht).(count($andereOntvangers) > 0 ? "<br>Deze mail is ook gestuurd naar : ". makeOpsomming($andereOntvangers) : '');
 					
 					$replacedBericht = $HTMLBericht;
 					$replacedBericht = str_replace('[[hash]]', $data['hash_long'], $replacedBericht);
