@@ -230,6 +230,8 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP) OR $test) {
 			
 			# Alleen als er een nieuw of gewijzigd iets is						
 			if(isset($mailBlockNew[$wijk]) OR isset($mailBlockChange[$wijk])) {
+				$namenWijkteam = $wijkTeam = $andereOntvangers = array();
+				
 				if($wijk == 'E' OR $wijk == 'F') {
 					$wijkTeam = getWijkteamLeden($wijk);
 				} else {
