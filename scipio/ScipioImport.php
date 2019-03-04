@@ -181,8 +181,9 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP) OR $test) {
 				$temp[] = "<b><a href='". $ScriptURL ."profiel.php?hash=[[hash]]&id=". $element->regnr ."'>". makeName($element->regnr, 6) ."</a></b>";
 				//$temp[] = implode('|', array_keys($changedData));
 				
-				//if(isset($changedData['status']) AND $velden[$UserStatus] != 'actief')	$temp[] = "Vertrokken";
-				if(isset($changedData['status']))																														$temp[] = "Andere status";
+				//if(isset($changedData['status']) AND $velden[$UserStatus] == 'vertrokken')									$temp[] = "Vertrokken";
+				//if(isset($changedData['status']) AND $velden[$UserStatus] == 'overleden')										$temp[] = "Overleden";
+				if(isset($changedData['status']))																														$temp[] = ucfirst($velden[$UserStatus]);
 								
 				# Ander telefoonnummer
 				if(isset($changedData['tel']) AND $velden[$UserTelefoon] != '' AND $oldData['tel'] !== '')	$temp[] = "Telefoonnummer gewijzigd van ".$oldData['tel'] .' naar '. $velden[$UserTelefoon];
@@ -196,7 +197,7 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP) OR $test) {
 				
 				# Verhuizingen
 				if(isset($changedData['straat']) OR isset($changedData['huisnummer']))											$temp[] = "Verhuisd van ". $oldData['straat'].' '.$oldData['huisnummer'] .' naar '. $velden[$UserStraat].' '.$velden[$UserHuisnummer];
-				if(isset($changedData['wijk'])) {
+				if(isset($changedData['wijk']) AND !isset($changedData['status'])) {
 					$oudeWijk = $oldData['wijk'];
 					$nieuweWijk = $velden[$UserWijk];
 					
@@ -226,12 +227,10 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP) OR $test) {
 	
 	if(count($mailBlockNew) > 0 OR count($mailBlockChange) > 0) {
 		foreach($wijkArray as $wijk) {
-			$mailBericht = $subject = array();
+			$mailBericht = $subject = $namenWijkteam = $wijkTeam = $andereOntvangers = array();
 			
 			# Alleen als er een nieuw of gewijzigd iets is						
-			if(isset($mailBlockNew[$wijk]) OR isset($mailBlockChange[$wijk])) {
-				$namenWijkteam = $wijkTeam = $andereOntvangers = array();
-				
+			if(isset($mailBlockNew[$wijk]) OR isset($mailBlockChange[$wijk])) {				
 				if($wijk == 'E' OR $wijk == 'F') {
 					$wijkTeam = getWijkteamLeden($wijk);
 				} else {
