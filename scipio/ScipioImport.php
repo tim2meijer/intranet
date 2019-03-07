@@ -99,10 +99,10 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP) OR $test) {
 				
 				$item = array();
 				$item[] = "<b><a href='". $ScriptURL ."profiel.php?hash=[[hash]]&id=". $element->regnr ."'>". makeName($element->regnr, 6) ."</a></b> ('". substr($element->gebdatum, 2, 2) .")";
-				$item[] = $velden[$UserStraat].' '.$velden[$UserHuisnummer];
-				//$item[] = "<br>";
-				$item[] = $velden[$UserTelefoon];
-				$item[] = $velden[$UserMail];
+				$item[] = $velden[$UserStraat].' '.$velden[$UserHuisnummer];				
+				if($velden[$UserTelefoon] != '')	$item[] = $velden[$UserTelefoon];
+				if($velden[$UserMail] != '')			$item[] = $velden[$UserMail];
+				$item[] = "";
 				
 				$wijk = $velden[$UserWijk];
 				$mailBlockNew[$wijk][] = implode("<br>\n", $item);

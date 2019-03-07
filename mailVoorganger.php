@@ -60,7 +60,8 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP)) {
 		$mail->AddCC($adresSchrift, makeName($schriftlezer, 6));		
 		$mail->AddCC('beamteam3gk@gmail.com', 'Beamteam 3GK');
 		$mail->AddCC('mededelingen@3gk-deventer.nl', 'Mededelingen 3GK');
-		$mail->AddCC('nieuwewebsite@koningskerkdeventer.nl','Webmaster 3GK');
+		//$mail->AddCC('nieuwewebsite@koningskerkdeventer.nl','Webmaster 3GK');
+		$mail->AddCC('ingevandijk66@gmail.com','Webmaster 3GK');
 		$mail->AddBCC('jenny@overbrugger.nl');
 		$mail->AddBCC('matthijs.draijer@koningskerkdeventer.nl');
 				
