@@ -48,6 +48,7 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP)) {
 				# Alleen als is aangegeven dat er remindermails verstuurd moeten worden
 				# moet deze hele loop doorlopen worden
 				if($roosterData['reminder'] == 1) {
+					$positie					= 0;
 					$HTMLMail					= $roosterData['text_mail'];
 					$onderwerp				= $roosterData['onderwerp_mail'];
 					$var['ReplyToName']	= $roosterData['naam_afzender'];
@@ -57,6 +58,7 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP)) {
 																	
 					foreach($vulling as $lid => $naam) {
 						$team = excludeID($vulling, $lid);
+						$positie++;
 						
 						for($i=0 ; $i < 2 ; $i++) {
 							if($i==0) {
@@ -80,6 +82,8 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP)) {
 							$ReplacedBericht = str_replace ('[[voorganger]]', $dienstData['voorganger'], $ReplacedBericht);
 							$ReplacedBericht = str_replace ('[[collecte1]]', $dienstData['collecte_1'], $ReplacedBericht);
 							$ReplacedBericht = str_replace ('[[collecte2]]', $dienstData['collecte_2'], $ReplacedBericht);
+							$ReplacedBericht = str_replace ('[[n]]', $positie, $ReplacedBericht);
+							$ReplacedBericht = str_replace ('[[n+1]]', ($positie+1), $ReplacedBericht);
 												
 							# Als er meer dan 1 teamlid is dan een opsommingslijst, anders gewoon een vermelding
 							if(count($team) == 1) {
@@ -128,7 +132,7 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP)) {
 						}
 						
 						//echo $FinalHTMLMail;
-						
+												
 						if(sendMail($lid, $FinalSubject, $FinalHTMLMail, $var)) {
 							toLog('debug', '', $lid, 'reminder-mail '. $roosterData['naam'] .' verstuurd');
 						} else {
