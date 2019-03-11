@@ -231,11 +231,11 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP) OR $test) {
 			
 			# Alleen als er een nieuw of gewijzigd iets is						
 			if(isset($mailBlockNew[$wijk]) OR isset($mailBlockChange[$wijk])) {				
-				if($wijk == 'E' OR $wijk == 'F') {
+				//if($wijk == 'E' OR $wijk == 'F') {
 					$wijkTeam = getWijkteamLeden($wijk);
-				} else {
-					$wijkTeam = array(984285 => 1);
-				}
+				//} else {
+				//	$wijkTeam = array(984285 => 1);
+				//}
 				foreach($wijkTeam as $lid => $dummy)	$namenWijkteam[$lid] = makeName($lid, 1);
 				
 				$mailBericht[] = "Beste [[voornaam]],<br>\n";
@@ -253,6 +253,9 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP) OR $test) {
 					$mailBericht[] = implode("<br>\n", $mailBlockChange[$wijk]);
 					$subject[] = 'gewijzigde gegevens wijk'. (count($mailBlockChange[$wijk]) > 1 ? 'genoten' : 'genoot');
 				}
+				
+				$variabele['BCC'] = true;
+				$variabele['BCC_mail'] = '3gk@draijer.org';
 
 				foreach($wijkTeam as $lid => $rol) {
 					$data = getMemberDetails($lid);					
@@ -264,7 +267,7 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP) OR $test) {
 					$replacedBericht = str_replace('[[hash]]', $data['hash_long'], $replacedBericht);
 					$replacedBericht = str_replace('[[voornaam]]', $data['voornaam'], $replacedBericht);
 													
-					if(sendMail($lid, implode(' en ', $subject), $replacedBericht, array())) {					
+					if(sendMail($lid, implode(' en ', $subject), $replacedBericht, $variabele)) {					
 						toLog('info', '', $lid, "Wijzigingsmail wijkteam wijk $wijk verstuurd");
 						echo "Mail verstuurd naar ". makeName($lid, 1) ." (wijkteam wijk $wijk)<br>\n";
 					} else {
