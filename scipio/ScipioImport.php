@@ -11,9 +11,8 @@ $db = connect_db();
 
 # Omdat de server deze dagelijks moet draaien wordt toegang niet gedaan op basis
 # van naam+wachtwoord maar op basis van IP-adres
-# even testen
-//if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP) OR $test) {
-if(true) {
+if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP) OR $test) {
+//if(true) {
 	$client = new SoapClient("ScipioConnect.wsdl");
 	
 	if(!$test) {

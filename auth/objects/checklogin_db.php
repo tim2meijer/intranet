@@ -25,30 +25,24 @@ if (!defined("LOADED_PROPERLY") || isset($_GET['cfgProgDir']) || isset($_POST['c
 
 # contact database
 if (empty($cfgServerPort)) {
-	mysql_connect($cfgServerHost, $cfgServerUser, $cfgServerPassword) or die($strNoConnection);
+	$db = mysqli_connect($cfgServerHost, $cfgServerUser, $cfgServerPassword) or die($strNoConnection);
 } else {
-	mysql_connect($cfgServerHost . ":" . $cfgServerPort, $cfgServerUser, $cfgServerPassword) or die($strNoConnection);
+	$db = mysqli_connect($cfgServerHost, $cfgServerUser, $cfgServerPassword, $cfgServerPort) or die($strNoConnection);
 }
 
-mysql_select_db($cfgDbDatabase) or die(mysql_error());
+mysqli_select_db($db, $cfgDbDatabase) or die(mysqli_error());
 
-if (phpversion() >= 4.3) {
-	$login=mysql_real_escape_string($login);
-} else {
-	$login=mysql_escape_string($login);
-}
-
-$userQuery = mysql_query("SELECT * FROM $cfgDbTableUsers WHERE $cfgDbLoginfield = '$login'") or die($strNoDatabase);
+$login = mysqli_real_escape_string($db, $login);
+$userQuery = mysqli_query($db, "SELECT * FROM $cfgDbTableUsers WHERE $cfgDbLoginfield = '$login'") or die($strNoDatabase);
 
 # check user and password
-if(mysql_num_rows($userQuery) != 0) {
+if(mysqli_num_rows($userQuery) != 0) {
 	# user exist --> continue
-	$userArray = mysql_fetch_array($userQuery);
+	$userArray = mysqli_fetch_array($userQuery);
 	
 	if ($login != $userArray[$cfgDbLoginfield]) {
 		# Case sensative user not present in database
 		$phpSP_message = $strUserNotExist;
-    // include($cfgProgDir . "objects/logout.php");
     include($cfgProgDir . "interface.php");
     exit;
 	}
@@ -79,7 +73,7 @@ if(isset($userArray["$cfgDbUserIDfield"]) && !empty($cfgDbUserIDfield)) {
 	if(!$_SESSION['logged']) {
 		toLog('info', $_SESSION['ID'], '', 'Inlogpoging vanaf '. $_SERVER['REMOTE_ADDR']);
 		$sql = "UPDATE $TableUsers SET $UserLastVisit = '". date("Y-m-d H:i:s") ."' WHERE $UserID like ". $_SESSION['ID'];
-		mysql_query($sql);
+		mysqli_query($db, $sql);
 		
 		$_SESSION['logged'] = true;
 	}

@@ -12,9 +12,17 @@ $db = connect_db();
 if(isset($_POST['save']) OR isset($_POST['maanden'])) {	
 	foreach($_POST['bijz'] as $dienst => $bijzonderheid) {
 		$details	= getKerkdienstDetails($dienst);
-		$dag				= date("d", $details['start']);
-		$maand			= date("m", $details['start']);
-		$jaar				= date("Y", $details['start']);
+		
+		# Admin mag dag, maand en jaar wijzigen
+		if(in_array(1, getMyGroups($_SESSION['ID']))) {
+			$dag				= $_POST['sDag'][$dienst];
+			$maand			= $_POST['sMaand'][$dienst];
+			$jaar				= $_POST['sJaar'][$dienst];
+		} else {
+			$dag				= date("d", $details['start']);
+			$maand			= date("m", $details['start']);
+			$jaar				= date("Y", $details['start']);
+		}
 
 		$startTijd	= mktime($_POST['sUur'][$dienst], $_POST['sMin'][$dienst], 0, $maand, $dag, $jaar);
 		$eindTijd		= mktime($_POST['eUur'][$dienst], $_POST['eMin'][$dienst], 0, $maand, $dag, $jaar);
@@ -26,15 +34,15 @@ if(isset($_POST['save']) OR isset($_POST['maanden'])) {
 		$set[] = $DienstOpmerking .' = \''. urlencode($bijzonderheid) .'\'';
 				
 		$sql = "UPDATE $TableDiensten SET ". implode(', ', $set)." WHERE $DienstID = ". $dienst;
-		
-		mysql_query($sql);
+				
+		mysqli_query($db, $sql);
 	}
 	toLog('info', $_SESSION['ID'], '', 'Diensten bijgewerkt');
 }
 
 if(isset($_REQUEST['new'])) {
-	$start	= mktime(10,0,0,date("n"),date("j"), date("Y"));
-	$eind		= mktime(11,30,0,date("n"),date("j"), date("Y"));		
+	$start	= mktime(9,0,0,date("n"),date("j"), date("Y"));
+	$eind		= mktime(9,30,0,date("n"),date("j"), date("Y"));		
 	$query	= "INSERT INTO $TableDiensten ($DienstStart, $DienstEind) VALUES ('$start', '$eind')";
 	$result = mysqli_query($db, $query);
 			
@@ -88,7 +96,30 @@ foreach($diensten as $dienst) {
 	$eUur		= date("H", $data['eind']);
 	
 	$text[] = "<tr>";
-	$text[] = "	<td align='right'>". strftime("%a %e %b", $data['start']) ."</td>";
+	
+	if(in_array(1, getMyGroups($_SESSION['ID']))) {
+		$sDag			= date("d", $data['start']);
+		$sMaand		= date("m", $data['start']);
+		$sJaar		= date("Y", $data['start']);
+		
+		$text[] = "	<td><select name='sDag[$dienst]'>";
+		for($d=1; $d<=31 ; $d++) {
+			$text[] = "	<option value='$d'". ($d == $sDag ? ' selected' : '') .">$d</option>";
+		}
+		$text[] = "	</select>";
+		$text[] = "	<select name='sMaand[$dienst]'>";
+		for($m=1; $m<=12 ; $m++) {
+			$text[] = "	<option value='$m'". ($m == $sMaand ? ' selected' : '') .">". $maandArray[$m] . "</option>";
+		}
+		$text[] = "	</select>";
+		$text[] = "	<select name='sJaar[$dienst]'>";
+		for($j=date('Y'); $j<=(date('Y')+2) ; $j++) {
+			$text[] = "	<option value='$j'". ($j == $sJaar ? ' selected' : '') .">$j</option>";
+		}		
+		$text[] = "	</select></td>";				
+	} else {
+		$text[] = "	<td align='right'>". strftime("%a %e %b", $data['start']) ."</td>";
+	}
 	//$text[] = "	<td align='right'>". date("d m Y", $data['start']) ."</td>";
 	$text[] = "	<td><select name='sUur[$dienst]'>";
 	for($u=0; $u<24 ; $u++) {
