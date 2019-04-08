@@ -135,6 +135,14 @@ $WijkteamWijk				= "wijk";
 $WijkteamLid				= "lid";
 $WijkteamRol				= "rol";
 
+$TableMC						= "mc_data";
+$MCID								= "scipio_id";
+$MCfname						= "fname";
+$MClname						= "lname";
+$MCmail							= "mail";
+$MCwijk							= "wijk";
+$MCmark							= "mark";
+
 $wijkArray			= array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J');
 $statusArray		= array('actief', 'afgemeld', 'afgevoerd', 'onttrokken', 'overleden', 'vertrokken');
 $burgelijkArray	= array('gehuwd', 'gereg. partner', 'gescheiden', 'ongehuwd', 'weduwe', 'weduwnaar');
