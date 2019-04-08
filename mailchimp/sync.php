@@ -38,7 +38,7 @@ do {
 		mc_subscribe($data['mail'], $data['voornaam'], $data['achternaam']);
 		mc_addinterest($data['mail'], $wijkInterest[$wijk]);
 		
-		$sql_mc_insert = "INSERT INTO $TableMC ($MCID, $MCmail, $MCfname, $MClname, $MCwijk) VALUES ($scipioID, '". $data['mail'] ."', '". $data['voornaam'] ."', '". $data['achternaam'] ."', $wijk)";
+		$sql_mc_insert = "INSERT INTO $TableMC ($MCID, $MCmail, $MCfname, $MClname, $MCwijk) VALUES ($scipioID, '". $data['mail'] ."', '". $data['voornaam'] ."', '". $data['achternaam'] ."', '$wijk')";
 		mysqli_query($db, $sql_mc_insert);
 		
 	# Komt hij wel voor dan check ik even of een aantal velden verwijderd zijn :
