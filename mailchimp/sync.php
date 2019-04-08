@@ -62,7 +62,8 @@ do {
 		}
 		
 		if($row[$MCwijk] != $wijk) {
-			mc_rminterest($data['mail'], $row[$MCwijk]);
+			$oudeWijk = $row[$MCwijk];
+			mc_rminterest($data['mail'], $wijkInterest[$oudeWijk]);
 			mc_addinterest($data['mail'], $wijkInterest[$wijk]);			
 			$sql_update[] = "$MCwijk = '$wijk'";
 		}
