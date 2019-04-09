@@ -5,7 +5,7 @@ $dbUsername				= "";	// Username van de SQL-dB
 $dbPassword				= "";		// Password van de SQL-dB
 $dbName						= "";	// Database in de SQL-dB
 
-$allowedIP				= array('');
+$allowedIP				= array('', '');
 
 $ScriptSever			= '';
 $ScriptURL				= $ScriptSever.'';
@@ -14,10 +14,29 @@ $ScriptMailAdress	= '';			# Mailadres van het script (is mailadres van afzender 
 $Version					= '';		# Versie nummer
 $SubjectPrefix		= '';		# Voorvoegsel bij de onderwerpregel bij het versturen van mails
 
+
 $scipioParams = array(
 	'Username' => '',
 	'Password' => '',
 	'Pincode' => ''
 );
+
+# Mailchimp gegevens
+$MC_apikey = '';
+$MC_listid = '';
+$MC_server = '';
+$wijkInterest = array(
+	'A' => "",
+	'B' => "",
+	'C' => "",
+	'D' => "",
+	'E' => "",
+	'F' => "",
+	'G' => "",
+	'H' => "",
+	'I' => "",
+	'J' => ""
+);
+
 
 ?>

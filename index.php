@@ -26,6 +26,7 @@ if(count($allRoosters) > 0) {
 	}
 	
 	$txtRooster[] = "<a class='$class' href='showCombineRooster.php' target='_blank'>Toon combinatie-rooster</a>";
+	$txtRooster[] = "<a class='$class' href='roosterKomendeWeek.php' target='_blank'>Toon rooster komende week</a>";
 		
 	$blockArray[] = implode("<br>".NL, $txtRooster);
 }
@@ -113,7 +114,11 @@ if(in_array(1, getMyGroups($_SESSION['ID']))) {
 
 
 # Gegevens wijzigen-deel
-if(in_array(1, getMyGroups($_SESSION['ID'])) OR in_array(20, getMyGroups($_SESSION['ID'])) OR in_array(20, getMyGroups($_SESSION['ID'])) OR in_array(28, getMyGroups($_SESSION['ID']))) {
+# 1 = Admin
+# 20 = Preekvoorziening
+# 22 = Diaconie
+# 28 = Cluster Eredienst
+if(in_array(1, getMyGroups($_SESSION['ID'])) OR in_array(20, getMyGroups($_SESSION['ID'])) OR in_array(22, getMyGroups($_SESSION['ID'])) OR in_array(28, getMyGroups($_SESSION['ID']))) {
 	$wijzigDeel[] = "<b>Diensten wijzigen</b>";
 }
 
@@ -173,7 +178,7 @@ if(in_array(1, getMyGroups($_SESSION['ID']))) {
 	$koppelLinks['makeiCal.php'] = 'Persoonlijke iCals aanmaken';
 	$koppelLinks['makeiCalScipio.php'] = 'iCal voor Scipio aanmaken';
 	$koppelLinks['onderhoud/importOuderlingen.php'] = 'Importeer ambtsdragers';
-	$koppelLinks['onderhoud/importSchriftlezer.php'] = 'Importeer schriftlezers';
+	//$koppelLinks['onderhoud/importSchriftlezer.php'] = 'Importeer schriftlezers';
 	$koppelLinks['scipio/ScipioImport.php'] = 'Scipio-data inladen';
 	
 	foreach($koppelLinks as $link => $naam) {
@@ -185,9 +190,9 @@ if(in_array(1, getMyGroups($_SESSION['ID']))) {
 
 # Hyperlinks
 $links[] = "<b>Links</b>";
-$links[] = "<a href='http://draijer.org/extern/trinitas/' target='_blank'>Trinitas</a>";
-$links[] = "<a href='http://draijer.org/extern/3GK/gebedskalender/' target='_blank'>Gebedskalender</a>";
-$links[] = "<a href='http://koningskerkdeventer.nl/' target='_blank'>koningskerkdeventer.nl</a>";
+$links[] = "<a href='../../trinitas/' target='_blank'>Trinitas</a>";
+$links[] = "<a href='../gebedskalender/' target='_blank'>Gebedskalender</a>";
+$links[] = "<a href='http://www.koningskerkdeventer.nl/' target='_blank'>koningskerkdeventer.nl</a>";
 $links[] = "<a href='agenda.php' target='_blank'>Agenda voor Scipio</a>";
 $links[] = "<a href='ical/".$memberData['username'].'-'. $memberData['hash_short'] .".ics' target='_blank'>Persoonlijke digitale agenda</a>";
 $blockArray[] = implode("<br>".NL, $links);
