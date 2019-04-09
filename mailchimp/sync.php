@@ -27,7 +27,7 @@ do {
 	$wijk = $data['wijk'];
 	
 	# Van elke persoon vraag ik op of die al voorkomt in mijn lokale mailchimp-database.
-	# 	dat is iets sneller dan aan mailchimp vragen of die al voorkomt én
+	# 	dat is iets sneller dan aan mailchimp vragen of die al voorkomt Ã©n
 	#		ik kan dan werken met het scipio id als identiefier ipv het mailadres (wat MC doet)
 		
 	$sql_mc = "SELECT * FROM $TableMC WHERE $MCID = $scipioID";
@@ -36,7 +36,8 @@ do {
 	# Komt hij niet voor dan moet hij aan MC worden toegevoegd en aan de juiste wijk worden toegekend	
 	if(mysqli_num_rows($result_mc) == 0) {
 		mc_subscribe($data['mail'], $data['voornaam'], $data['achternaam']);
-		mc_addinterest($data['mail'], $wijkInterest[$wijk]);
+		//mc_addinterest($data['mail'], $wijkInterest[$wijk]);
+		mc_addtag($data['mail'], $wijkInterest[$wijk]);
 		
 		$sql_mc_insert = "INSERT INTO $TableMC ($MCID, $MCmail, $MCfname, $MClname, $MCwijk) VALUES ($scipioID, '". $data['mail'] ."', '". $data['voornaam'] ."', '". $data['achternaam'] ."', '$wijk')";
 		mysqli_query($db, $sql_mc_insert);
@@ -50,6 +51,8 @@ do {
 		$sql_update = array();
 		$sql_update[] = "$MCmark = '0'";
 		
+		mc_addtag($data['mail'], $wijkInterest[$wijk]);
+				
 		if($row[$MCmail] != $data['mail']) {
 			mc_changemail($row[$MCmail], $data['mail']);
 			$sql_update[] = "$MCmail = '". $data['mail'] ."'";
@@ -63,8 +66,12 @@ do {
 		
 		if($row[$MCwijk] != $wijk) {
 			$oudeWijk = $row[$MCwijk];
-			mc_rminterest($data['mail'], $wijkInterest[$oudeWijk]);
-			mc_addinterest($data['mail'], $wijkInterest[$wijk]);			
+			//mc_rminterest($data['mail'], $wijkInterest[$oudeWijk]);
+			//mc_addinterest($data['mail'], $wijkInterest[$wijk]);
+			
+			mc_rmtag($data['mail'], $wijkInterest[$oudeWijk]);
+			mc_addtag($data['mail'], $wijkInterest[$wijk]);			
+			
 			$sql_update[] = "$MCwijk = '$wijk'";
 		}
 		
