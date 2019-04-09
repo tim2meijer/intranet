@@ -37,7 +37,7 @@ do {
 	if(mysqli_num_rows($result_mc) == 0) {
 		mc_subscribe($data['mail'], $data['voornaam'], $data['achternaam']);
 		//mc_addinterest($data['mail'], $wijkInterest[$wijk]);
-		mc_addtag($data['mail'], $wijkInterest[$wijk]);
+		mc_addtag($data['mail'], 'Wijk '. $wijk);
 		
 		$sql_mc_insert = "INSERT INTO $TableMC ($MCID, $MCmail, $MCfname, $MClname, $MCwijk) VALUES ($scipioID, '". $data['mail'] ."', '". $data['voornaam'] ."', '". $data['achternaam'] ."', '$wijk')";
 		mysqli_query($db, $sql_mc_insert);
@@ -51,7 +51,7 @@ do {
 		$sql_update = array();
 		$sql_update[] = "$MCmark = '0'";
 		
-		mc_addtag($data['mail'], $wijkInterest[$wijk]);
+		mc_addtag($data['mail'], 'Wijk '. $wijk);
 				
 		if($row[$MCmail] != $data['mail']) {
 			mc_changemail($row[$MCmail], $data['mail']);
@@ -69,8 +69,8 @@ do {
 			//mc_rminterest($data['mail'], $wijkInterest[$oudeWijk]);
 			//mc_addinterest($data['mail'], $wijkInterest[$wijk]);
 			
-			mc_rmtag($data['mail'], $wijkInterest[$oudeWijk]);
-			mc_addtag($data['mail'], $wijkInterest[$wijk]);			
+			mc_rmtag($data['mail'], 'Wijk '. $oudeWijk);
+			mc_addtag($data['mail'], 'Wijk '. $wijk);
 			
 			$sql_update[] = "$MCwijk = '$wijk'";
 		}
