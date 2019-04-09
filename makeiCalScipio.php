@@ -129,7 +129,11 @@ if($row_dienst = mysqli_fetch_array($result_dienst)) {
 			
 			if($RoosterString != '') {
 				$DESCRIPTION .= 'ROOSTERS\n'. $RoosterString;
-			}				
+			}
+
+			if($data_dienst['liturgie'] != '') {
+				$DESCRIPTION .= 'LITURGIE\n'. str_replace("\r\n", '\n', $data_dienst['liturgie']);
+			}
 		}
 		
 		$ics[] = 'DESCRIPTION:'.$DESCRIPTION;

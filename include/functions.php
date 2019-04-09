@@ -170,7 +170,7 @@ function getKerkdiensten($startTijd, $eindTijd) {
 
 
 function getKerkdienstDetails($id) {
-	global $TableDiensten, $DienstID, $DienstStart, $DienstEind, $DienstVoorganger, $DienstCollecte_1, $DienstCollecte_2, $DienstOpmerking;
+	global $TableDiensten, $DienstID, $DienstStart, $DienstEind, $DienstVoorganger, $DienstCollecte_1, $DienstCollecte_2, $DienstOpmerking, $DienstLiturgie;
 	$db = connect_db();
 	
 	$data = array();
@@ -189,6 +189,7 @@ function getKerkdienstDetails($id) {
 		$data['voorganger']			= strtolower($voorgangerData['titel']).' '.$voorgangerData['init'].' '.($voorgangerData['tussen'] == '' ? '' : $voorgangerData['tussen'].' ').$voorgangerData['achter'];
 		if(strtolower($voorgangerData['plaats']) != 'deventer' AND $voorgangerData['plaats'] != '')	$data['voorganger'] .= ' ('.$voorgangerData['plaats'].')';
 		$data['voorganger']			= trim($data['voorganger']);
+		$data['liturgie']       = urldecode($row[$DienstLiturgie]);
 	}
 	return $data;
 }
@@ -1072,6 +1073,24 @@ function getVoorgangers() {
 	}
 	
 	return $ids;
+}
+
+function getLiturgie($id) {
+	global $DienstLiturgie, $TableDiensten, $DienstID;
+
+	$db = connect_db();
+	$sql = "SELECT $DienstLiturgie FROM $TableDiensten WHERE $DienstID = $id";
+
+	$result = mysqli_query($db, $sql);
+
+	if(mysqli_num_rows($result) == 0) {
+		return false;
+	} else {
+		$row = mysqli_fetch_array($result);
+		return urldecode($row[$DienstLiturgie]);
+	}
+
+	return $result;
 }
 
 function getVoorgangerData($id) {

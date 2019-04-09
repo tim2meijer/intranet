@@ -73,6 +73,7 @@ $DienstVoorganger		= "voorganger";
 $DienstCollecte_1		= "collecte_1";
 $DienstCollecte_2		= "collecte_2";
 $DienstOpmerking		= "opmerking";
+$DienstLiturgie         = "liturgie";
 
 $TablePlanning			= "planning";
 $PlanningDienst			= "dienst";

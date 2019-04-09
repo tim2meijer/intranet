@@ -127,6 +127,10 @@ if(in_array(1, getMyGroups($_SESSION['ID'])) OR in_array(20, getMyGroups($_SESSI
 	$wijzigLinks['voorgangerRooster.php'] = 'Preekrooster invoeren';	
 }
 
+if(in_array(1, getMyGroups($_SESSION['ID'])) OR in_array(28, getMyGroups($_SESSION['ID']))) {
+	$wijzigLinks['editLiturgie.php'] = 'Liturgie invoeren of aanpassen';
+}
+
 if(in_array(1, getMyGroups($_SESSION['ID'])) OR in_array(22, getMyGroups($_SESSION['ID']))) {
 	$wijzigLinks['editCollectes.php'] = 'Collecte-doelen invoeren';	
 }
