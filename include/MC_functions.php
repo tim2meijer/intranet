@@ -20,9 +20,8 @@ function mc_connect($url, $json_data, $patch = true) {
 
 
 function mc_subscribe($email, $fname, $lname) {
-	global $MC_apikey, $MC_listid, $MC_server;
+	global $MC_listid, $MC_server;
 	
-	//$auth = base64_encode( 'user:'.$MC_apikey );
 	$data = array(
 		'email_address' => $email,
 		'status'        => 'subscribed',
@@ -33,21 +32,12 @@ function mc_subscribe($email, $fname, $lname) {
 		);
 	$json_data = json_encode($data);
 	
-	/*
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL, 'https://'.$MC_server.'api.mailchimp.com/3.0/lists/'.$MC_listid.'/members/');
-	curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Authorization: Basic '.$auth));
-	curl_setopt($ch, CURLOPT_POST, true);
-	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-	curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
-	$result = curl_exec($ch);
-	*/
 	$url = 'https://'.$MC_server.'api.mailchimp.com/3.0/lists/'.$MC_listid.'/members/';
 	mc_connect($url, $json_data, false);
 }
 
 function mc_unsubscribe($email) {
-	global $MC_apikey, $MC_listid, $MC_server;
+	global $MC_listid, $MC_server;
 	
 	$userid = md5( strtolower( $email ) );
 	$data = array(
@@ -60,37 +50,39 @@ function mc_unsubscribe($email) {
 }
 
 function mc_addinterest($email, $interest) {
-	global $MC_apikey, $MC_listid, $MC_server;
+	global $MC_listid, $MC_server;
 	
 	$userid = md5( strtolower( $email ) );
-	//$auth = base64_encode( 'user:'. $MC_apikey );
 	$data = array(
 		'interests' => array(
 			$interest => true
 			)
 		);
 	$json_data = json_encode($data);
-	/*
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL, 'https://'.$MC_server.'api.mailchimp.com/3.0/lists/'.$MC_listid.'/members/' . $userid);
-	curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Authorization: Basic '. $auth));
-	curl_setopt($ch, CURLOPT_POST, true);
-	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
-	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-	curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
-	$result = curl_exec($ch);
-	*/
 	
 	$url = 'https://'.$MC_server.'api.mailchimp.com/3.0/lists/'.$MC_listid.'/members/' . $userid;
 	mc_connect($url, $json_data);
 }
 
-
-function mc_rminterest($email, $interest) {
-	global $MC_apikey, $MC_listid, $MC_server;
+function mc_addtag($email, $tag) {
+	global $MC_listid, $MC_server;
 	
 	$userid = md5( strtolower( $email ) );
-	//$auth = base64_encode( 'user:'. $MC_apikey );
+	$data = array(
+		'name' => $tag,
+		'status' => 'active'		
+		);
+	$json_data = json_encode($data);
+	
+	$url = 'https://'.$MC_server.'api.mailchimp.com/3.0/lists/'.$MC_listid.'/members/' . $userid .'/tags';
+	mc_connect($url, $json_data);
+}
+
+
+function mc_rminterest($email, $interest) {
+	global $MC_listid, $MC_server;
+	
+	$userid = md5( strtolower( $email ) );
 	$data = array(
 		'interests' => array(
 			$interest => false
@@ -98,28 +90,29 @@ function mc_rminterest($email, $interest) {
 		);
 	$json_data = json_encode($data);
 	
-	/*
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL, 'https://'.$MC_server.'api.mailchimp.com/3.0/lists/'.$MC_listid.'/members/' . $userid);
-	curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Authorization: Basic '. $auth));
-	curl_setopt($ch, CURLOPT_POST, true);
-	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
-	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-	curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
-	$result = curl_exec($ch);
-	*/
-	
 	$url = 'https://'.$MC_server.'api.mailchimp.com/3.0/lists/'.$MC_listid.'/members/' . $userid;
 	mc_connect($url, $json_data);
 }
 
 
-
-function mc_changename($email, $fname, $lname) {
-	global $MC_apikey, $MC_listid, $MC_server;
+function mc_rmtag($email, $tag) {
+	global $MC_listid, $MC_server;
 	
 	$userid = md5( strtolower( $email ) );
-	//$auth = base64_encode( 'user:'. $MC_apikey );
+	$data = array(
+		'name' => $tag,
+		'status' => 'inactive'		
+		);
+	$json_data = json_encode($data);
+	
+	$url = 'https://'.$MC_server.'api.mailchimp.com/3.0/lists/'.$MC_listid.'/members/' . $userid .'/tags';
+	mc_connect($url, $json_data);
+}
+
+function mc_changename($email, $fname, $lname) {
+	global $MC_listid, $MC_server;
+	
+	$userid = md5( strtolower( $email ) );
 	$data = array(
 		'merge_fields'  => array(
 			'FNAME' => $fname,
@@ -128,41 +121,18 @@ function mc_changename($email, $fname, $lname) {
 		);
 	$json_data = json_encode($data);
 	
-	/*
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL, 'https://'.$MC_server.'api.mailchimp.com/3.0/lists/'.$MC_listid.'/members/' . $userid);
-	curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Authorization: Basic '. $auth));
-	curl_setopt($ch, CURLOPT_POST, true);
-	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
-	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-	curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
-	$result = curl_exec($ch);
-		*/
-	
 	$url = 'https://'.$MC_server.'api.mailchimp.com/3.0/lists/'.$MC_listid.'/members/' . $userid;
 	mc_connect($url, $json_data);
 }
 
 function mc_changemail($email, $newEmail) {
-	global $MC_apikey, $MC_listid, $MC_server;
+	global $MC_listid, $MC_server;
 	
 	$userid = md5( strtolower( $email ) );
-	//$auth = base64_encode( 'user:'. $MC_apikey );
 	$data = array(
 		'email_address' => $newEmail,
 		);
 	$json_data = json_encode($data);
-	
-	/*
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL, 'https://'.$MC_server.'api.mailchimp.com/3.0/lists/'.$MC_listid.'/members/' . $userid);
-	curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Authorization: Basic '. $auth));
-	curl_setopt($ch, CURLOPT_POST, true);
-	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
-	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-	curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
-	$result = curl_exec($ch);
-	*/
 	
 	$url = 'https://'.$MC_server.'api.mailchimp.com/3.0/lists/'.$MC_listid.'/members/' . $userid;
 	mc_connect($url, $json_data);
