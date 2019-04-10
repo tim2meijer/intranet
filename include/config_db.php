@@ -12,7 +12,7 @@ $ScriptURL				= $ScriptSever.'';
 $ScriptTitle			= '';	# Naam van het script (is naam van afzender in mails)
 $ScriptMailAdress	= '';			# Mailadres van het script (is mailadres van afzender in mails)
 $Version					= '';		# Versie nummer
-$SubjectPrefix		= '';		# Voorvoegsel bij de onderwerpregel bij het versturen van mails
+$SubjectPrefix		= ' ';		# Voorvoegsel bij de onderwerpregel bij het versturen van mails
 
 
 $scipioParams = array(
@@ -22,10 +22,12 @@ $scipioParams = array(
 );
 
 # Mailchimp gegevens
-$MC_apikey = '';
+$MC_apikey = '-';
 $MC_listid = '';
 $MC_server = '';
-$wijkInterest = array(
+
+# De verschillende wijken hebben allemaal een andere tag in MailChimp
+$tagWijk = array(
 	'A' => "",
 	'B' => "",
 	'C' => "",
@@ -38,5 +40,6 @@ $wijkInterest = array(
 	'J' => ""
 );
 
-
+# Als het adres vanuit Scipio komt krijgt die ook een tag
+$tagScipio = ;
 ?>

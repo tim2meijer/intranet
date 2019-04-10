@@ -139,6 +139,7 @@ $WijkteamRol				= "rol";
 $TableMC						= "mc_data";
 $MCID								= "scipio_id";
 $MCfname						= "fname";
+$MCtname						= "tname";
 $MClname						= "lname";
 $MCmail							= "mail";
 $MCwijk							= "wijk";
