@@ -144,6 +144,8 @@ $MClname						= "lname";
 $MCmail							= "mail";
 $MCwijk							= "wijk";
 $MCmark							= "mark";
+$MClastSeen					= "last_seen";
+$MClastChecked			= "last_checked";
 
 $wijkArray			= array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J');
 $statusArray		= array('actief', 'afgemeld', 'afgevoerd', 'onttrokken', 'overleden', 'vertrokken');

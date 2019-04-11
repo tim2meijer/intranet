@@ -1,6 +1,8 @@
 <?php
 
-function mc_connect($url, $json_data, $type) {
+# https://github.com/actuallymentor/MailChimp-API-v3.0-PHP-cURL-example/blob/master/mc-API-connector.php
+
+function mc_connect($url, $json_data, $type, $output = false) {
 	global $MC_apikey;
 	
 	$auth = base64_encode( 'user:'.$MC_apikey );
@@ -16,9 +18,17 @@ function mc_connect($url, $json_data, $type) {
 	if($type == 'delete')	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
-	//echo curl_exec($ch);
-	//return curl_exec($ch);
 	$dump = curl_exec($ch);
+		
+	if($output) {
+		return $dump;
+	} else {
+		if(strpos($dump, 'error-glossary')) {
+			return false;
+		} else {
+			return true;
+		}		
+	}
 }
 
 
@@ -38,7 +48,7 @@ function mc_subscribe($email, $fname, $tname, $lname) {
 	$json_data = json_encode($data);
 	
 	$url = 'https://'.$MC_server.'api.mailchimp.com/3.0/lists/'.$MC_listid.'/members/';
-	mc_connect($url, $json_data, 'post');
+	return mc_connect($url, $json_data, 'post');
 }
 
 
@@ -53,7 +63,7 @@ function mc_unsubscribe($email) {
 	$json_data = json_encode($data);
 
 	$url = 'https://'.$MC_server.'api.mailchimp.com/3.0/lists/'.$MC_listid.'/members/' . $userid;
-	mc_connect($url, $json_data, 'patch');
+	return mc_connect($url, $json_data, 'patch');
 }
 
 
@@ -68,7 +78,7 @@ function mc_resubscribe($email) {
 	$json_data = json_encode($data);
 
 	$url = 'https://'.$MC_server.'api.mailchimp.com/3.0/lists/'.$MC_listid.'/members/' . $userid;
-	mc_connect($url, $json_data, 'patch');
+	return mc_connect($url, $json_data, 'patch');
 }
 
 
@@ -85,7 +95,7 @@ function mc_addinterest($email, $interest) {
 	$json_data = json_encode($data);
 	
 	$url = 'https://'.$MC_server.'api.mailchimp.com/3.0/lists/'.$MC_listid.'/members/' . $userid;
-	mc_connect($url, $json_data, 'patch');
+	return mc_connect($url, $json_data, 'patch');
 }
 
 
@@ -102,7 +112,7 @@ function mc_rminterest($email, $interest) {
 	$json_data = json_encode($data);
 	
 	$url = 'https://'.$MC_server.'api.mailchimp.com/3.0/lists/'.$MC_listid.'/members/' . $userid;
-	mc_connect($url, $json_data, 'patch');
+	return mc_connect($url, $json_data, 'patch');
 }
 
 
@@ -116,7 +126,7 @@ function mc_addtag($email, $segment_id) {
 	$json_data = json_encode($data);
 	
 	$url = 'https://'.$MC_server.'api.mailchimp.com/3.0/lists/'.$MC_listid.'/segments/'. $segment_id .'/members';
-	mc_connect($url, $json_data, 'post');
+	return mc_connect($url, $json_data, 'post');
 }
 
 
@@ -129,7 +139,7 @@ function mc_rmtag($email, $segment_id) {
 	$json_data = json_encode($data);
 	
 	$url = 'https://'.$MC_server.'api.mailchimp.com/3.0/lists/'.$MC_listid.'/segments/'. $segment_id .'/members/'. $userid;
-	mc_connect($url, $json_data, 'delete');
+	return mc_connect($url, $json_data, 'delete');
 }
 
 
@@ -148,7 +158,7 @@ function mc_changename($email, $fname, $tname, $lname) {
 	$json_data = json_encode($data);
 	
 	$url = 'https://'.$MC_server.'api.mailchimp.com/3.0/lists/'.$MC_listid.'/members/' . $userid;
-	mc_connect($url, $json_data, 'patch');
+	return mc_connect($url, $json_data, 'patch');
 }
 
 
@@ -163,5 +173,32 @@ function mc_changemail($email, $newEmail) {
 	$json_data = json_encode($data);
 	
 	$url = 'https://'.$MC_server.'api.mailchimp.com/3.0/lists/'.$MC_listid.'/members/' . $userid;
-	mc_connect($url, $json_data, 'patch');
+	return mc_connect($url, $json_data, 'patch');
 }
+
+
+function mc_getData($email) {
+	global $MC_listid, $MC_server;
+	
+	$userid = md5( strtolower( $email ) );
+	$data = array();
+	$json_data = json_encode($data);
+
+	$url = 'https://'.$MC_server.'api.mailchimp.com/3.0/lists/'.$MC_listid.'/members/' . $userid;
+	$result = mc_connect($url, $json_data, 'get', true);
+	$json = json_decode($result, true);
+		
+	$data['voornaam']	= $json['merge_fields']['VOORNAAM'];
+	$data['tussen']		= $json['merge_fields']['TUSSENVOEG'];
+	$data['achter']		= $json['merge_fields']['ACHTERNAAM'];
+	$data['status']		= $json['status'];
+	
+	foreach($json['tags'] as $value) {
+		$id = $value['id'];
+		$data['tags'][$id] = $value['name'];
+	}
+	
+	return $data;
+}
+
+?>
