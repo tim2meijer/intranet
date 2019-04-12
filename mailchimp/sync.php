@@ -124,19 +124,16 @@ do {
 	}
 } while($row = mysqli_fetch_array($result));
 
-/*
-# Verwijder niet geziene adressen
-$sql_mc_unsub = "SELECT * FROM $TableMC WHERE $MCmark = '1'";
+# Verwijder adressen die al sinds eergisteren niet meer gezien zijn
+$dagen = mktime (0, 0, 0, date("n"), (date("j")-2));
+$sql_mc_unsub = "SELECT * FROM $TableMC WHERE $MClastSeen < ". $dagen;
 $result_unsub = mysqli_query($db, $sql_mc_unsub);
 if($row_unsub = mysqli_fetch_array($result_unsub)) {
 	do {
 		set_time_limit(3);
 		mc_unsubscribe($row_unsub[$MCmail]);
-				
+		mysqli_query($db, "DELETE FROM $TableMC WHERE $MCID = ". $row_unsub[$MCID]);				
 	} while($row_unsub = mysqli_fetch_array($result_unsub));
-	
-	mysqli_query($db, "DELETE FROM $TableMC WHERE $MCmark = '1'");
 }
-*/
 
 ?>
