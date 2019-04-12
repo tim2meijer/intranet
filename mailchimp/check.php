@@ -61,6 +61,16 @@ do {
 			toLog('error', '', $scipioID, 'Kon scipio-tag niet opnieuw instellen in MailChimp');
 		}			
 	}
+	
+	# Check of ScipioID wel is ingevuld in MailChimp
+	if($data['scipio'] == '') {
+		if(mc_addSipioID($email, $scipioID)) {
+			toLog('info', '', $scipioID, 'ScipioID toegevoegd in MailChimp');
+		} else {
+			toLog('error', '', $scipioID, 'Kon scipio-ID niet toevoegen in MailChimp');
+		}
+	}
+	
 		
 	# De wijzigingen aan de MC kant moeten ook verwerkt worden in mijn lokale mailchimp-database
 	$sql_update = "UPDATE $TableMC SET $MClastChecked = ". time() . " WHERE $MCID like $scipioID";
