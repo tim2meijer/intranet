@@ -42,4 +42,13 @@ $tagWijk = array(
 
 # Als het adres vanuit Scipio komt krijgt die ook een tag
 $tagScipio = ;
+
+# De verschillende maillijsten hebben allemaal een ander id in MailChimp
+$ID_google = ;
+$ID_wijkmails = ;
+$ID_gebed_dag = ;
+$ID_gebed_week = ;
+$ID_gebed_maand = ;
+$ID_trinitas = ;
+
 ?>
