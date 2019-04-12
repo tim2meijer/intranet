@@ -177,6 +177,23 @@ function mc_changemail($email, $newEmail) {
 }
 
 
+function mc_addSipioID($email, $id) {
+	global $MC_listid, $MC_server;
+	
+	$userid = md5( strtolower( $email ) );
+	$data = array(
+		'merge_fields'  => array(
+			'SCIPIO' => id
+			)
+		);
+	$json_data = json_encode($data);
+	
+	$url = 'https://'.$MC_server.'api.mailchimp.com/3.0/lists/'.$MC_listid.'/members/' . $userid;
+	return mc_connect($url, $json_data, 'patch');
+}
+
+
+
 function mc_getData($email) {
 	global $MC_listid, $MC_server;
 	
@@ -188,6 +205,7 @@ function mc_getData($email) {
 	$result = mc_connect($url, $json_data, 'get', true);
 	$json = json_decode($result, true);
 		
+	$data['scipio']		= $json['merge_fields']['SCIPIO'];
 	$data['voornaam']	= $json['merge_fields']['VOORNAAM'];
 	$data['tussen']		= $json['merge_fields']['TUSSENVOEG'];
 	$data['achter']		= $json['merge_fields']['ACHTERNAAM'];
