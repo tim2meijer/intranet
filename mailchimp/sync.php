@@ -6,7 +6,8 @@ include_once('../include/config.php');
 $db = connect_db();
 
 # Ga op zoek naar alle personen met een mailadres
-$sql = "SELECT * FROM $TableUsers WHERE $UserMail != '' AND $UserStatus = 'actief'";
+# Mailadres is daarbij alles met een @-teken erin
+$sql = "SELECT * FROM $TableUsers WHERE $UserMail like '%@%' AND $UserStatus = 'actief'";
 $result = mysqli_query($db, $sql);
 $row = mysqli_fetch_array($result);
 do {
