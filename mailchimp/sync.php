@@ -48,7 +48,22 @@ do {
 			toLog('debug', '', $scipioID, 'Scipio-tag toegekend in MailChimp');
 		} else {
 			toLog('error', '', $scipioID, 'Kon geen Scipio-tag toekennen in MailChimp');
-		}			
+		}
+		
+		# + Scipio-ID toevoegen
+		if(mc_addSipioID($email, $scipioID)) {
+			toLog('debug', '', $scipioID, 'ScipioID toegevoegd in MailChimp');
+		} else {
+			toLog('error', '', $scipioID, 'Kon geen ScipioID toevoegen in MailChimp');
+		}
+		
+		# + toevoegen aan GoogleGroups
+		if(mc_addinterest($data['mail'], $ID_google)) {
+			toLog('debug', '', $scipioID, 'Toegevoegd aan GoogleGroups in MailChimp');
+		} else {
+			toLog('error', '', $scipioID, 'Kon niet toevoegen aan GoogleGroups in MailChimp');
+		}
+				
 		
 		# De wijzigingen aan de MC kant moeten ook verwerkt worden in mijn lokale mailchimp-database
 		$sql_mc_insert = "INSERT INTO $TableMC ($MCID, $MCmail, $MCfname, $MCtname, $MClname, $MCwijk, $MClastChecked, $MClastSeen) VALUES ($scipioID, '". $data['mail'] ."', '". $data['voornaam'] ."', '". urlencode($data['tussenvoegsel']) ."', '". $data['achternaam'] ."', '$wijk', ". time() .", ". time() .")";
