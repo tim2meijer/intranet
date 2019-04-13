@@ -161,8 +161,6 @@ if(in_array(1, getMyGroups($_SESSION['ID']))) {
 	$adminLinks['admin/log.php'] = 'Bekijk logfiles';
 	$adminLinks['sendMail.php'] = 'Verstuur mail';
 	$adminLinks['onderhoud/cleanUpDb.php'] = 'Verwijder oude diensten';
-	$adminLinks['mailchimp/sync.php'] = 'Synchroniseren Mailchimp';
-	$adminLinks['mailchimp/check.php'] = 'Controleren Mailchimp';
 	$adminLinks['../dumper/'] = 'Dumper';
 	
 	foreach($adminLinks as $link => $naam) {
@@ -172,6 +170,19 @@ if(in_array(1, getMyGroups($_SESSION['ID']))) {
 	$blockArray[] = implode("<br>".NL, $adminDeel);
 }
 
+if(in_array(1, getMyGroups($_SESSION['ID']))) {
+	$adminDeel = $adminLinks = array();
+	$adminDeel[] = "<b>Mailchimp</b>";
+
+	$adminLinks['mailchimp/sync.php'] = 'Synchroniseren Mailchimp';
+	$adminLinks['mailchimp/check.php'] = 'Controleren Mailchimp';
+	
+	foreach($adminLinks as $link => $naam) {
+		$adminDeel[] = "<a href='$link' target='_blank'>$naam</a>";
+	}
+	
+	$blockArray[] = implode("<br>".NL, $adminDeel);
+}
 
 # Koppelingen-deel
 if(in_array(1, getMyGroups($_SESSION['ID']))) {

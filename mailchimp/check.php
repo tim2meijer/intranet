@@ -20,54 +20,64 @@ do {
 	$achter		= $row[$MClname];
 	$wijk			= $row[$MCwijk];	
 	$email		= $row[$MCmail];
+	$status		= $row[$MCstatus];
 	
 	# variabelen definieren vanuit de MC-data
 	$data = mc_getData($email);
 	$tags	= $data['tags'];	
 	$segment_id = $tagWijk[$wijk];
 	
-	# Check of adres wel bestaat in MailChimp
-	if($data['status'] != 'subscribed') {
+	# Staat adres wel aan beide kanten als ingeschreven
+	if($status == 'subscribe' AND $data['status'] != 'subscribed') {
 		if(mc_resubscribe($email)) {
-			toLog('info', '', $scipioID, 'Opnieuw ingeschreven in MailChimp');
+			toLog('info', '', $scipioID, 'Opnieuw ingeschreven in MailChimp [C]');
 		} else {
-			toLog('error', '', $scipioID, 'Kon niet opnieuw inschrijven in MailChimp');
+			toLog('error', '', $scipioID, 'Kon niet opnieuw inschrijven in MailChimp [C]');
+		}
+	}
+	
+	# Staat adres wel aan beide kanten als niet-ingeschreven
+	if($status == 'unsubscribe' AND $data['status'] != 'unsubscribed') {
+		if(mc_unsubscribe($email)) {
+			toLog('info', '', $scipioID, 'Opnieuw uitgeschreven in MailChimp [C]');
+		} else {
+			toLog('error', '', $scipioID, 'Kon niet opnieuw uitschrijven in MailChimp [C]');
 		}
 	}
 	
 	# Check of naam wel correct is in MailChimp
 	if($data['voornaam'] != $voor OR urldecode($data['tussen']) != $tussen OR $data['achter'] != $achter) {
 		if(mc_changename($email, $voor, $tussen, $achter)) {
-			toLog('info', '', $scipioID, 'Opnieuw ingesteld in MailChimp');
+			toLog('info', '', $scipioID, 'Naam opnieuw ingesteld in MailChimp [C]');
 		} else {
-			toLog('error', '', $scipioID, 'Kon naam niet opnieuw instellen in MailChimp');
+			toLog('error', '', $scipioID, 'Kon naam niet opnieuw instellen in MailChimp [C]');
 		}
 	}
 	
 	# Check of de tag 'Wijk ?' aan dit adres hangt
 	if(!array_key_exists($segment_id, $tags)) {
 		if(mc_addtag($email, $segment_id)) {
-			toLog('info', '', $scipioID, 'Wijk opnieuw ingesteld in MailChimp');
+			toLog('info', '', $scipioID, 'Wijk opnieuw ingesteld in MailChimp [C]');
 		} else {
-			toLog('error', '', $scipioID, 'Kon wijk niet opnieuw instellen in MailChimp');
+			toLog('error', '', $scipioID, 'Kon wijk niet opnieuw instellen in MailChimp [C]');
 		}
 	}
 	
 	# Check of de tag 'Scipio' aan dit adres hangt
 	if(!array_key_exists($tagScipio, $tags)) {
 		if(mc_addtag($email, $tagScipio)) {
-			toLog('info', '', $scipioID, 'Scipio-tag opnieuw ingesteld in MailChimp');
+			toLog('info', '', $scipioID, 'Scipio-tag opnieuw ingesteld in MailChimp [C]');
 		} else {
-			toLog('error', '', $scipioID, 'Kon scipio-tag niet opnieuw instellen in MailChimp');
+			toLog('error', '', $scipioID, 'Kon scipio-tag niet opnieuw instellen in MailChimp [C]');
 		}			
 	}
 	
 	# Check of ScipioID wel is ingevuld in MailChimp
 	if($data['scipio'] == '') {
 		if(mc_addSipioID($email, $scipioID)) {
-			toLog('info', '', $scipioID, 'ScipioID toegevoegd in MailChimp');
+			toLog('info', '', $scipioID, 'ScipioID toegevoegd in MailChimp [C]');
 		} else {
-			toLog('error', '', $scipioID, 'Kon scipio-ID niet toevoegen in MailChimp');
+			toLog('error', '', $scipioID, 'Kon scipio-ID niet toevoegen in MailChimp [C]');
 		}
 	}
 	
