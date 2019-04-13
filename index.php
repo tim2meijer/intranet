@@ -161,6 +161,8 @@ if(in_array(1, getMyGroups($_SESSION['ID']))) {
 	$adminLinks['admin/log.php'] = 'Bekijk logfiles';
 	$adminLinks['sendMail.php'] = 'Verstuur mail';
 	$adminLinks['onderhoud/cleanUpDb.php'] = 'Verwijder oude diensten';
+	$adminLinks['mailchimp/sync.php'] = 'Synchroniseren Mailchimp';
+	$adminLinks['mailchimp/check.php'] = 'Controleren Mailchimp';
 	$adminLinks['../dumper/'] = 'Dumper';
 	
 	foreach($adminLinks as $link => $naam) {

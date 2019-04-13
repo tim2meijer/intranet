@@ -125,6 +125,8 @@ do {
 	}
 } while($row = mysqli_fetch_array($result));
 
+
+
 # Verwijder adressen die al sinds eergisteren niet meer gezien zijn
 $dagen = mktime (0, 0, 0, date("n"), (date("j")-2));
 $sql_mc_unsub = "SELECT * FROM $TableMC WHERE $MCstatus like 'subscribe' AND $MClastSeen < ". $dagen;
@@ -133,6 +135,7 @@ if($row_unsub = mysqli_fetch_array($result_unsub)) {
 	do {
 		set_time_limit(3);
 		mc_unsubscribe($row_unsub[$MCmail]);
+		toLog('info', '', $row_unsub[$MCID], 'Uitgeschreven in MailChimp');
 		mysqli_query($db, "UPDATE $TableMC SET $MCstatus = 'unsubscribe' WHERE $MCID = ". $row_unsub[$MCID]);				
 	} while($row_unsub = mysqli_fetch_array($result_unsub));
 }
