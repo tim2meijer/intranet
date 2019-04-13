@@ -183,7 +183,7 @@ function mc_addSipioID($email, $id) {
 	$userid = md5( strtolower( $email ) );
 	$data = array(
 		'merge_fields'  => array(
-			'SCIPIO' => id
+			'SCIPIO' => $id
 			)
 		);
 	$json_data = json_encode($data);

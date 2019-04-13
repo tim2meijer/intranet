@@ -251,7 +251,6 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP) OR $test) {
 					$subject[] = 'gewijzigde gegevens wijk'. (count($mailBlockChange[$wijk]) > 1 ? 'genoten' : 'genoot');
 				}
 				
-				$eerste = true;
 				foreach($wijkTeam as $lid => $rol) {
 					$data = getMemberDetails($lid);					
 					$andereOntvangers = excludeID($namenWijkteam, $lid);
@@ -261,16 +260,7 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP) OR $test) {
 					$replacedBericht = $HTMLBericht;
 					$replacedBericht = str_replace('[[hash]]', $data['hash_long'], $replacedBericht);
 					$replacedBericht = str_replace('[[voornaam]]', $data['voornaam'], $replacedBericht);
-					
-					# Initialiseer de variabelen $variabele
-					# Bij de eerste van het wijkteam moet er iets in de BCC gestuurd worden
-					$variabele =  array();
-					if($eerste) {
-						$variabele['BCC'] = true;
-						$variabele['BCC_mail'] = '3gk@draijer.org';
-						$eerste = false;
-					}
-													
+												
 					if(sendMail($lid, implode(' en ', $subject), $replacedBericht, $variabele)) {					
 						toLog('info', '', $lid, "Wijzigingsmail wijkteam wijk $wijk verstuurd");
 						echo "Mail verstuurd naar ". makeName($lid, 1) ." (wijkteam wijk $wijk)<br>\n";

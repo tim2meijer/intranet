@@ -82,6 +82,7 @@ do {
 		$row = mysqli_fetch_array($result_mc);
 		$sql_update = array();
 		$sql_update[] = "$MClastSeen = ". time();
+		$sql_update[] = "$MCstatus = 'subscribe'";
 										
 		# Gewijzigd mailadres
 		if($row[$MCmail] != $data['mail']) {
@@ -126,13 +127,13 @@ do {
 
 # Verwijder adressen die al sinds eergisteren niet meer gezien zijn
 $dagen = mktime (0, 0, 0, date("n"), (date("j")-2));
-$sql_mc_unsub = "SELECT * FROM $TableMC WHERE $MClastSeen < ". $dagen;
+$sql_mc_unsub = "SELECT * FROM $TableMC WHERE $MCstatus like 'subscribe' AND $MClastSeen < ". $dagen;
 $result_unsub = mysqli_query($db, $sql_mc_unsub);
 if($row_unsub = mysqli_fetch_array($result_unsub)) {
 	do {
 		set_time_limit(3);
 		mc_unsubscribe($row_unsub[$MCmail]);
-		mysqli_query($db, "DELETE FROM $TableMC WHERE $MCID = ". $row_unsub[$MCID]);				
+		mysqli_query($db, "UPDATE $TableMC SET $MCstatus = 'unsubscribe' WHERE $MCID = ". $row_unsub[$MCID]);				
 	} while($row_unsub = mysqli_fetch_array($result_unsub));
 }
 
