@@ -90,5 +90,6 @@ do {
 	
 } while($row = mysqli_fetch_array($result));
 
+toLog('info', '', '', 'Controle MailChimp-data uitgevoerd');
 
 ?>

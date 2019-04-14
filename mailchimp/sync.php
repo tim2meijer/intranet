@@ -137,6 +137,7 @@ do {
 	}
 } while($row = mysqli_fetch_array($result));
 
+toLog('info', '', '', 'Synchronisatie met MailChimp uitgevoerd');
 
 
 # Verwijder adressen die al sinds eergisteren niet meer gezien zijn

@@ -827,7 +827,7 @@ function getLogData($start, $end, $types, $dader, $subject, $message, $aantal) {
 	}
 	
 	if($message != '') {
-		$where[] = "$LogMessage like '$message'";
+		$where[] = "($LogMessage like '%$message%' OR $LogMessage like '$message%' OR $LogMessage like '%$message')";
 	}
 	
 	$where[] = "$LogTime BETWEEN $start AND $end";
