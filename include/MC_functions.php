@@ -2,6 +2,10 @@
 
 # https://github.com/actuallymentor/MailChimp-API-v3.0-PHP-cURL-example/blob/master/mc-API-connector.php
 
+# Algemene functie om verbinding te maken met de API van MailChimp (MC)
+# Naast de URL ($url) en de data ($json_data) die verstuurd moet worden
+# moet ook het type (POST, GET, etc) worden meegegeven en of de uitkomst
+# ($output) wel of niet getoond moet worden
 function mc_connect($url, $json_data, $type, $output = false) {
 	global $MC_apikey;
 	
@@ -32,7 +36,8 @@ function mc_connect($url, $json_data, $type, $output = false) {
 }
 
 
-
+# Functie om een adres toe te voegen aan MC
+# Mailadres, voornaam, tussenvoegsel en achternaam
 function mc_subscribe($email, $fname, $tname, $lname) {
 	global $MC_listid, $MC_server;
 	
@@ -52,7 +57,7 @@ function mc_subscribe($email, $fname, $tname, $lname) {
 }
 
 
-
+# Functie om adres uit te schrijven (dus niet te verwijderen)
 function mc_unsubscribe($email) {
 	global $MC_listid, $MC_server;
 	
@@ -67,7 +72,7 @@ function mc_unsubscribe($email) {
 }
 
 
-
+# Functie om iemand die is uitgeschreven opnieuw in te schrijven
 function mc_resubscribe($email) {
 	global $MC_listid, $MC_server;
 	
@@ -82,7 +87,7 @@ function mc_resubscribe($email) {
 }
 
 
-
+# 
 function mc_addinterest($email, $interest) {
 	global $MC_listid, $MC_server;
 	
@@ -217,6 +222,40 @@ function mc_getData($email) {
 	}
 	
 	return $data;
+}
+
+function mc_getmembers($offset, $count = 25) {
+	global $MC_listid, $MC_server;
+	
+	$data = array();
+	$json_data = json_encode($data);
+	
+	$url = 'https://'.$MC_server.'api.mailchimp.com/3.0/lists/'. $MC_listid .'/members?offset='. $offset.'&count='.$count;
+	$result = mc_connect($url, $json_data, 'get', true);
+	$json = json_decode($result, true);
+	
+	$members = $json['members'];
+	$aantal = $json['total_items'];
+	
+	foreach($members as $key => $member) {
+		unset($data);
+				
+		$data['email']		= $member['email_address'];
+		$data['status']		= $member['status'];
+		$data['voornaam']	= $member['merge_fields']['VOORNAAM'];
+		$data['tussen']		= $member['merge_fields']['TUSSENVOEG'];
+		$data['achter']		= $member['merge_fields']['ACHTERNAAM'];
+		$data['scipio']		= $member['merge_fields']['SCIPIO'];
+				
+		foreach($member['tags'] as $value) {
+			$id = $value['id'];
+			$data['tags'][$id] = $value['name'];
+		}
+		
+		$output[$key] = $data;
+	}
+	
+	return $output;	
 }
 
 ?>

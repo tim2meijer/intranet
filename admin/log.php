@@ -8,13 +8,13 @@ include($cfgProgDir. "secure.php");
 $db = connect_db();
 
 $bMin		= getParam('bMin', date("i"));
-$bUur		= getParam('bUur', (date("H")-6));
+$bUur		= getParam('bUur', (date("H")-12));
 $bDag		= getParam('bDag', (date("d")));
 $bMaand	= getParam('bMaand', date("m"));
 $bJaar	= getParam('bJaar', date("Y"));
 
-$eMin		= getParam('eMin', date("i")+2);
-$eUur		= getParam('eUur', date("H"));
+$eMin		= getParam('eMin', 59);
+$eUur		= getParam('eUur', 23);
 $eDag		= getParam('eDag', date("d"));
 $eMaand	= getParam('eMaand', date("m"));
 $eJaar	= getParam('eJaar', date("Y"));
