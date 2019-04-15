@@ -35,16 +35,16 @@ $logData = getLogData($start, $end, $type, $dader, $slachtoffer, $message, $aant
 $zoekScherm[] = "<form method='post' action='$_SERVER[PHP_SELF]'>";
 $zoekScherm[] = "<table border=0 align='center'>";
 $zoekScherm[] = "<tr>";
-$zoekScherm[] = "	<td colspan='2'><b>Begindatum</b></td>";
-$zoekScherm[] = "	<td>&nbsp;</td>";
-$zoekScherm[] = "	<td colspan='2'><b>Einddatum</b></td>";
-$zoekScherm[] = "	<td>&nbsp;</td>";
+$zoekScherm[] = "	<td colspan='2'><b>Van</b></td>";
+$zoekScherm[] = "	<td rowspan='2'>&nbsp;</td>";
+$zoekScherm[] = "	<td colspan='2'><b>Tot</b></td>";
+$zoekScherm[] = "	<td rowspan='2'>&nbsp;</td>";
 $zoekScherm[] = "	<td><b>Dader</b></td>";
-$zoekScherm[] = "	<td>&nbsp;</td>";
+$zoekScherm[] = "	<td rowspan='2'>&nbsp;</td>";
 $zoekScherm[] = "	<td><b>Slachtoffer</b></td>";
-$zoekScherm[] = "	<td>&nbsp;</td>";
+$zoekScherm[] = "	<td rowspan='2'>&nbsp;</td>";
 $zoekScherm[] = "	<td><b>Aantal</b></td>";
-$zoekScherm[] = "	<td>&nbsp;</td>";
+$zoekScherm[] = "	<td rowspan='3'>&nbsp;</td>";
 $zoekScherm[] = "	<td rowspan='3'><input type='submit' value='Zoeken' name='submit'></td>";
 $zoekScherm[] = "</tr>";
 $zoekScherm[] = "<tr>";
@@ -60,7 +60,7 @@ for($u=1 ; $u<24 ; $u++)	{	$zoekScherm[] = "<option value='$u'". ($u == $bUur ? 
 $zoekScherm[] = "	</select><select name='bMin'>";
 for($m=1 ; $m<60 ; $m++)	{	$zoekScherm[] = "<option value='$m'". ($m == $bMin ? ' selected' : '') .">$m</option>";	}
 $zoekScherm[] = "	</select></td>";
-$zoekScherm[] = "	<td>&nbsp;</td>";
+//$zoekScherm[] = "	<td>&nbsp;</td>";
 $zoekScherm[] = "	<td><select name='eDag'>";
 for($d=1 ; $d<=31 ; $d++)	{	$zoekScherm[] = "<option value='$d'". ($d == $eDag ? ' selected' : '') .">$d</option>";	}
 $zoekScherm[] = "	</select><select name='eMaand'>";
@@ -73,7 +73,7 @@ for($u=1 ; $u<24 ; $u++)	{	$zoekScherm[] = "<option value='$u'". ($u == $eUur ? 
 $zoekScherm[] = "	</select><select name='eMin'>";
 for($m=1 ; $m<60 ; $m++)	{	$zoekScherm[] = "<option value='$m'". ($m == $eMin ? ' selected' : '') .">$m</option>";	}
 $zoekScherm[] = "	</select></td>";
-$zoekScherm[] = "	<td>&nbsp;</td>";
+//$zoekScherm[] = "	<td>&nbsp;</td>";
 $zoekScherm[] = "	<td><select name='dader'>";
 $zoekScherm[] = "	<option value=''>Alle</option>";
 
@@ -83,7 +83,7 @@ foreach($users as $userID) {
 }
 
 $zoekScherm[] = "	</select></td>";
-$zoekScherm[] = "	<td>&nbsp;</td>";
+//$zoekScherm[] = "	<td>&nbsp;</td>";
 $zoekScherm[] = "	<td><select name='slacht'>";
 $zoekScherm[] = "	<option value=''>Alle</option>";
 
@@ -92,17 +92,17 @@ foreach($users as $userID) {
 }
 
 $zoekScherm[] = "	</select></td>";
-$zoekScherm[] = "	<td>&nbsp;</td>";
+//$zoekScherm[] = "	<td>&nbsp;</td>";
 $zoekScherm[] = "	<td><select name='aantal'>";
 foreach($cfgAantalLog as $a) {	$zoekScherm[] = "<option value='$a'". ($a == $aantal ? ' selected' : '') .">$a</option>";	}
 $zoekScherm[] = "	</select></td>";
-$zoekScherm[] = "	<td>&nbsp;</td>";
+//$zoekScherm[] = "	<td>&nbsp;</td>";
 $zoekScherm[] = "</tr>";
 $zoekScherm[] = "<tr>";
-$zoekScherm[] = "	<td colspan=6><input type='checkbox' name='type[]' value='debug'". (in_array('debug', $type) ? ' checked' : '').">Debug <input type='checkbox' name='type[]' value='info'". (in_array('info', $type) ? ' checked' : '').">Info <input type='checkbox' name='type[]' value='error'". (in_array('error', $type) ? ' checked' : '').">Error</td>";
-$zoekScherm[] = "	<td align='right'><b>Zoekwoord</b></td>";
+$zoekScherm[] = "	<td colspan=3><input type='checkbox' name='type[]' value='debug'". (in_array('debug', $type) ? ' checked' : '').">Debug <input type='checkbox' name='type[]' value='info'". (in_array('info', $type) ? ' checked' : '').">Info <input type='checkbox' name='type[]' value='error'". (in_array('error', $type) ? ' checked' : '').">Error</td>";
+$zoekScherm[] = "	<td align='right' td colspan=2><b>Zoekwoord</b></td>";
 $zoekScherm[] = "	<td>&nbsp;</td>";
-$zoekScherm[] = "	<td colspan=6><input type='text' name='message' value='$message'></td>";
+$zoekScherm[] = "	<td colspan=5><input type='text' name='message' value='$message' size=40></td>";
 $zoekScherm[] = "</tr>";
 $zoekScherm[] = "</table>";
 
