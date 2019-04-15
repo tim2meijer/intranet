@@ -31,47 +31,61 @@ do {
 	if(mysqli_num_rows($result_mc) == 0) {
 		# Toevoegen aan de database
 		if(mc_subscribe($data['mail'], $data['voornaam'], $data['tussenvoegsel'], $data['achternaam'])) {
-			toLog('info', '', $scipioID, 'Toegevoegd in MailChimp [S]');
+			toLog('info', '', $scipioID, 'Gesyned naar MailChimp');
 			echo makeName($scipioID, 6) ." toegevoegd<br>\n";
 		} else {
-			toLog('error', '', $scipioID, 'Kon niet toevoegen in MailChimp [S]');
+			toLog('error', '', $scipioID, 'Kon niet syncen naar MailChimp');
 		}
 		
 		# + tag van de juiste wijk eraan
 		if(mc_addtag($data['mail'], $tagWijk[$wijk])) {
-			toLog('debug', '', $scipioID, 'Wijk toegekend in MailChimp [S]');
+			toLog('debug', '', $scipioID, 'Wijk gesynced in MailChimp');
 		} else {
-			toLog('error', '', $scipioID, 'Kon geen wijk toekennen in MailChimp [S]');
+			toLog('error', '', $scipioID, 'Kon geen wijk syncen in MailChimp');
 		}
 		
 		# + tag dat deze vanuit Scipio komt
 		if(mc_addtag($data['mail'], $tagScipio)) {
-			toLog('debug', '', $scipioID, 'Scipio-tag toegekend in MailChimp [S]');
+			toLog('debug', '', $scipioID, 'Scipio-tag gesynced naar MailChimp');
 		} else {
-			toLog('error', '', $scipioID, 'Kon geen Scipio-tag toekennen in MailChimp [S]');
+			toLog('error', '', $scipioID, 'Kon geen Scipio-tag syncen naar MailChimp [S]');
 		}
 		
 		# + Scipio-ID toevoegen
 		if(mc_addSipioID($email, $scipioID)) {
-			toLog('debug', '', $scipioID, 'ScipioID toegevoegd in MailChimp [S]');
+			toLog('debug', '', $scipioID, 'ScipioID gesynced naar MailChimp');
 		} else {
-			toLog('error', '', $scipioID, 'Kon geen ScipioID toevoegen in MailChimp [S]');
+			toLog('error', '', $scipioID, 'Kon geen ScipioID syncen naar MailChimp');
 		}
 		
 		# + toevoegen aan GoogleGroups
 		if(mc_addinterest($data['mail'], $ID_google)) {
-			toLog('debug', '', $scipioID, 'Toegevoegd aan GoogleGroups in MailChimp [S]');
+			toLog('debug', '', $scipioID, 'Inschrijving GoogleGroups gesynced naar MailChimp');
 		} else {
-			toLog('error', '', $scipioID, 'Kon niet toevoegen aan GoogleGroups in MailChimp [S]');
+			toLog('error', '', $scipioID, 'Kon inschrijving GoogleGroups niet syncen naar MailChimp');
 		}
-				
+		
+		# + toevoegen aan Trinitas
+		if(mc_addinterest($data['mail'], $ID_trinitas)) {
+			toLog('debug', '', $scipioID, 'Inschrijving Trinitas gesynced naar MailChimp');
+		} else {
+			toLog('error', '', $scipioID, 'Kon inschrijving Trinitas niet syncen naar MailChimp');
+		}
+		
+		# + toevoegen aan wijkmails
+		if(mc_addinterest($data['mail'], $ID_wijkmails)) {
+			toLog('debug', '', $scipioID, 'Inschrijving wijkmails gesynced naar MailChimp');
+		} else {
+			toLog('error', '', $scipioID, 'Kon inschrijving wijkmails niet syncen naar MailChimp');
+		}
+						
 		
 		# De wijzigingen aan de MC kant moeten ook verwerkt worden in mijn lokale mailchimp-database
 		$sql_mc_insert = "INSERT INTO $TableMC ($MCID, $MCmail, $MCfname, $MCtname, $MClname, $MCwijk, $MCstatus, $MClastChecked, $MClastSeen) VALUES ($scipioID, '". $data['mail'] ."', '". $data['voornaam'] ."', '". urlencode($data['tussenvoegsel']) ."', '". $data['achternaam'] ."', '$wijk', 'subscribe', ". time() .", ". time() .")";
 		if(mysqli_query($db, $sql_mc_insert)) {
-			toLog('debug', '', $scipioID, 'Mailchimp-data toegevoegd in lokale MC-tabel [S]');
+			toLog('debug', '', $scipioID, 'Mailchimp-data na sync toegevoegd in lokale MC-tabel');
 		} else {
-			toLog('error', '', $scipioID, 'Kon niet toevoegen in lokale MC-tabel [S]');
+			toLog('error', '', $scipioID, 'Kon na sync niets toevoegen in lokale MC-tabel');
 		}
 		
 				
@@ -100,22 +114,22 @@ do {
 		# Gewijzigd mailadres
 		if($email != $data['mail']) {
 			if(mc_changemail($email, $data['mail'])) {
-				toLog('info', '', $scipioID, 'Mailadres gewijzigd in MailChimp [S]');
+				toLog('info', '', $scipioID, 'Mailadres gewijzigd dus gesynced naar MailChimp');
 				$sql_update[] = "$MCmail = '". $data['mail'] ."'";
 			} else {
-				toLog('error', '', $scipioID, 'Kon mailadres niet wijzigen in MailChimp [S]');
+				toLog('error', '', $scipioID, 'Mailadres gewijzigd naar niet gesynced naar MailChimp');
 			}			
 		}
 		
 		# Gewijzigde naam
 		if($row_mc[$MCfname] != $data['voornaam'] OR urldecode($row_mc[$MCtname]) != $data['tussenvoegsel'] OR $row_mc[$MClname] != $data['achternaam']) {
 			if(mc_changename($email, $data['voornaam'], $data['tussenvoegsel'], $data['achternaam'])) {
-				toLog('info', '', $scipioID, 'Naam gewijzigd in MailChimp [S]');
+				toLog('info', '', $scipioID, 'Naam gewijzigd dus gesynced naar MailChimp');
 				$sql_update[] = "$MCfname = '". $data['voornaam'] ."'";
 				$sql_update[] = "$MCtname = '". urlencode($data['tussenvoegsel']) ."'";
 				$sql_update[] = "$MClname = '". $data['achternaam'] ."'";
 			} else {
-				toLog('error', '', $scipioID, 'Kon naam niet wijzigen in MailChimp [S]');
+				toLog('error', '', $scipioID, 'Naam gewijzigd maar niet gesynced naar MailChimp');
 			}
 		}
 		
@@ -123,21 +137,21 @@ do {
 		if($row_mc[$MCwijk] != $wijk) {
 			$oudeWijk = $row_mc[$MCwijk];			
 			if(mc_addtag($email, $tagWijk[$wijk]) AND mc_rmtag($email, $tagWijk[$oudeWijk])){
-				toLog('info', '', $scipioID, "Wijk gewijzigd van wijk $oudeWijk naar wijk $wijk [S]");
+				toLog('info', '', $scipioID, "Wijk gewijzigd ($oudeWijk -> $wijk) dus gesynced naar MailChimp");
 				$sql_update[] = "$MCwijk = '$wijk'";
 			} else {
-				toLog('error', '', $scipioID, "Kon wijk niet gewijzigen van wijk $oudeWijk naar wijk $wijk [S]");
+				toLog('error', '', $scipioID, "Wijk gewijzigd ($oudeWijk -> $wijk) maar niet gesynced naar MailChimp");
 			}
 		}
 		
 		# De wijzigingen aan de MC kant moeten ook verwerkt worden in mijn lokale mailchimp-database
 		$sql_mc_update = "UPDATE $TableMC SET ". implode(', ', $sql_update)." WHERE $MCID like $scipioID";
 		mysqli_query($db, $sql_mc_update);		
-		toLog('debug', '', $scipioID, 'Gesynced met MailChimp');
+		toLog('debug', '', $scipioID, 'Gesynced naar MailChimp');
 	}
 } while($row = mysqli_fetch_array($result));
 
-toLog('info', '', '', 'Synchronisatie met MailChimp uitgevoerd');
+toLog('info', '', '', 'Synchronisatie naar MailChimp uitgevoerd');
 
 
 # Verwijder adressen die al sinds eergisteren niet meer gezien zijn
@@ -148,7 +162,7 @@ if($row_unsub = mysqli_fetch_array($result_unsub)) {
 	do {
 		set_time_limit(3);
 		mc_unsubscribe($row_unsub[$MCmail]);
-		toLog('info', '', $row_unsub[$MCID], 'Uitgeschreven in MailChimp [S]');
+		toLog('info', '', $row_unsub[$MCID], 'Uitschrijving gesynced naar MailChimp');
 		mysqli_query($db, "UPDATE $TableMC SET $MCstatus = 'unsubscribe' WHERE $MCID = ". $row_unsub[$MCID]);				
 	} while($row_unsub = mysqli_fetch_array($result_unsub));
 }
