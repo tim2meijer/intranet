@@ -11,11 +11,13 @@ include($cfgProgDir. "secure.php");
 # Als er op een knop gedrukt is, het rooster wegschrijven
 if(isset($_POST['save']) OR isset($_POST['maanden'])) {	
 	foreach($_POST['collecte'] as $dienst => $collectes) {
+		$set = array();
 		$set[] = $DienstCollecte_1 .' = \''. urlencode($collectes[1]) .'\'';
 		$set[] = $DienstCollecte_2 .' = \''. urlencode($collectes[2]) .'\'';
 		
 		$sql = "UPDATE $TableDiensten SET ". implode(', ', $set)." WHERE $DienstID = ". $dienst;		
-		mysql_query($sql);
+			
+		mysqli_query($db, $sql);
 	}
 	toLog('info', $_SESSION['ID'], '', 'Collectes bijgewerkt');
 }
@@ -35,7 +37,9 @@ if(isset($_POST['maanden'])) {
 # Haal alle kerkdiensten binnen een tijdsvak op
 $diensten = getKerkdiensten(mktime(0,0,0), mktime(date("H"),date("i"),date("s"),(date("n")+(3*$blokken))));
 
+//$text[] = "<form method='post' action='$_SERVER[PHP_SELF]'>";
 $text[] = "<form method='post' action='$_SERVER[PHP_SELF]'>";
+
 $text[] = "<input type='hidden' name='blokken' value='$blokken'>";
 $text[] = "<table>";
 $text[] = "<tr>";

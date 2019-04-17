@@ -56,9 +56,9 @@ $zoekScherm[] = "	</select><select name='bJaar'>";
 for($j=(date('Y') - 1) ; $j<=(date('Y') + 1) ; $j++)	{	$zoekScherm[] = "<option value='$j'". ($j == $bJaar ? ' selected' : '') .">$j</option>";	}
 $zoekScherm[] = "	</select></td>";
 $zoekScherm[] = "	<td><select name='bUur'>";
-for($u=1 ; $u<24 ; $u++)	{	$zoekScherm[] = "<option value='$u'". ($u == $bUur ? ' selected' : '') .">$u</option>";	}
+for($u=0 ; $u<24 ; $u++)	{	$zoekScherm[] = "<option value='$u'". ($u == $bUur ? ' selected' : '') .">$u</option>";	}
 $zoekScherm[] = "	</select><select name='bMin'>";
-for($m=1 ; $m<60 ; $m++)	{	$zoekScherm[] = "<option value='$m'". ($m == $bMin ? ' selected' : '') .">$m</option>";	}
+for($m=0 ; $m<60 ; $m++)	{	$zoekScherm[] = "<option value='$m'". ($m == $bMin ? ' selected' : '') .">$m</option>";	}
 $zoekScherm[] = "	</select></td>";
 //$zoekScherm[] = "	<td>&nbsp;</td>";
 $zoekScherm[] = "	<td><select name='eDag'>";
@@ -69,9 +69,9 @@ $zoekScherm[] = "	</select><select name='eJaar'>";
 for($j=(date('Y') - 1) ; $j<=(date('Y') + 1) ; $j++)	{	$zoekScherm[] = "<option value='$j'". ($j == $eJaar ? ' selected' : '') .">$j</option>";	}
 $zoekScherm[] = "	</select></td>";
 $zoekScherm[] = "	<td><select name='eUur'>";
-for($u=1 ; $u<24 ; $u++)	{	$zoekScherm[] = "<option value='$u'". ($u == $eUur ? ' selected' : '') .">$u</option>";	}
+for($u=0 ; $u<24 ; $u++)	{	$zoekScherm[] = "<option value='$u'". ($u == $eUur ? ' selected' : '') .">$u</option>";	}
 $zoekScherm[] = "	</select><select name='eMin'>";
-for($m=1 ; $m<60 ; $m++)	{	$zoekScherm[] = "<option value='$m'". ($m == $eMin ? ' selected' : '') .">$m</option>";	}
+for($m=0 ; $m<60 ; $m++)	{	$zoekScherm[] = "<option value='$m'". ($m == $eMin ? ' selected' : '') .">$m</option>";	}
 $zoekScherm[] = "	</select></td>";
 //$zoekScherm[] = "	<td>&nbsp;</td>";
 $zoekScherm[] = "	<td><select name='dader'>";
