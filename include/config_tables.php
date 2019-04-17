@@ -158,4 +158,8 @@ $maandArrayEng	= array(1 => 'January', 2 => 'February', 3 => 'March', 4 => 'Apri
 $letterArray		= array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
 $teamRollen			= array(1 => 'Ouderling', 2 => 'Diaken', 3 => 'Wijkco&ouml;rdinator', 4 => 'Bezoekbroeder', 5 => 'Bezoekzuster', 6 => 'Ge&iuml;ntereseerde');
 
+# Sommige roosters worden geimporteerd.
+# Deze moeten aantal functionaliteiten niet krijgen
+$importRoosters = array(7, 8, 9, 10, 13);
+
 ?>
