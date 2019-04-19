@@ -3,6 +3,8 @@ include_once('../include/functions.php');
 include_once('../include/MC_functions.php');
 include_once('../include/config.php');
 
+# https://github.com/drewm/mailchimp-api
+
 $db = connect_db();
 
 # Ga op zoek naar alle personen met een mailadres
