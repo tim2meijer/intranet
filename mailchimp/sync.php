@@ -81,7 +81,7 @@ do {
 						
 		
 		# De wijzigingen aan de MC kant moeten ook verwerkt worden in mijn lokale mailchimp-database
-		$sql_mc_insert = "INSERT INTO $TableMC ($MCID, $MCmail, $MCfname, $MCtname, $MClname, $MCwijk, $MCstatus, $MClastChecked, $MClastSeen) VALUES ($scipioID, '". $data['mail'] ."', '". $data['voornaam'] ."', '". urlencode($data['tussenvoegsel']) ."', '". $data['achternaam'] ."', '$wijk', 'subscribe', ". time() .", ". time() .")";
+		$sql_mc_insert = "INSERT INTO $TableMC ($MCID, $MCmail, $MCfname, $MCtname, $MClname, $MCwijk, $MCstatus, $MClastChecked, $MClastSeen) VALUES ($scipioID, '". $data['mail'] ."', '". $data['voornaam'] ."', '". urlencode($data['tussenvoegsel']) ."', '". $data['achternaam'] ."', '$wijk', 'subscribed', ". time() .", ". time() .")";
 		if(mysqli_query($db, $sql_mc_insert)) {
 			toLog('debug', '', $scipioID, 'Mailchimp-data na sync toegevoegd in lokale MC-tabel');
 		} else {
@@ -101,10 +101,10 @@ do {
 		
 		
 		# Stond in de tabel als niet ingeschreven
-		if($row_mc[$MCstatus] == 'unsubscribe') {
+		if($row_mc[$MCstatus] == 'unsubscribed') {
 			if(mc_resubscribe($email)) {
 				toLog('info', '', $scipioID, 'Opnieuw ingeschreven in MailChimp [S]');
-				$sql_update[] = "$MClastSeen = 'subscribe'";
+				$sql_update[] = "$MClastSeen = 'subscribed'";
 			} else {
 				toLog('error', '', $scipioID, 'Kon niet opnieuw inschrijven in MailChimp [S]');
 			}
@@ -156,14 +156,14 @@ toLog('info', '', '', 'Synchronisatie naar MailChimp uitgevoerd');
 
 # Verwijder adressen die al sinds eergisteren niet meer gezien zijn
 $dagen = mktime (0, 0, 0, date("n"), (date("j")-2));
-$sql_mc_unsub = "SELECT * FROM $TableMC WHERE $MCstatus like 'subscribe' AND $MClastSeen < ". $dagen;
+$sql_mc_unsub = "SELECT * FROM $TableMC WHERE $MCstatus like 'subscribed' AND $MClastSeen < ". $dagen;
 $result_unsub = mysqli_query($db, $sql_mc_unsub);
 if($row_unsub = mysqli_fetch_array($result_unsub)) {
 	do {
 		set_time_limit(3);
 		mc_unsubscribe($row_unsub[$MCmail]);
 		toLog('info', '', $row_unsub[$MCID], 'Uitschrijving gesynced naar MailChimp');
-		mysqli_query($db, "UPDATE $TableMC SET $MCstatus = 'unsubscribe' WHERE $MCID = ". $row_unsub[$MCID]);				
+		mysqli_query($db, "UPDATE $TableMC SET $MCstatus = 'unsubscribed' WHERE $MCID = ". $row_unsub[$MCID]);				
 	} while($row_unsub = mysqli_fetch_array($result_unsub));
 }
 
