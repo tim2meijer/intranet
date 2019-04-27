@@ -149,7 +149,7 @@ do {
 		# De wijzigingen aan de MC kant moeten ook verwerkt worden in mijn lokale mailchimp-database
 		$sql_mc_update = "UPDATE $TableMC SET ". implode(', ', $sql_update)." WHERE $MCID like $scipioID";
 		mysqli_query($db, $sql_mc_update);		
-		toLog('debug', '', $scipioID, 'Gesynced naar MailChimp');
+		//toLog('debug', '', $scipioID, 'Gesynced naar MailChimp');
 	}
 } while($row = mysqli_fetch_array($result));
 

@@ -27,13 +27,14 @@ if(count($data) > 0) {
 			$wijk	=	$row[$MCwijk];			
 			$segment_id = $tagWijk[$wijk];
 			
+			/*
 			echo $row[$MCID] .'|'. $rij['scipio'] .'<br>';
 			echo $row[$MCstatus] .'|'. $rij['status'] .'<br>';
 			echo $row[$MCfname] .'|'. $rij['voornaam'] .'<br>';
 			echo $row[$MCtname] .'|'. $rij['tussen'] .'<br>';	
 			echo $row[$MClname] .'|'. $rij['achter'] .'<br>';	
-		
-			
+			*/
+						
 			if($row[$MCID] != $rij['scipio'] AND $row[$MCstatus] = 'subscribed')		toLog('error', '', $row[$MCID], "ScipioID in MailChimp (".$rij['scipio'].") en lokale database (". $row[$MCID] .") komen niet overeen ($email)");			
 			if($row[$MCstatus] != $rij['status'] AND $row[$MCstatus] != 'blocked')	toLog('error', '', $row[$MCID], "Volgens MailChimp is $email ". $rij['status'] .", volgende de lokale database niet");			
 			if($row[$MCfname] != $rij['voornaam'])																	toLog('error', '', $row[$MCID], "Volgens Mailchimp is de voornaam van $email ". $rij['voornaam'] .", volgens de lokale database ". $row[$MCfname]);
@@ -45,8 +46,8 @@ if(count($data) > 0) {
 			toLog('error', '', $rij['scipio'], "$email komt meer dan 1x voor in de lokale database");
 		} elseif(array_key_exists($tagScipio, $rij['tags']) AND $rij['status'] != 'unsubscribed') {
 			toLog('error', '', $rij['scipio'], $rij['scipio'] ." komt wel voor in MailChimp, maar niet in lokale database");
-		} else {
-			toLog('debug', '', '', "$email niet lokaal gevonden, maar lijkt geen probleem");
+		//} else {
+		//	toLog('debug', '', '', "$email niet lokaal gevonden, maar lijkt geen probleem");
 		}
 	}	
 }

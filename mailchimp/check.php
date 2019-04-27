@@ -86,7 +86,7 @@ do {
 	$sql_update = "UPDATE $TableMC SET $MClastChecked = ". time() . " WHERE $MCID like $scipioID";
 	mysqli_query($db, $sql_update);
 	
-	toLog('debug', '', $scipioID, 'Gecontroleerd in MailChimp');
+	//toLog('debug', '', $scipioID, 'Gecontroleerd in MailChimp');
 	
 } while($row = mysqli_fetch_array($result));
 
