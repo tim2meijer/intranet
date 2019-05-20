@@ -160,6 +160,6 @@ $teamRollen			= array(1 => 'Ouderling', 2 => 'Diaken', 3 => 'Wijkco&ouml;rdinato
 
 # Sommige roosters worden geimporteerd.
 # Deze moeten aantal functionaliteiten niet krijgen
-$importRoosters = array(7, 8, 9, 10, 13);
+$importRoosters = array(7, 8, 9, 10);
 
 ?>

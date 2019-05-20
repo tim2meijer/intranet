@@ -36,7 +36,7 @@ if(count($data) > 0) {
 			*/
 						
 			if($row[$MCID] != $rij['scipio'] AND $row[$MCstatus] = 'subscribed')		toLog('error', '', $row[$MCID], "ScipioID in MailChimp (".$rij['scipio'].") en lokale database (". $row[$MCID] .") komen niet overeen ($email)");			
-			if($row[$MCstatus] != $rij['status'] AND $row[$MCstatus] != 'blocked')	toLog('error', '', $row[$MCID], "Volgens MailChimp is $email ". $rij['status'] .", volgende de lokale database niet");			
+			if($row[$MCstatus] != $rij['status'] AND $row[$MCstatus] != 'block')		toLog('error', '', $row[$MCID], "Volgens MailChimp is $email ". $rij['status'] .", volgende de lokale database niet");			
 			if($row[$MCfname] != $rij['voornaam'])																	toLog('error', '', $row[$MCID], "Volgens Mailchimp is de voornaam van $email ". $rij['voornaam'] .", volgens de lokale database ". $row[$MCfname]);
 			if(urldecode($row[$MCtname]) != $rij['tussen'])													toLog('error', '', $row[$MCID], "Volgens Mailchimp is het tussenvoegsel van $email .". $rij['tussen'] .", volgens de lokale database ". $row[$MCtname]);
 			if($row[$MClname] != $rij['achter'])																		toLog('error', '', $row[$MCID], "Volgens Mailchimp is de achternaam van $email ". $rij['achternaam'] .", volgens de lokale database ". $row[$MClname]);
