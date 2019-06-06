@@ -27,6 +27,7 @@ if(isset($_REQUEST['wijk'])) {
 	$wijkLeden = getWijkMembers($wijk);
 	$ouderlingen = getGroupMembers(8);
 	$diakenen = getGroupMembers(9);
+	$predikanten = getGroupMembers(34);
 	$leden = getWijkteamLeden($wijk);
 	$aantal = count($leden);
 	
@@ -73,6 +74,9 @@ if(isset($_REQUEST['wijk'])) {
 	$text[] = "<tr>";
 	$text[] = "	<td><select name='lid[$i]'>";	
 	$text[] = "<option valu=''></option>";
+	$text[] = "<optgroup label='Predikanten'>";
+	foreach($predikanten as $id)	$text[] = "		<option value='$id'>".makeName($id, 5)."</option>";
+	$text[] = "	</optgroup>";
 	$text[] = "<optgroup label='Ouderlingen'>";
 	foreach($ouderlingen as $id)	$text[] = "		<option value='$id'>".makeName($id, 5)."</option>";
 	$text[] = "	</optgroup>";
