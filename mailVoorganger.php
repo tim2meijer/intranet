@@ -52,19 +52,13 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP)) {
 		$mail = new PHPMailer;
 		$mail->FromName	= 'Preekvoorziening Koningskerk Deventer';
 		$mail->From			= $ScriptMailAdress;
-		$mail->AddReplyTo('jenny@overbrugger.nl', 'Jenny van der Vegt-Huzen');
+		$mail->AddReplyTo('', '');
 		
 		# Alle geadresseerden toevoegen
 		$mail->AddAddress($voorgangerData['mail'], $mailNaam);		
 		$mail->AddCC($adresBand, makeName($bandleider, 6));
 		$mail->AddCC($adresSchrift, makeName($schriftlezer, 6));		
-		$mail->AddCC('beamteam3gk@gmail.com', 'Beamteam 3GK');
-		$mail->AddCC('mededelingen@3gk-deventer.nl', 'Mededelingen 3GK');
-		//$mail->AddCC('nieuwewebsite@koningskerkdeventer.nl','Webmaster 3GK');
-		$mail->AddCC('ingevandijk66@gmail.com','Webmaster 3GK');
-		$mail->AddBCC('jenny@overbrugger.nl');
-		$mail->AddBCC('matthijs.draijer@koningskerkdeventer.nl');
-				
+						
 		# Mail opstellen
 		$mailText = $bijlageText = array(); 
 		$mailText[] = "Beste $aanspeekNaam,";
