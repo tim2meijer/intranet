@@ -263,7 +263,8 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP) OR $test) {
 					$replacedBericht = str_replace('[[voornaam]]', $data['voornaam'], $replacedBericht);
 					
 					if($KB_in_CC) {
-						$variabele['BCC'] = '';
+						$variabele['BCC'] = true;
+						$variabele['BCC_mail'] = '';
 						$KB_in_CC = false;
 					}
 												
