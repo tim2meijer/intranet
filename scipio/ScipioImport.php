@@ -275,6 +275,9 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP) OR $test) {
 						toLog('error', '', $lid, "Problemen met wijzigingsmail ". makeName($lid, 1) ." (wijkteam wijk $wijk)");
 						echo "Problemen met mail versturen<br>\n";
 					}
+					
+					# Om te zorgen dat kerkelijk bureau niet tig mailtjes krijgt direct BCC-tag verwijderen
+					unset($variabele);
 				}
 			}
 		}
