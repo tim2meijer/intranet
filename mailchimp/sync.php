@@ -50,11 +50,11 @@ do {
 		if(mc_addtag($data['mail'], $tagScipio)) {
 			toLog('debug', '', $scipioID, 'Scipio-tag gesynced naar MailChimp');
 		} else {
-			toLog('error', '', $scipioID, 'Kon geen Scipio-tag syncen naar MailChimp [S]');
+			toLog('error', '', $scipioID, 'Kon geen Scipio-tag syncen naar MailChimp');
 		}
 		
 		# + Scipio-ID toevoegen
-		if(mc_addSipioID($email, $scipioID)) {
+		if(mc_addScipioID($email, $scipioID)) {
 			toLog('debug', '', $scipioID, 'ScipioID gesynced naar MailChimp');
 		} else {
 			toLog('error', '', $scipioID, 'Kon geen ScipioID syncen naar MailChimp');
@@ -79,6 +79,13 @@ do {
 			toLog('debug', '', $scipioID, 'Inschrijving wijkmails gesynced naar MailChimp');
 		} else {
 			toLog('error', '', $scipioID, 'Kon inschrijving wijkmails niet syncen naar MailChimp');
+		}
+		
+		# + hash toevoegen
+		if(mc_addHash($data['mail'], $data['hash_long'])) {
+			toLog('debug', '', $scipioID, 'Hash gesynced naar MailChimp');
+		} else {
+			toLog('error', '', $scipioID, 'Kon hash niet syncen naar MailChimp');
 		}
 						
 		

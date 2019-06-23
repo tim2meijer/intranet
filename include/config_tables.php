@@ -45,6 +45,7 @@ $GroupNaam					= "naam";
 $GroupHTMLIn				= "html_intern";
 $GroupHTMLEx				= "html_extern";
 $GroupBeheer				= "beheerder";
+$GroupMCTag					= "tag";
 
 $TableRoosters			= "roosters";
 $RoostersID					= "id";
@@ -147,6 +148,12 @@ $MCmark							= "mark";
 $MCstatus						= "status";
 $MClastSeen					= "last_seen";
 $MClastChecked			= "last_checked";
+
+$TableCommMC				= "mc_comm";
+$CommMCID						= "scipio_id";
+$CommMCGroupID			= "group_id";
+$ComMClastSeen			= "last_seen";
+$ComMClastChecked		= "last_checked";
 
 $wijkArray			= array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J');
 $statusArray		= array('actief', 'afgemeld', 'afgevoerd', 'onttrokken', 'overleden', 'vertrokken');

@@ -21,7 +21,7 @@ do {
 	$wijk			= $row[$MCwijk];	
 	$email		= $row[$MCmail];
 	$status		= $row[$MCstatus];
-	
+		
 	# variabelen definieren vanuit de MC-data
 	$data = mc_getData($email);
 	$tags	= $data['tags'];	
@@ -78,6 +78,17 @@ do {
 			toLog('info', '', $scipioID, 'ScipioID toegevoegd na controle in MailChimp');
 		} else {
 			toLog('error', '', $scipioID, 'Kon scipio-ID niet toevoegen na controle in MailChimp');
+		}
+	}
+	
+	# Check of hash wel is ingevuld in MailChimp
+	if($data['hash'] == '') {
+		$memberData = getMemberDetails($scipioID);
+		
+		if(mc_addHash($email, $memberData['hash_long'])) {
+			toLog('info', '', $scipioID, 'Hash toegevoegd na controle in MailChimp');
+		} else {
+			toLog('error', '', $scipioID, 'Kon hash niet toevoegen na controle in MailChimp');
 		}
 	}
 	

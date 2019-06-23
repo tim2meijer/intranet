@@ -39,7 +39,8 @@ if(count($data) > 0) {
 			if($row[$MCstatus] != $rij['status'] AND $row[$MCstatus] != 'block')		toLog('error', '', $row[$MCID], "Volgens MailChimp is $email ". $rij['status'] .", volgende de lokale database niet");			
 			if($row[$MCfname] != $rij['voornaam'])																	toLog('error', '', $row[$MCID], "Volgens Mailchimp is de voornaam van $email ". $rij['voornaam'] .", volgens de lokale database ". $row[$MCfname]);
 			if(urldecode($row[$MCtname]) != $rij['tussen'])													toLog('error', '', $row[$MCID], "Volgens Mailchimp is het tussenvoegsel van $email .". $rij['tussen'] .", volgens de lokale database ". $row[$MCtname]);
-			if($row[$MClname] != $rij['achter'])																		toLog('error', '', $row[$MCID], "Volgens Mailchimp is de achternaam van $email ". $rij['achternaam'] .", volgens de lokale database ". $row[$MClname]);
+			if($row[$MClname] != $rij['achter'])																		toLog('error', '', $row[$MCID], "Volgens Mailchimp is de achternaam van $email ". $rij['achternaam'] .", volgens de lokale database ". $row[$MClname]);		
+			//if($rij['hash'] == '')																									toLog('error', '', $row[$MCID], "Hash van $email is leeg binnen Mailchimp");			
 			if(!array_key_exists($tagScipio, $rij['tags']))													toLog('error', '', $row[$MCID], "Scipio-tag ontbreekt in MailChimp ($email staat wel in lokale database)");
 			if(!array_key_exists($segment_id, $rij['tags']) AND $wijk != '')				toLog('error', '', $row[$MCID], "Wijk-tag (wijk $wijk) ontbreekt in MailChimp ($email staat wel in lokale database)");
 		} elseif(mysqli_num_rows($result) > 1) {

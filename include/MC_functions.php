@@ -23,7 +23,7 @@ function mc_connect($url, $json_data, $type, $output = false) {
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
 	$dump = curl_exec($ch);
-		
+	
 	if($output) {
 		return $dump;
 	} else {
@@ -176,19 +176,35 @@ function mc_changemail($email, $newEmail) {
 		'email_address' => $newEmail,
 		);
 	$json_data = json_encode($data);
-	
+
 	$url = 'https://'.$MC_server.'api.mailchimp.com/3.0/lists/'.$MC_listid.'/members/' . $userid;
 	return mc_connect($url, $json_data, 'patch');
 }
 
 
-function mc_addSipioID($email, $id) {
+function mc_addScipioID($email, $id) {
 	global $MC_listid, $MC_server;
 	
 	$userid = md5( strtolower( $email ) );
 	$data = array(
 		'merge_fields'  => array(
 			'SCIPIO' => $id
+			)
+		);
+	$json_data = json_encode($data);
+	
+	$url = 'https://'.$MC_server.'api.mailchimp.com/3.0/lists/'.$MC_listid.'/members/' . $userid;
+	return mc_connect($url, $json_data, 'patch');
+}
+
+
+function mc_addHash($email, $hash) {
+	global $MC_listid, $MC_server;
+	
+	$userid = md5( strtolower( $email ) );
+	$data = array(
+		'merge_fields'  => array(
+			'HASH' => $hash
 			)
 		);
 	$json_data = json_encode($data);
@@ -210,6 +226,7 @@ function mc_getData($email) {
 	$result = mc_connect($url, $json_data, 'get', true);
 	$json = json_decode($result, true);
 		
+	$data['hash']			= $json['merge_fields']['HASH'];	
 	$data['scipio']		= $json['merge_fields']['SCIPIO'];
 	$data['voornaam']	= $json['merge_fields']['VOORNAAM'];
 	$data['tussen']		= $json['merge_fields']['TUSSENVOEG'];
@@ -246,6 +263,7 @@ function mc_getmembers($offset, $count = 25) {
 		$data['tussen']		= $member['merge_fields']['TUSSENVOEG'];
 		$data['achter']		= $member['merge_fields']['ACHTERNAAM'];
 		$data['scipio']		= $member['merge_fields']['SCIPIO'];
+		$data['hash']		= $member['merge_fields']['HASH'];
 				
 		foreach($member['tags'] as $value) {
 			$id = $value['id'];
