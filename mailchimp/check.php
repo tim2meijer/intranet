@@ -55,7 +55,7 @@ do {
 	}
 	
 	# Check of de tag 'Wijk ?' aan dit adres hangt
-	if(!array_key_exists($segment_id, $tags)) {
+	if(!array_key_exists($segment_id, $tags) AND $status == 'subscribe') {
 		if(mc_addtag($email, $segment_id)) {
 			toLog('info', '', $scipioID, 'Wijk opnieuw ingesteld na controle in MailChimp');
 		} else {
@@ -64,7 +64,7 @@ do {
 	}
 	
 	# Check of de tag 'Scipio' aan dit adres hangt
-	if(!array_key_exists($tagScipio, $tags)) {
+	if(!array_key_exists($tagScipio, $tags) AND $status == 'subscribe') {
 		if(mc_addtag($email, $tagScipio)) {
 			toLog('info', '', $scipioID, 'Scipio-tag opnieuw ingesteld na controle in MailChimp');
 		} else {
@@ -73,7 +73,7 @@ do {
 	}
 	
 	# Check of ScipioID wel is ingevuld in MailChimp
-	if($data['scipio'] == '') {
+	if($data['scipio'] == '' AND $status == 'subscribe') {
 		if(mc_addSipioID($email, $scipioID)) {
 			toLog('info', '', $scipioID, 'ScipioID toegevoegd na controle in MailChimp');
 		} else {
@@ -82,7 +82,7 @@ do {
 	}
 	
 	# Check of hash wel is ingevuld in MailChimp
-	if($data['hash'] == '') {
+	if($data['hash'] == '' AND $status == 'subscribe') {
 		$memberData = getMemberDetails($scipioID);
 		
 		if(mc_addHash($email, $memberData['hash_long'])) {
