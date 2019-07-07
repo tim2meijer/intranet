@@ -18,11 +18,19 @@ do {
 	
 	# identifier is het id binnen scipio
 	$scipioID = $row[$UserID];
-	
+		
 	# Haal alle gegevens op
 	$data = getMemberDetails($scipioID); 
 	$wijk = $data['wijk'];
-	
+	$relatie = $data['relatie'];
+	$status = $data['belijdenis'];
+		
+	if($status == 'belijdend lid') {
+		$tagStatus = $tagBelijdenis;
+	} else {
+		$tagStatus = $tagDoop;
+	}
+		
 	# Van elke persoon vraag ik op of die al voorkomt in mijn lokale mailchimp-database.
 	# 	dat is iets sneller dan aan mailchimp vragen of die al voorkomt én
 	#		ik kan dan werken met het scipio id als identiefier ipv het mailadres (wat MC doet)		
@@ -54,7 +62,7 @@ do {
 		}
 		
 		# + Scipio-ID toevoegen
-		if(mc_addScipioID($email, $scipioID)) {
+		if(mc_addScipioID($data['mail'], $scipioID)) {
 			toLog('debug', '', $scipioID, 'ScipioID gesynced naar MailChimp');
 		} else {
 			toLog('error', '', $scipioID, 'Kon geen ScipioID syncen naar MailChimp');
@@ -87,10 +95,23 @@ do {
 		} else {
 			toLog('error', '', $scipioID, 'Kon hash niet syncen naar MailChimp');
 		}
-						
+
+		# + kerkelijke relatie toevoegen
+		if(mc_addtag($data['mail'], $tagRelatie[$relatie])) {
+			toLog('debug', '', $scipioID, 'Kerkelijke relatie gesynced naar MailChimp');
+		} else {
+			toLog('error', '', $scipioID, 'Kon kerkelijke relatie niet syncen naar MailChimp');
+		}
+		
+		# + kerkelijke status (doop / belijdenis) toevoegen
+		if(mc_addtag($data['mail'], $tagStatus)) {
+			toLog('debug', '', $scipioID, 'Kerkelijke status gesynced naar MailChimp');
+		} else {
+			toLog('error', '', $scipioID, 'Kon kerkelijke status niet syncen naar MailChimp');
+		}
 		
 		# De wijzigingen aan de MC kant moeten ook verwerkt worden in mijn lokale mailchimp-database
-		$sql_mc_insert = "INSERT INTO $TableMC ($MCID, $MCmail, $MCfname, $MCtname, $MClname, $MCwijk, $MCstatus, $MClastChecked, $MClastSeen) VALUES ($scipioID, '". $data['mail'] ."', '". $data['voornaam'] ."', '". urlencode($data['tussenvoegsel']) ."', '". $data['achternaam'] ."', '$wijk', 'subscribed', ". time() .", ". time() .")";
+		$sql_mc_insert = "INSERT INTO $TableMC ($MCID, $MCmail, $MCfname, $MCtname, $MClname, $MCwijk, $MCstatus, $MCrelatie, $MCdoop, $MClastChecked, $MClastSeen) VALUES ($scipioID, '". $data['mail'] ."', '". $data['voornaam'] ."', '". urlencode($data['tussenvoegsel']) ."', '". $data['achternaam'] ."', '$wijk', 'subscribed', '$relatie', '". $data['belijdenis'] ."', ". time() .", ". time() .")";
 		if(mysqli_query($db, $sql_mc_insert)) {
 			toLog('debug', '', $scipioID, 'Mailchimp-data na sync toegevoegd in lokale MC-tabel');
 		} else {
@@ -100,7 +121,7 @@ do {
 				
 		
 	# Komt hij wel voor dan check ik even of een aantal velden gewijzigd zijn :
-	#		mailadres / naam / wijk
+	#		mailadres / naam / wijk / kerkelijke status / relatie
 	} else {
 		$row_mc = mysqli_fetch_array($result_mc);
 		$email = $row_mc[$MCmail];
@@ -152,6 +173,29 @@ do {
 				toLog('error', '', $scipioID, "Wijk gewijzigd ($oudeWijk -> $wijk) maar niet gesynced naar MailChimp");
 			}
 		}
+		
+		# Gewijzigde kerkelijke status
+		if($row_mc[$MCdoop] != $status) {
+			if($tagStatus == $tagDoop) { $oudeStatus = $tagBelijdenis; } else { $oudeStatus = $tagDoop;	}				
+			if((mc_addtag($email, $tagStatus) AND mc_rmtag($email, $oudeStatus)) OR (mc_addtag($email, $tagStatus) AND $row_mc[$MCdoop] == '')){
+				toLog('info', '', $scipioID, "Kerkelijke status gewijzigd (". $row_mc[$MCdoop] ." -> $status) dus gesynced naar MailChimp");
+				$sql_update[] = "$MCdoop = '$status'";
+			} else {
+				toLog('error', '', $scipioID, "Kerkelijke status gewijzigd (". $row_mc[$MCdoop] ." -> $status) maar niet gesynced naar MailChimp");
+			}			
+		}
+		
+		# Gewijzigde kerkelijke relatie
+		if($row_mc[$MCrelatie] != $relatie) {
+			$oudeRelatie = $row_mc[$MCrelatie];						
+			if((mc_addtag($email, $tagRelatie[$relatie]) AND mc_rmtag($email, $tagRelatie[$oudeRelatie])) OR (mc_addtag($email, $tagRelatie[$relatie]) AND $row_mc[$MCrelatie] == '')){
+				toLog('info', '', $scipioID, "Kerkelijke relatie gewijzigd (". $row_mc[$MCrelatie] ." -> $relatie) dus gesynced naar MailChimp");
+				$sql_update[] = "$MCrelatie = '$relatie'";
+			} else {
+				toLog('error', '', $scipioID, "Kerkelijke relatie gewijzigd (". $row_mc[$MCrelatie] ." -> $relatie) maar niet gesynced naar MailChimp");
+			}
+		}
+		
 		
 		# De wijzigingen aan de MC kant moeten ook verwerkt worden in mijn lokale mailchimp-database
 		$sql_mc_update = "UPDATE $TableMC SET ". implode(', ', $sql_update)." WHERE $MCID like $scipioID";

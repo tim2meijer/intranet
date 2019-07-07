@@ -145,7 +145,9 @@ $MClname						= "lname";
 $MCmail							= "mail";
 $MCwijk							= "wijk";
 $MCmark							= "mark";
-$MCstatus						= "status";
+$MCstatus						= "status"; 
+$MCrelatie					= "relatie";
+$MCdoop							= "doop";
 $MClastSeen					= "last_seen";
 $MClastChecked			= "last_checked";
 

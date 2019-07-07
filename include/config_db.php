@@ -14,7 +14,6 @@ $ScriptMailAdress	= '';			# Mailadres van het script (is mailadres van afzender 
 $Version					= '';		# Versie nummer
 $SubjectPrefix		= ' ';		# Voorvoegsel bij de onderwerpregel bij het versturen van mails
 
-
 $scipioParams = array(
 	'Username' => '',
 	'Password' => '',
@@ -22,33 +21,48 @@ $scipioParams = array(
 );
 
 # Mailchimp gegevens
-$MC_apikey = '-';
+$MC_apikey = '';
 $MC_listid = '';
 $MC_server = '';
 
 # De verschillende wijken hebben allemaal een andere tag in MailChimp
 $tagWijk = array(
-	'A' => "",
-	'B' => "",
-	'C' => "",
-	'D' => "",
-	'E' => "",
-	'F' => "",
-	'G' => "",
-	'H' => "",
-	'I' => "",
-	'J' => ""
+	'A' => ,
+	'B' => ,
+	'C' => ,
+	'D' => ,
+	'E' => ,
+	'F' => ,
+	'G' => ,
+	'H' => ,
+	'I' => ,
+	'J' => 
 );
 
-# Als het adres vanuit Scipio komt krijgt die ook een tag
-$tagScipio = ;
+
+# De verschillende kerkelijke relaties hebben allemaal een andere tag in MailChimp
+$tagRelatie = array(
+	'dochter' => ,
+	'echtgenoot' => ,
+	'echtgenote' => ,
+	'gezinshoofd' => ,
+	'levenspartner' => ,
+	'zelfstandig' => ,
+	'zoon' => 
+);
+
+# Er zijn verschillende tags
+$tagScipio = ;				# vanuit Scipio
+
+$tagDoop = ;				# Kerkelijke status
+$tagBelijdenis = ;	# Kerkelijke status
 
 # De verschillende maillijsten hebben allemaal een ander id in MailChimp
-$ID_google = ;
-$ID_wijkmails = ;
-$ID_gebed_dag = ;
-$ID_gebed_week = ;
-$ID_gebed_maand = ;
-$ID_trinitas = ;
+$ID_google = '';
+$ID_wijkmails = '';
+$ID_gebed_dag = '';
+$ID_gebed_week = '';
+$ID_gebed_maand = '';
+$ID_trinitas = '';
 
 ?>

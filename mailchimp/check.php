@@ -74,7 +74,7 @@ do {
 	
 	# Check of ScipioID wel is ingevuld in MailChimp
 	if($data['scipio'] == '' AND $status == 'subscribe') {
-		if(mc_addSipioID($email, $scipioID)) {
+		if(mc_addScipioID($email, $scipioID)) {
 			toLog('info', '', $scipioID, 'ScipioID toegevoegd na controle in MailChimp');
 		} else {
 			toLog('error', '', $scipioID, 'Kon scipio-ID niet toevoegen na controle in MailChimp');
