@@ -24,8 +24,13 @@ if(count($data) > 0) {
 				
 		if(mysqli_num_rows($result) == 1) {
 			$row = mysqli_fetch_array($result);
-			$wijk	=	$row[$MCwijk];			
+			$wijk			=	$row[$MCwijk];			
+			$relatie	=	$row[$MCrelatie];
+			$status		=	$row[$MCdoop];
+			
 			$segment_id = $tagWijk[$wijk];
+			$relatie_id = $tagRelatie[$relatie];
+			$status_id	= $tagStatus[$status];
 			
 			/*
 			echo $row[$MCID] .'|'. $rij['scipio'] .'<br>';
@@ -42,7 +47,9 @@ if(count($data) > 0) {
 			if($row[$MClname] != $rij['achter'])																		toLog('error', '', $row[$MCID], "Volgens Mailchimp is de achternaam van $email ". $rij['achternaam'] .", volgens de lokale database ". $row[$MClname]);		
 			//if($rij['hash'] == '')																									toLog('error', '', $row[$MCID], "Hash van $email is leeg binnen Mailchimp");			
 			if(!array_key_exists($tagScipio, $rij['tags']))													toLog('error', '', $row[$MCID], "Scipio-tag ontbreekt in MailChimp ($email staat wel in lokale database)");
-			if(!array_key_exists($segment_id, $rij['tags']) AND $wijk != '')				toLog('error', '', $row[$MCID], "Wijk-tag (wijk $wijk) ontbreekt in MailChimp ($email staat wel in lokale database)");
+			if(!array_key_exists($segment_id, $rij['tags']) AND $wijk != '')				toLog('error', '', $row[$MCID], "Wijk-tag (wijk $wijk) ontbreekt in MailChimp ($email staat wel in lokale database)");	
+			if(!array_key_exists($relatie_id, $rij['tags']) AND $relatie != '')			toLog('error', '', $row[$MCID], "Relatie-tag ($relatie) ontbreekt in MailChimp ($email staat wel in lokale database)");
+			if(!array_key_exists($status_id, $rij['tags']) AND $status != '')				toLog('error', '', $row[$MCID], "Status-tag ($status) ontbreekt in MailChimp ($email staat wel in lokale database)");
 		} elseif(mysqli_num_rows($result) > 1) {
 			toLog('error', '', $rij['scipio'], "$email komt meer dan 1x voor in de lokale database");
 		} elseif(array_key_exists($tagScipio, $rij['tags']) AND $rij['status'] != 'unsubscribed') {

@@ -24,13 +24,7 @@ do {
 	$wijk = $data['wijk'];
 	$relatie = $data['relatie'];
 	$status = $data['belijdenis'];
-		
-	if($status == 'belijdend lid') {
-		$tagStatus = $tagBelijdenis;
-	} else {
-		$tagStatus = $tagDoop;
-	}
-		
+			
 	# Van elke persoon vraag ik op of die al voorkomt in mijn lokale mailchimp-database.
 	# 	dat is iets sneller dan aan mailchimp vragen of die al voorkomt én
 	#		ik kan dan werken met het scipio id als identiefier ipv het mailadres (wat MC doet)		
@@ -104,7 +98,7 @@ do {
 		}
 		
 		# + kerkelijke status (doop / belijdenis) toevoegen
-		if(mc_addtag($data['mail'], $tagStatus)) {
+		if(mc_addtag($data['mail'], $tagStatus[$status])) {
 			toLog('debug', '', $scipioID, 'Kerkelijke status gesynced naar MailChimp');
 		} else {
 			toLog('error', '', $scipioID, 'Kon kerkelijke status niet syncen naar MailChimp');
@@ -176,12 +170,12 @@ do {
 		
 		# Gewijzigde kerkelijke status
 		if($row_mc[$MCdoop] != $status) {
-			if($tagStatus == $tagDoop) { $oudeStatus = $tagBelijdenis; } else { $oudeStatus = $tagDoop;	}				
-			if((mc_addtag($email, $tagStatus) AND mc_rmtag($email, $oudeStatus)) OR (mc_addtag($email, $tagStatus) AND $row_mc[$MCdoop] == '')){
-				toLog('info', '', $scipioID, "Kerkelijke status gewijzigd (". $row_mc[$MCdoop] ." -> $status) dus gesynced naar MailChimp");
+			$oudeStatus = $row_mc[$MCdoop];			
+			if((mc_addtag($email, $tagStatus[$status]) AND mc_rmtag($email, $tagStatus[$oudeStatus])) OR (mc_addtag($email, $tagStatus[$status]) AND $row_mc[$MCdoop] == '')){
+				toLog('info', '', $scipioID, "Kerkelijke status gewijzigd ($oudeStatus -> $status) dus gesynced naar MailChimp");
 				$sql_update[] = "$MCdoop = '$status'";
 			} else {
-				toLog('error', '', $scipioID, "Kerkelijke status gewijzigd (". $row_mc[$MCdoop] ." -> $status) maar niet gesynced naar MailChimp");
+				toLog('error', '', $scipioID, "Kerkelijke status gewijzigd ($oudeStatus -> $status) maar niet gesynced naar MailChimp");
 			}			
 		}
 		

@@ -14,19 +14,25 @@ do {
 	set_time_limit(3);
 	
 	# variabelen definieren vanuit de lokale tabel
-	$scipioID	= $row[$MCID];
-	$voor			= $row[$MCfname];
-	$tussen		= urldecode($row[$MCtname]);
-	$achter		= $row[$MClname];
-	$wijk			= $row[$MCwijk];	
-	$email		= $row[$MCmail];
-	$status		= $row[$MCstatus];
-		
+	$scipioID		= $row[$MCID];
+	$voor				= $row[$MCfname];
+	$tussen			= urldecode($row[$MCtname]);
+	$achter			= $row[$MClname];
+	$wijk				= $row[$MCwijk];	
+	$email			= $row[$MCmail];
+	$status			= $row[$MCstatus];	
+	$relatie		= $row[$MCrelatie];
+	$kerkStatus	= $row[$MCdoop];
+	
+	# op basis van deze lokale data config-variabelen definieren
+	$segment_id = $tagWijk[$wijk];
+	$relatie_id = $tagRelatie[$relatie];
+	$status_id	= $tagStatus[$kerkStatus];
+			
 	# variabelen definieren vanuit de MC-data
 	$data = mc_getData($email);
-	$tags	= $data['tags'];	
-	$segment_id = $tagWijk[$wijk];
-	
+	$tags	= $data['tags'];
+		
 	# Staat adres wel aan beide kanten als ingeschreven
 	if($status == 'subscribe' AND $data['status'] != 'subscribed') {
 		if(mc_resubscribe($email)) {
@@ -63,6 +69,24 @@ do {
 		}
 	}
 	
+	# Check of de tag 'belijdend-lid'/'dooplid' aan dit adres hangt
+	if(!array_key_exists($status_id, $tags) AND $status == 'subscribe') {
+		if(mc_addtag($email, $status_id)) {
+			toLog('info', '', $scipioID, 'Kerkelijke status opnieuw ingesteld na controle in MailChimp');
+		} else {
+			toLog('error', '', $scipioID, 'Kon kerkelijke status niet opnieuw instellen na controle in MailChimp');
+		}
+	}
+	
+	# Check of de tag 'gezinshoofd'/'zoon'/'dochter' etc aan dit adres hangt
+	if(!array_key_exists($relatie_id, $tags) AND $status == 'subscribe') {
+		if(mc_addtag($email, $relatie_id)) {
+			toLog('info', '', $scipioID, 'Kerkelijke relatie opnieuw ingesteld na controle in MailChimp');
+		} else {
+			toLog('error', '', $scipioID, 'Kon kerkelijke relatie niet opnieuw instellen na controle in MailChimp');
+		}
+	}
+	
 	# Check of de tag 'Scipio' aan dit adres hangt
 	if(!array_key_exists($tagScipio, $tags) AND $status == 'subscribe') {
 		if(mc_addtag($email, $tagScipio)) {
@@ -90,15 +114,11 @@ do {
 		} else {
 			toLog('error', '', $scipioID, 'Kon hash niet toevoegen na controle in MailChimp');
 		}
-	}
-	
+	}	
 		
 	# De wijzigingen aan de MC kant moeten ook verwerkt worden in mijn lokale mailchimp-database
 	$sql_update = "UPDATE $TableMC SET $MClastChecked = ". time() . " WHERE $MCID like $scipioID";
-	mysqli_query($db, $sql_update);
-	
-	//toLog('debug', '', $scipioID, 'Gecontroleerd in MailChimp');
-	
+	mysqli_query($db, $sql_update);	
 } while($row = mysqli_fetch_array($result));
 
 toLog('info', '', '', 'Controle MailChimp-data uitgevoerd');
