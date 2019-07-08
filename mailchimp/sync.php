@@ -123,8 +123,10 @@ do {
 		$sql_update = array();
 		$sql_update[] = "$MClastSeen = ". time();
 		
-		# Als mensen 
+		# Als mensen zichzelf hebben uitgeschreven, is hun adres
+		# bij Mailchimp geblokeerd en mag ik er niks aan wijzigen
 		if($row_mc[$MCstatus] != 'block') {
+			
 			# Stond in de tabel als niet ingeschreven
 			if($row_mc[$MCstatus] == 'unsubscribed') {
 				if(mc_resubscribe($email)) {
