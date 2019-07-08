@@ -123,78 +123,77 @@ do {
 		$sql_update = array();
 		$sql_update[] = "$MClastSeen = ". time();
 		
+		# Als mensen 
+		if($row_mc[$MCstatus] != 'block') {
+			# Stond in de tabel als niet ingeschreven
+			if($row_mc[$MCstatus] == 'unsubscribed') {
+				if(mc_resubscribe($email)) {
+					toLog('info', '', $scipioID, 'Opnieuw ingeschreven in MailChimp [S]');
+					$sql_update[] = "$MClastSeen = 'subscribed'";
+				} else {
+					toLog('error', '', $scipioID, 'Kon niet opnieuw inschrijven in MailChimp [S]');
+				}
+			}
+													
+			# Gewijzigd mailadres
+			if($email != $data['mail']) {
+				if(mc_changemail($email, $data['mail'])) {
+					toLog('info', '', $scipioID, 'Mailadres gewijzigd dus gesynced naar MailChimp');
+					$sql_update[] = "$MCmail = '". $data['mail'] ."'";
+				} else {
+					toLog('error', '', $scipioID, 'Mailadres gewijzigd naar niet gesynced naar MailChimp');
+				}			
+			}
 		
-		# Stond in de tabel als niet ingeschreven
-		if($row_mc[$MCstatus] == 'unsubscribed') {
-			if(mc_resubscribe($email)) {
-				toLog('info', '', $scipioID, 'Opnieuw ingeschreven in MailChimp [S]');
-				$sql_update[] = "$MClastSeen = 'subscribed'";
-			} else {
-				toLog('error', '', $scipioID, 'Kon niet opnieuw inschrijven in MailChimp [S]');
+			# Gewijzigde naam
+			if($row_mc[$MCfname] != $data['voornaam'] OR urldecode($row_mc[$MCtname]) != $data['tussenvoegsel'] OR $row_mc[$MClname] != $data['achternaam']) {
+				if(mc_changename($email, $data['voornaam'], $data['tussenvoegsel'], $data['achternaam'])) {
+					toLog('info', '', $scipioID, 'Naam gewijzigd dus gesynced naar MailChimp');
+					$sql_update[] = "$MCfname = '". $data['voornaam'] ."'";
+					$sql_update[] = "$MCtname = '". urlencode($data['tussenvoegsel']) ."'";
+					$sql_update[] = "$MClname = '". $data['achternaam'] ."'";
+				} else {
+					toLog('error', '', $scipioID, 'Naam gewijzigd maar niet gesynced naar MailChimp');
+				}
+			}
+		
+			# Gewijzigde wijk
+			if($row_mc[$MCwijk] != $wijk) {
+				$oudeWijk = $row_mc[$MCwijk];			
+				if(mc_addtag($email, $tagWijk[$wijk]) AND mc_rmtag($email, $tagWijk[$oudeWijk])){
+					toLog('info', '', $scipioID, "Wijk gewijzigd ($oudeWijk -> $wijk) dus gesynced naar MailChimp");
+					$sql_update[] = "$MCwijk = '$wijk'";
+				} else {
+					toLog('error', '', $scipioID, "Wijk gewijzigd ($oudeWijk -> $wijk) maar niet gesynced naar MailChimp");
+				}
+			}
+		
+			# Gewijzigde kerkelijke status
+			if($row_mc[$MCdoop] != $status) {
+				$oudeStatus = $row_mc[$MCdoop];			
+				if((mc_addtag($email, $tagStatus[$status]) AND mc_rmtag($email, $tagStatus[$oudeStatus])) OR (mc_addtag($email, $tagStatus[$status]) AND $row_mc[$MCdoop] == '')){
+					toLog('info', '', $scipioID, "Kerkelijke status gewijzigd ($oudeStatus -> $status) dus gesynced naar MailChimp");
+					$sql_update[] = "$MCdoop = '$status'";
+				} else {
+					toLog('error', '', $scipioID, "Kerkelijke status gewijzigd ($oudeStatus -> $status) maar niet gesynced naar MailChimp");
+				}			
+			}
+		
+			# Gewijzigde kerkelijke relatie
+			if($row_mc[$MCrelatie] != $relatie) {
+				$oudeRelatie = $row_mc[$MCrelatie];						
+				if((mc_addtag($email, $tagRelatie[$relatie]) AND mc_rmtag($email, $tagRelatie[$oudeRelatie])) OR (mc_addtag($email, $tagRelatie[$relatie]) AND $row_mc[$MCrelatie] == '')){
+					toLog('info', '', $scipioID, "Kerkelijke relatie gewijzigd (". $row_mc[$MCrelatie] ." -> $relatie) dus gesynced naar MailChimp");
+					$sql_update[] = "$MCrelatie = '$relatie'";
+				} else {
+					toLog('error', '', $scipioID, "Kerkelijke relatie gewijzigd (". $row_mc[$MCrelatie] ." -> $relatie) maar niet gesynced naar MailChimp");
+				}
 			}
 		}
-		
-												
-		# Gewijzigd mailadres
-		if($email != $data['mail']) {
-			if(mc_changemail($email, $data['mail'])) {
-				toLog('info', '', $scipioID, 'Mailadres gewijzigd dus gesynced naar MailChimp');
-				$sql_update[] = "$MCmail = '". $data['mail'] ."'";
-			} else {
-				toLog('error', '', $scipioID, 'Mailadres gewijzigd naar niet gesynced naar MailChimp');
-			}			
-		}
-		
-		# Gewijzigde naam
-		if($row_mc[$MCfname] != $data['voornaam'] OR urldecode($row_mc[$MCtname]) != $data['tussenvoegsel'] OR $row_mc[$MClname] != $data['achternaam']) {
-			if(mc_changename($email, $data['voornaam'], $data['tussenvoegsel'], $data['achternaam'])) {
-				toLog('info', '', $scipioID, 'Naam gewijzigd dus gesynced naar MailChimp');
-				$sql_update[] = "$MCfname = '". $data['voornaam'] ."'";
-				$sql_update[] = "$MCtname = '". urlencode($data['tussenvoegsel']) ."'";
-				$sql_update[] = "$MClname = '". $data['achternaam'] ."'";
-			} else {
-				toLog('error', '', $scipioID, 'Naam gewijzigd maar niet gesynced naar MailChimp');
-			}
-		}
-		
-		# Gewijzigde wijk
-		if($row_mc[$MCwijk] != $wijk) {
-			$oudeWijk = $row_mc[$MCwijk];			
-			if(mc_addtag($email, $tagWijk[$wijk]) AND mc_rmtag($email, $tagWijk[$oudeWijk])){
-				toLog('info', '', $scipioID, "Wijk gewijzigd ($oudeWijk -> $wijk) dus gesynced naar MailChimp");
-				$sql_update[] = "$MCwijk = '$wijk'";
-			} else {
-				toLog('error', '', $scipioID, "Wijk gewijzigd ($oudeWijk -> $wijk) maar niet gesynced naar MailChimp");
-			}
-		}
-		
-		# Gewijzigde kerkelijke status
-		if($row_mc[$MCdoop] != $status) {
-			$oudeStatus = $row_mc[$MCdoop];			
-			if((mc_addtag($email, $tagStatus[$status]) AND mc_rmtag($email, $tagStatus[$oudeStatus])) OR (mc_addtag($email, $tagStatus[$status]) AND $row_mc[$MCdoop] == '')){
-				toLog('info', '', $scipioID, "Kerkelijke status gewijzigd ($oudeStatus -> $status) dus gesynced naar MailChimp");
-				$sql_update[] = "$MCdoop = '$status'";
-			} else {
-				toLog('error', '', $scipioID, "Kerkelijke status gewijzigd ($oudeStatus -> $status) maar niet gesynced naar MailChimp");
-			}			
-		}
-		
-		# Gewijzigde kerkelijke relatie
-		if($row_mc[$MCrelatie] != $relatie) {
-			$oudeRelatie = $row_mc[$MCrelatie];						
-			if((mc_addtag($email, $tagRelatie[$relatie]) AND mc_rmtag($email, $tagRelatie[$oudeRelatie])) OR (mc_addtag($email, $tagRelatie[$relatie]) AND $row_mc[$MCrelatie] == '')){
-				toLog('info', '', $scipioID, "Kerkelijke relatie gewijzigd (". $row_mc[$MCrelatie] ." -> $relatie) dus gesynced naar MailChimp");
-				$sql_update[] = "$MCrelatie = '$relatie'";
-			} else {
-				toLog('error', '', $scipioID, "Kerkelijke relatie gewijzigd (". $row_mc[$MCrelatie] ." -> $relatie) maar niet gesynced naar MailChimp");
-			}
-		}
-		
 		
 		# De wijzigingen aan de MC kant moeten ook verwerkt worden in mijn lokale mailchimp-database
 		$sql_mc_update = "UPDATE $TableMC SET ". implode(', ', $sql_update)." WHERE $MCID like $scipioID";
-		mysqli_query($db, $sql_mc_update);		
-		//toLog('debug', '', $scipioID, 'Gesynced naar MailChimp');
+		mysqli_query($db, $sql_mc_update);
 	}
 } while($row = mysqli_fetch_array($result));
 
