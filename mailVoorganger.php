@@ -25,6 +25,9 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP)) {
 		$aSchriftlezer	= getRoosterVulling(12, $dienst);
 		$schriftlezer		= $aSchriftlezer[0];
 		$adresSchrift		= getMailAdres($schriftlezer);
+		
+		$aBeamer		= getRoosterVulling(11, $dienst);
+		$beameraar		= $aBeamer[0];
 				
 		if(date("H", $dienstData['start']) < 12) {
 			$dagdeel = 'morgendienst';
@@ -68,6 +71,7 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP)) {
 		$mailText[] = "";
 		$mailText[] = "De band wordt geleid door ". makeName($bandleider, 5) .".";
 		$mailText[] = "Schriftlezing wordt gedaan door ". makeName($schriftlezer, 5) .".";
+		$mailText[] = "Beamer wordt bediend door ". makeName($beameraar, 5) .".";
 		$mailText[] = "";
 		$mailText[] = ($voorgangerData['stijl'] == 0 ? 'U kunt' : 'Je mag')." de liturgie afstemmen met ". makeName($bandleider, 1) ." voor de muziek. ". ($bandData['geslacht'] == 'M' ? 'Hij' : 'Zij') ." kan dan aangeven of liederen bekend en of geschikt zijn in onze gemeente en eventuele suggesties voor een vervangend lied.";
 		$mailText[] = ($voorgangerData['stijl'] == 0 ? 'Wilt u' : 'Wil jij')." de liturgie een week van te voren doorgeven zodat de band kan oefenen.";
