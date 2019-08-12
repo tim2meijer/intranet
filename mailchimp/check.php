@@ -28,13 +28,23 @@ do {
 	$segment_id = $tagWijk[$wijk];
 	$relatie_id = $tagRelatie[$relatie];
 	$status_id	= $tagStatus[$kerkStatus];
+	
+	# De status in de lokale database (= $status) kan zijn :
+	#	'subscribed', 'unsubscribed', 'block'
+	
+	# De status in mailchimp ($data['status']) kan zijn :
+	#	'Subscribed', 'Unsubscribed', 'Cleaned'
+	
+	# De meeste Unsubscribed kunnen door de API op Subscribed gezet worden.
+	# Behalve als iemand zichzelf heeft uitgeschreven ->  block om dat aan te geven
+	# Een cleaned iemand "bestaat" niet in de lokale database -> nog doen
 			
 	# variabelen definieren vanuit de MC-data
 	$data = mc_getData($email);
 	$tags	= $data['tags'];
 		
 	# Staat adres wel aan beide kanten als ingeschreven
-	if($status == 'subscribe' AND $data['status'] != 'subscribed') {
+	if($status == 'subscribed' AND $data['status'] != 'subscribed') {
 		if(mc_resubscribe($email)) {
 			toLog('info', '', $scipioID, 'Opnieuw ingeschreven na controle in MailChimp');
 		} else {
@@ -43,7 +53,7 @@ do {
 	}
 	
 	# Staat adres wel aan beide kanten als niet-ingeschreven
-	if($status == 'unsubscribe' AND $data['status'] != 'unsubscribed') {
+	if($status == 'unsubscribed' AND $data['status'] != 'unsubscribed') {
 		if(mc_unsubscribe($email)) {
 			toLog('info', '', $scipioID, 'Opnieuw uitgeschreven na controle in MailChimp');
 		} else {
