@@ -61,7 +61,7 @@ do {
 	}
 	
 	# Check of de tag 'Wijk ?' aan dit adres hangt
-	if(!array_key_exists($segment_id, $tags) AND $status == 'subscribe') {
+	if(!array_key_exists($segment_id, $tags) AND $status == 'subscribed') {
 		if(mc_addtag($email, $segment_id)) {
 			toLog('info', '', $scipioID, 'Wijk opnieuw ingesteld na controle in MailChimp');
 		} else {
@@ -70,7 +70,7 @@ do {
 	}
 	
 	# Check of de tag 'belijdend-lid'/'dooplid' aan dit adres hangt
-	if(!array_key_exists($status_id, $tags) AND $status == 'subscribe') {
+	if(!array_key_exists($status_id, $tags) AND $status == 'subscribed') {
 		if(mc_addtag($email, $status_id)) {
 			toLog('info', '', $scipioID, 'Kerkelijke status opnieuw ingesteld na controle in MailChimp');
 		} else {
@@ -79,7 +79,7 @@ do {
 	}
 	
 	# Check of de tag 'gezinshoofd'/'zoon'/'dochter' etc aan dit adres hangt
-	if(!array_key_exists($relatie_id, $tags) AND $status == 'subscribe') {
+	if(!array_key_exists($relatie_id, $tags) AND $status == 'subscribed') {
 		if(mc_addtag($email, $relatie_id)) {
 			toLog('info', '', $scipioID, 'Kerkelijke relatie opnieuw ingesteld na controle in MailChimp');
 		} else {
@@ -88,7 +88,7 @@ do {
 	}
 	
 	# Check of de tag 'Scipio' aan dit adres hangt
-	if(!array_key_exists($tagScipio, $tags) AND $status == 'subscribe') {
+	if(!array_key_exists($tagScipio, $tags) AND $status == 'subscribed') {
 		if(mc_addtag($email, $tagScipio)) {
 			toLog('info', '', $scipioID, 'Scipio-tag opnieuw ingesteld na controle in MailChimp');
 		} else {
@@ -97,7 +97,7 @@ do {
 	}
 	
 	# Check of ScipioID wel is ingevuld in MailChimp
-	if($data['scipio'] == '' AND $status == 'subscribe') {
+	if($data['scipio'] == '' AND $status == 'subscribed') {
 		if(mc_addScipioID($email, $scipioID)) {
 			toLog('info', '', $scipioID, 'ScipioID toegevoegd na controle in MailChimp');
 		} else {
@@ -106,7 +106,7 @@ do {
 	}
 	
 	# Check of hash wel is ingevuld in MailChimp
-	if($data['hash'] == '' AND $status == 'subscribe') {
+	if($data['hash'] == '' AND $status == 'subscribed') {
 		$memberData = getMemberDetails($scipioID);
 		
 		if(mc_addHash($email, $memberData['hash_long'])) {
