@@ -60,6 +60,7 @@ $RoostersFromAddr		= "mail_afzender";
 $RoostersGelijk			= "gelijke_diensten";
 $RoostersOpmerking	= "opmerking";
 $RoostersTextOnly		= "text_only";
+$RoostersAlert			= "alert";
 $RoostersLastChange	= "last_change";
 
 $TableGrpUsr				= "group_member";
