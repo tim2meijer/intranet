@@ -18,7 +18,7 @@ foreach($roosters as $rooster) {
 		$result = mysqli_query($db, $sql);
 		
 		if(mysqli_num_rows($result) == 0) {
-			$alert[] = "<a href='". $ScriptSever ."/showRooster.php?rooster=$rooster'>". $roosterData['naam']. '</a> heeft minder dan '. $roosterData['alert'] ." weken vulling (<a href='". $ScriptSever ."/admin/editRoosters.php?id=$rooster'>edit</a>)";
+			$alert[] = "<a href='". $ScriptURL ."showRooster.php?rooster=$rooster'>". $roosterData['naam']. '</a> heeft minder dan '. $roosterData['alert'] ." weken vulling (<a href='". $ScriptURL ."admin/editRoosters.php?id=$rooster'>edit</a>)";
 		}
 	}	
 }
