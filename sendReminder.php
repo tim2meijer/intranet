@@ -15,11 +15,7 @@ if(in_array($_SERVER['REMOTE_ADDR'], $allowedIP)) {
 
 	$diensten = getKerkdiensten($startTijd, $eindTijd);
 	$roosters = getRoosters(0);
-	
-	# Sommige roosters worden geimporteerd.
-	# Deze moeten een iets andere Ps krijgen
-	$importRoosters = array(7, 8, 9, 10, 13);
-	
+		
 	# Mochten er diensten zijn, dan even alle teams opvragen
 	# Van deze teamID's een naam-array maken ($teamVulling).
 	# Deze $teamVulling wegschrijven in een array met alle team-vullingen per rooster ($teams)

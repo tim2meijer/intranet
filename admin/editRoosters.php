@@ -18,7 +18,7 @@ if(isset($_POST['save'])) {
 		$sql = "INSERT INTO $TableRoosters ($RoostersNaam, $RoostersGroep, $RoostersFields, $RoostersTextOnly, $RoostersReminder) VALUES ('". $_POST['naam'] ."', ". $_POST['groep'] .", ". $_POST['aantal'] .", ". $_POST['text_only'] .", '". $_POST['reminder'] ."')";
 		toLog('info', $_SESSION['ID'], '', 'Roostergegevens '. $_POST['naam'] .' toegevoegd');
 	} else {
-		$sql = "UPDATE $TableRoosters SET $RoostersNaam = '". $_POST['naam'] ."', $RoostersGroep = ". $_POST['groep'] .", $RoostersFields = ". $_POST['aantal'] .", $RoostersTextOnly = ". $_POST['text_only'] .", $RoostersReminder = '". $_POST['reminder'] ."' WHERE $GroupID = ". $_POST['id'];
+		$sql = "UPDATE $TableRoosters SET $RoostersNaam = '". $_POST['naam'] ."', $RoostersGroep = ". $_POST['groep'] .", $RoostersFields = ". $_POST['aantal'] .", $RoostersTextOnly = ". $_POST['text_only'] .", $RoostersReminder = '". $_POST['reminder'] ."', $RoostersAlert = '". $_POST['alert'] ."' WHERE $GroupID = ". $_POST['id'];
 		toLog('info', $_SESSION['ID'], '', 'Roostergegevens '. $_POST['naam'] .' gewijzigd');
 	}
 		
@@ -79,6 +79,16 @@ if(isset($_POST['save'])) {
 		$text[] = "</tr>";
 	}
 	
+	$text[] = "<tr>";
+	$text[] = "	<td>Leeg-rooster-alert</td>";
+	$text[] = "	<td><select name='alert'>";		
+	$text[] = "<option value='0'". ($roosterData['alert'] == 0 ? ' selected' : '') .">Uit</option>";
+	$text[] = "<option value='1'". ($roosterData['alert'] == 1 ? ' selected' : '') .">1 week</option>";
+	$text[] = "<option value='2'". ($roosterData['alert'] == 2 ? ' selected' : '') .">2 weken</option>";
+	$text[] = "<option value='3'". ($roosterData['alert'] == 3 ? ' selected' : '') .">3 weken</option>";
+	$text[] = "<option value='4'". ($roosterData['alert'] == 4 ? ' selected' : '') .">4 weken</option>";
+	$text[] = "	</select></td>";
+	$text[] = "</tr>";
 	$text[] = "<tr>";
 	$text[] = "	<td rowspan='2'><input type='submit' name='save' value='Opslaan'></td>";
 	$text[] = "</tr>";

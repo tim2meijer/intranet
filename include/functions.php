@@ -384,7 +384,7 @@ function getMyRoostersBeheer($id) {
 }
 
 function getRoosterDetails($id) {
-	global $TableRoosters, $RoostersID, $RoostersNaam, $RoostersGroep, $RoostersFields, $RoostersReminder, $RoostersMail, $RoostersSubject, $RoostersFrom, $RoostersFromAddr, $RoostersGelijk, $RoostersTextOnly, $RoostersOpmerking;
+	global $TableRoosters, $RoostersID, $RoostersNaam, $RoostersGroep, $RoostersFields, $RoostersReminder, $RoostersMail, $RoostersSubject, $RoostersFrom, $RoostersFromAddr, $RoostersGelijk, $RoostersTextOnly, $RoostersAlert, $RoostersOpmerking;
 	$db = connect_db();
 	
 	$data = array();
@@ -402,6 +402,7 @@ function getRoosterDetails($id) {
 		$data['mail_afzender']	= urldecode($row[$RoostersFromAddr]);
 		$data['gelijk']	= $row[$RoostersGelijk];
 		$data['text_only']	= $row[$RoostersTextOnly];
+		$data['alert']	= $row[$RoostersAlert];
 		$data['opmerking']	= $row[$RoostersOpmerking];
 	}
 	return $data;	
@@ -827,7 +828,7 @@ function getLogData($start, $end, $types, $dader, $subject, $message, $aantal) {
 	}
 	
 	if($message != '') {
-		$where[] = "$LogMessage like '$message'";
+		$where[] = "($LogMessage like '%$message%' OR $LogMessage like '$message%' OR $LogMessage like '%$message')";
 	}
 	
 	$where[] = "$LogTime BETWEEN $start AND $end";
